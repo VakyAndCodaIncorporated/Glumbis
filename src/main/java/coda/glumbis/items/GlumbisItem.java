@@ -50,7 +50,7 @@ public class GlumbisItem extends Item {
                 targetTag.putString("OwnerName", player.getName().getString());
                 tag.put(DATA_CREATURE, targetTag);
                 stack.setTag(tag);
-                target.remove(Entity.RemovalReason.UNLOADED_WITH_PLAYER);
+                target.discard();
                 player.setItemInHand(hand, stack);
                 level.playSound(null, player.blockPosition(), SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.AMBIENT, 1, 1);
             }

@@ -1,4 +1,15 @@
 {
   "item.glumbis.sock": "Sock",
-  "item.glumbis.glumbis": "Glumbis"
+  "item.glumbis.glumbis": "Glumbis",
+  "item.glumbis.socks": "Socks",
+  "item.glumbis.soggy_socks": "Soggy Socks",
+
+  "advancement.glumbis.soggy_socks.title": "Squishy and Squeaky!",
+  "advancement.glumbis.soggy_socks.description": "Get your socks wet.",
+  "advancement.glumbis.sleep_with_wet_socks.title": "That Actually Works?!",
+  "advancement.glumbis.sleep_with_wet_socks.description": "Sleep with wet socks on.\nNote: Try it on low health!",
+  "advancement.glumbis.glumbis_is_awesome.title": "Glumbis is Awesome!!",
+  "advancement.glumbis.glumbis_is_awesome.description": "Catch a cat in a sock.",
+  "advancement.glumbis.root.title": "Glumbis",
+  "advancement.glumbis.root.description": "Sock cat"
 }

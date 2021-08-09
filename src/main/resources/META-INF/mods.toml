@@ -6,7 +6,7 @@ modId="glumbis" #mandatory
 version="${file.jarVersion}" #mandatory
 displayName="Glumbis" #mandatory
 logoFile="examplemod.png" #optional
-credits="" #optional
+credits="Virtualhel" #optional
 authors="Coda" #optional
 description='''
 Glumbis lets you pick up cats in socks for easy transport!'''
