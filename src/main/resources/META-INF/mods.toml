@@ -8,7 +8,20 @@ displayName="Glumbis" #mandatory
 logoFile="examplemod.png" #optional
 credits="Virtualhel" #optional
 authors="Coda" #optional
-description='''
+description="
+╭━━━━━━━╮
+┃　　● ══　 █    ┃
+┃██████████┃
+┃██████████┃
+┃██████████┃
+┃█ ur adopted.   █┃
+┃█ -Mom&Dad  █┃
+┃██████████┃
+┃██████████┃
+┃██████████┃
+┃　　　○　　　  ┃
+╰━━━━━━━╯
+"
 Glumbis lets you pick up cats in socks for easy transport!'''
 [[dependencies.glumbis]] #optional
     modId="forge" #mandatory
