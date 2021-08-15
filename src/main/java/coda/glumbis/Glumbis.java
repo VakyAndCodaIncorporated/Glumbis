@@ -75,15 +75,15 @@ public class Glumbis {
     // Is there a worse way to do this?
     private void onEntityJoinWorld(EntityJoinWorldEvent event) {
         final Predicate<LivingEntity> GLUMBIS_IN_PLAYERS_HOTBAR = (p_20440_) -> {
-            return p_20440_ instanceof Player && p_20440_.getSlot(1).get().is(GlumbisItems.GLUMBIS.get())
+            return p_20440_ instanceof Player && p_20440_.getSlot(0).get().is(GlumbisItems.GLUMBIS.get())
+                    || p_20440_.getSlot(1).get().is(GlumbisItems.GLUMBIS.get())
                     || p_20440_.getSlot(2).get().is(GlumbisItems.GLUMBIS.get())
                     || p_20440_.getSlot(3).get().is(GlumbisItems.GLUMBIS.get())
                     || p_20440_.getSlot(4).get().is(GlumbisItems.GLUMBIS.get())
                     || p_20440_.getSlot(5).get().is(GlumbisItems.GLUMBIS.get())
                     || p_20440_.getSlot(6).get().is(GlumbisItems.GLUMBIS.get())
                     || p_20440_.getSlot(7).get().is(GlumbisItems.GLUMBIS.get())
-                    || p_20440_.getSlot(8).get().is(GlumbisItems.GLUMBIS.get())
-                    || p_20440_.getSlot(9).get().is(GlumbisItems.GLUMBIS.get());
+                    || p_20440_.getSlot(8).get().is(GlumbisItems.GLUMBIS.get());
         };
         Entity entity = event.getEntity();
 
