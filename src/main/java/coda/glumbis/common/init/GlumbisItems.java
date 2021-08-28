@@ -1,9 +1,9 @@
-package coda.glumbis.init;
+package coda.glumbis.common.init;
 
 import coda.glumbis.Glumbis;
-import coda.glumbis.items.GlumbisItem;
-import coda.glumbis.items.SocksArmorItem;
-import coda.glumbis.items.SoggySocksArmorItem;
+import coda.glumbis.common.items.GlumbisItem;
+import coda.glumbis.common.items.SocksArmorItem;
+import coda.glumbis.common.items.SoggySocksArmorItem;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -18,5 +18,4 @@ public class GlumbisItems {
     public static final RegistryObject<Item> GLUMBIS = ITEMS.register("glumbis", () -> new GlumbisItem(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS).stacksTo(1)));
     public static final RegistryObject<Item> SOCKS = ITEMS.register("socks", () -> new SocksArmorItem(EquipmentSlot.FEET));
     public static final RegistryObject<Item> SOGGY_SOCKS = ITEMS.register("soggy_socks", () -> new SoggySocksArmorItem(EquipmentSlot.FEET));
-
 }

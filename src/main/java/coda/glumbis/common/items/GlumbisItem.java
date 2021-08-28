@@ -1,7 +1,7 @@
-package coda.glumbis.items;
+package coda.glumbis.common.items;
 
 import coda.glumbis.Glumbis;
-import coda.glumbis.init.GlumbisItems;
+import coda.glumbis.common.init.GlumbisItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -11,7 +11,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;

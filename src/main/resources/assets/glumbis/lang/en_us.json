@@ -4,6 +4,9 @@
   "item.glumbis.socks": "Socks",
   "item.glumbis.soggy_socks": "Soggy Socks",
 
+  "entity.glumbis.glumboss": "Glumboss",
+  "entity.glumbis.big_sock": "Big Sock",
+
   "advancement.glumbis.soggy_socks.title": "Squishy and Squeaky!",
   "advancement.glumbis.soggy_socks.description": "Get your socks wet.",
   "advancement.glumbis.sleep_with_wet_socks.title": "That Actually Works?!",

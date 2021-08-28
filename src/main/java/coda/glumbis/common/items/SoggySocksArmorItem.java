@@ -1,7 +1,7 @@
-package coda.glumbis.items;
+package coda.glumbis.common.items;
 
 import coda.glumbis.Glumbis;
-import coda.glumbis.init.GlumbisItems;
+import coda.glumbis.common.init.GlumbisItems;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;

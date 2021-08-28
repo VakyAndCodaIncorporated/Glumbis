@@ -1,4 +1,4 @@
-package coda.glumbis.items;
+package coda.glumbis.common.items;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EquipmentSlot;
