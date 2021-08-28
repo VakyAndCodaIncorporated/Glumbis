@@ -62,10 +62,6 @@ public class BigSockEntity extends LivingEntity implements PlayerRideable {
       this.zo = p_38296_;
    }
 
-   protected float getEyeHeight(Pose p_38327_, EntityDimensions p_38328_) {
-      return p_38328_.height;
-   }
-
    protected Entity.MovementEmission getMovementEmission() {
       return Entity.MovementEmission.NONE;
    }
@@ -114,72 +110,6 @@ public class BigSockEntity extends LivingEntity implements PlayerRideable {
    public boolean isPickable() {
       return !this.isRemoved();
    }
-
-   public boolean canBeControlledByRider() {
-      return this.getControllingPassenger() instanceof LivingEntity;
-   }
-
-   public void travel(Vec3 p_30633_) {
-      if (this.isAlive()) {
-         if (this.isVehicle() && this.canBeControlledByRider() && this.isSaddled()) {
-            LivingEntity livingentity = (LivingEntity)this.getControllingPassenger();
-            this.setYRot(livingentity.getYRot());
-            this.yRotO = this.getYRot();
-            this.setXRot(livingentity.getXRot() * 0.5F);
-            this.setRot(this.getYRot(), this.getXRot());
-            this.yBodyRot = this.getYRot();
-            this.yHeadRot = this.yBodyRot;
-            float f = livingentity.xxa * 0.5F;
-            float f1 = livingentity.zza;
-            if (f1 <= 0.0F) {
-               f1 *= 0.25F;
-               this.gallopSoundCounter = 0;
-            }
-
-            if (this.onGround && this.playerJumpPendingScale == 0.0F && this.isStanding() && !this.allowStandSliding) {
-               f = 0.0F;
-               f1 = 0.0F;
-            }
-
-            if (this.playerJumpPendingScale > 0.0F && !this.isJumping() && this.onGround) {
-               double d0 = this.getCustomJump() * (double)this.playerJumpPendingScale * (double)this.getBlockJumpFactor();
-               double d1 = d0 + this.getJumpBoostPower();
-               Vec3 vec3 = this.getDeltaMovement();
-               this.setDeltaMovement(vec3.x, d1, vec3.z);
-               this.setIsJumping(true);
-               this.hasImpulse = true;
-               net.minecraftforge.common.ForgeHooks.onLivingJump(this);
-               if (f1 > 0.0F) {
-                  float f2 = Mth.sin(this.getYRot() * ((float)Math.PI / 180F));
-                  float f3 = Mth.cos(this.getYRot() * ((float)Math.PI / 180F));
-                  this.setDeltaMovement(this.getDeltaMovement().add((double)(-0.4F * f2 * this.playerJumpPendingScale), 0.0D, (double)(0.4F * f3 * this.playerJumpPendingScale)));
-               }
-
-               this.playerJumpPendingScale = 0.0F;
-            }
-
-            this.flyingSpeed = this.getSpeed() * 0.1F;
-            if (this.isControlledByLocalInstance()) {
-               this.setSpeed((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED));
-               super.travel(new Vec3((double)f, p_30633_.y, (double)f1));
-            } else if (livingentity instanceof Player) {
-               this.setDeltaMovement(Vec3.ZERO);
-            }
-
-            if (this.onGround) {
-               this.playerJumpPendingScale = 0.0F;
-               this.setIsJumping(false);
-            }
-
-            this.calculateEntityAnimation(this, false);
-            this.tryCheckInsideBlocks();
-         } else {
-            this.flyingSpeed = 0.02F;
-            super.travel(p_30633_);
-         }
-      }
-   }
-
 
    public void lerpTo(double p_38299_, double p_38300_, double p_38301_, float p_38302_, float p_38303_, int p_38304_, boolean p_38305_) {
       this.lerpX = p_38299_;
