@@ -5,10 +5,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 
-public class GlumbossSmashAttackGoal extends GlumbossAttackGoal {
+public class GlumbossSlamAttackGoal extends GlumbossAttackGoal {
 
-    public GlumbossSmashAttackGoal(GlumbossEntity entity) {
-        super(entity, GlumbossEntity.AttackType.SMASH);
+    public GlumbossSlamAttackGoal(GlumbossEntity entity) {
+        super(entity, GlumbossEntity.AttackType.SLAM);
     }
 
     @Override

@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import software.bernie.geckolib3.GeckoLib;
 
 import java.util.Random;
 import java.util.function.Predicate;
@@ -45,6 +46,8 @@ public class Glumbis {
         forgeBus.addListener(this::onEntityInteract);
         forgeBus.addListener(this::onPlayerSleep);
         forgeBus.addListener(this::onEntityJoinWorld);
+
+        GeckoLib.initialize();
     }
 
     private void registerEntityAttributes(EntityAttributeCreationEvent event) {

@@ -1,25 +1,15 @@
 package coda.glumbis.client.renderer;
 
-import coda.glumbis.Glumbis;
 import coda.glumbis.client.model.GlumbossModel;
 import coda.glumbis.common.entities.GlumbossEntity;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
-@OnlyIn(Dist.CLIENT)
-public class GlumbossRenderer extends MobRenderer<GlumbossEntity, GlumbossModel> {
-    public static final ModelLayerLocation MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(Glumbis.MOD_ID, "glumboss"), "main");
-    public static final ResourceLocation TEXTURE = new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glumboss.png");
+public class GlumbossRenderer extends GeoEntityRenderer<GlumbossEntity> {
 
-    public GlumbossRenderer(EntityRendererProvider.Context context) {
-        super(context, new GlumbossModel(context.bakeLayer(MODEL_LAYER)), 1.0F);
+    public GlumbossRenderer(EntityRendererProvider.Context renderManager) {
+        super(renderManager, new GlumbossModel());
+        this.shadowRadius = 1.25F;
     }
 
-    public ResourceLocation getTextureLocation(GlumbossEntity entity) {
-        return TEXTURE;
-    }
 }
