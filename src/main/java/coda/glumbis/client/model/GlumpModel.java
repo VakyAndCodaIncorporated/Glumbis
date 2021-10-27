@@ -2,31 +2,32 @@ package coda.glumbis.client.model;
 
 import coda.glumbis.Glumbis;
 import coda.glumbis.common.entities.GlumbossEntity;
+import coda.glumbis.common.entities.GlumpEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
-public class GlumbossModel extends AnimatedGeoModel<GlumbossEntity> {
+public class GlumpModel extends AnimatedGeoModel<GlumpEntity> {
 
     @Override
-    public ResourceLocation getModelLocation(GlumbossEntity object) {
+    public ResourceLocation getModelLocation(GlumpEntity object) {
         return new ResourceLocation(Glumbis.MOD_ID, "geo/entity/glumboss.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(GlumbossEntity object) {
+    public ResourceLocation getTextureLocation(GlumpEntity object) {
         return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glumboss.png");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(GlumbossEntity animatable) {
+    public ResourceLocation getAnimationFileLocation(GlumpEntity animatable) {
         return new ResourceLocation(Glumbis.MOD_ID, "animations/entity/glumboss.animation.json");
     }
 
     @Override
-    public void setLivingAnimations(GlumbossEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
+    public void setLivingAnimations(GlumpEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("head");
         IBone catBody = this.getAnimationProcessor().getBone("catBody");

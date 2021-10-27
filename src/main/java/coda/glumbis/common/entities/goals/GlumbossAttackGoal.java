@@ -5,7 +5,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 
 public abstract class GlumbossAttackGoal extends Goal {
     protected final GlumbossEntity entity;
-    private final GlumbossEntity.AttackType attackType;
+    protected final GlumbossEntity.AttackType attackType;
 
     protected GlumbossAttackGoal(GlumbossEntity entity, GlumbossEntity.AttackType attackType) {
         this.entity = entity;

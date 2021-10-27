@@ -10,7 +10,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -22,13 +25,13 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class GlumbossEntity extends PathfinderMob implements IAnimatable {
-    private static final EntityDataAccessor<Boolean> SLAMMING = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> KICKING = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.BOOLEAN);
+public class GlumpEntity extends PathfinderMob implements IAnimatable {
+    private static final EntityDataAccessor<Boolean> SLAMMING = SynchedEntityData.defineId(GlumpEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> KICKING = SynchedEntityData.defineId(GlumpEntity.class, EntityDataSerializers.BOOLEAN);
     private final AnimationFactory factory = new AnimationFactory(this);
     public AttackType attackType;
 
-    public GlumbossEntity(EntityType<? extends GlumbossEntity> p_i48567_1_, Level p_i48567_2_) {
+    public GlumpEntity(EntityType<? extends GlumpEntity> p_i48567_1_, Level p_i48567_2_) {
         super(p_i48567_1_, p_i48567_2_);
     }
 
