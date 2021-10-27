@@ -1,6 +1,7 @@
 package coda.glumbis;
 
 import coda.glumbis.common.entities.GlumbossEntity;
+import coda.glumbis.common.entities.GlumpEntity;
 import coda.glumbis.common.init.GlumbisEntities;
 import coda.glumbis.common.init.GlumbisItems;
 import net.minecraft.nbt.CompoundTag;
@@ -52,6 +53,7 @@ public class Glumbis {
 
     private void registerEntityAttributes(EntityAttributeCreationEvent event) {
         event.put(GlumbisEntities.GLUMBOSS.get(), GlumbossEntity.createAttributes().build());
+        event.put(GlumbisEntities.GLUMP.get(), GlumpEntity.createAttributes().build());
     }
 
     private void onEntityInteract(PlayerInteractEvent.EntityInteract event) {

@@ -13,17 +13,17 @@ public class GlumpModel extends AnimatedGeoModel<GlumpEntity> {
 
     @Override
     public ResourceLocation getModelLocation(GlumpEntity object) {
-        return new ResourceLocation(Glumbis.MOD_ID, "geo/entity/glumboss.geo.json");
+        return new ResourceLocation(Glumbis.MOD_ID, "geo/entity/glump.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureLocation(GlumpEntity object) {
-        return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glumboss.png");
+        return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glump_1.png");
     }
 
     @Override
     public ResourceLocation getAnimationFileLocation(GlumpEntity animatable) {
-        return new ResourceLocation(Glumbis.MOD_ID, "animations/entity/glumboss.animation.json");
+        return new ResourceLocation(Glumbis.MOD_ID, "animations/entity/glump.animation.json");
     }
 
     @Override
