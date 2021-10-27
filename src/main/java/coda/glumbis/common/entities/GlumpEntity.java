@@ -57,6 +57,11 @@ public class GlumpEntity extends PathfinderMob implements IAnimatable, FlyingAni
         return createMobAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.FLYING_SPEED, 0.35F).add(Attributes.ATTACK_DAMAGE, 2.0F).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
     }
 
+    @Override
+    public boolean canBeLeashed(Player p_21418_) {
+        return false;
+    }
+
     public void setSoggy(boolean isSoggy) {
         this.entityData.set(SOGGY, isSoggy);
     }

@@ -81,6 +81,11 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
     }
 
     @Override
+    public boolean canBeLeashed(Player p_21418_) {
+        return false;
+    }
+
+    @Override
     public boolean hurt(DamageSource p_21016_, float p_21017_) {
         return !p_21016_.isProjectile() && super.hurt(p_21016_, p_21017_);
     }

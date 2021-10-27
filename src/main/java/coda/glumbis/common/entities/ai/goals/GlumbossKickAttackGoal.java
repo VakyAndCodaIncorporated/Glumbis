@@ -53,9 +53,9 @@ public class GlumbossKickAttackGoal extends GlumbossAttackGoal {
                 this.timer++;
                 this.entity.setKicking(true);
                 if (this.timer == 15) {
-                    entity.playSound(SoundEvents.GHAST_SCREAM, 0.4F, 1.0F);
+                    //entity.playSound(SoundEvents.GHAST_SCREAM, 0.4F, 1.0F);
 
-                    if (entity.distanceToSqr(target) <= 9) {
+                    if (entity.distanceToSqr(target) <= 16) {
                         target.hurt(DamageSource.mobAttack(entity), (float) entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
                     }
                 }

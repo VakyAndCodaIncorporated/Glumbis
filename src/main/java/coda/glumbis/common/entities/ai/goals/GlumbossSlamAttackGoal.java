@@ -57,15 +57,14 @@ public class GlumbossSlamAttackGoal extends GlumbossAttackGoal {
 
                         double distanceToGlumboss = livingEntity.distanceToSqr(entity);
 
-                        if (distanceToGlumboss > 16) {
+                        if (distanceToGlumboss > 49) {
                             continue;
                         }
 
                         float damage = 1 - Mth.sqrt((float) distanceToGlumboss) / 10;
 
                         livingEntity.hurt(DamageSource.mobAttack(entity), (0.5F * damage + 0.5F) * 10);
-                        livingEntity.setDeltaMovement(livingEntity.getDeltaMovement()
-                                .add(livingEntity.position().subtract(entity.position()).normalize().multiply(1.5, 0.8, 1.5)));
+                        livingEntity.setDeltaMovement(livingEntity.getDeltaMovement().add(livingEntity.position().subtract(entity.position()).normalize().multiply(1.5, 0.8, 1.5)));
                     }
                 }
             }
