@@ -18,22 +18,11 @@ public class GlumpModel extends AnimatedGeoModel<GlumpEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(GlumpEntity object) {
-        return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glump_1.png");
+        return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glump/glump_1.png");
     }
 
     @Override
     public ResourceLocation getAnimationFileLocation(GlumpEntity animatable) {
         return new ResourceLocation(Glumbis.MOD_ID, "animations/entity/glump.animation.json");
-    }
-
-    @Override
-    public void setLivingAnimations(GlumpEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
-        IBone head = this.getAnimationProcessor().getBone("head");
-        IBone catBody = this.getAnimationProcessor().getBone("catBody");
-
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
-        catBody.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 350F));
     }
 }

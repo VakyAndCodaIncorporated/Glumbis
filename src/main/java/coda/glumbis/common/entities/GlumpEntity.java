@@ -46,7 +46,7 @@ public class GlumpEntity extends PathfinderMob implements IAnimatable, FlyingAni
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return createMobAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.FLYING_SPEED, 0.5F).add(Attributes.ATTACK_DAMAGE, 2.0F).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+        return createMobAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.FLYING_SPEED, 0.5F).add(Attributes.ATTACK_DAMAGE, 2.0F).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
     }
 
     public void setSoggy(boolean isSoggy) {
@@ -86,7 +86,7 @@ public class GlumpEntity extends PathfinderMob implements IAnimatable, FlyingAni
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glump.fly", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glump.walk", true));
             return PlayState.CONTINUE;
         }
         else {
