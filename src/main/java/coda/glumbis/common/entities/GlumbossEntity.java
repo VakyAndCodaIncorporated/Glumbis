@@ -2,9 +2,11 @@ package coda.glumbis.common.entities;
 
 import coda.glumbis.common.entities.ai.goals.GlumbossKickAttackGoal;
 import coda.glumbis.common.entities.ai.goals.GlumbossSlamAttackGoal;
+import coda.glumbis.common.init.GlumbisSounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
@@ -21,6 +23,8 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+
+import javax.annotation.Nullable;
 
 public class GlumbossEntity extends PathfinderMob implements IAnimatable {
     private static final EntityDataAccessor<Boolean> SLAMMING = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.BOOLEAN);
@@ -41,6 +45,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.9F));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(6, new MoveTowardsTargetGoal(this, 1.0D, 32));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
@@ -112,6 +117,29 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "controller", 10, this::predicate));
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource p_21239_) {
+        return GlumbisSounds.GLUMBOSS_HURT.get();
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return GlumbisSounds.GLUMBOSS_AMBIENT.get();
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return GlumbisSounds.GLUMBOSS_HURT.get();
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        return 0.4F;
     }
 
     public enum AttackType {

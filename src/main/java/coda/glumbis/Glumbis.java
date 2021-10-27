@@ -4,8 +4,8 @@ import coda.glumbis.common.entities.GlumbossEntity;
 import coda.glumbis.common.entities.GlumpEntity;
 import coda.glumbis.common.init.GlumbisEntities;
 import coda.glumbis.common.init.GlumbisItems;
+import coda.glumbis.common.init.GlumbisSounds;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
@@ -26,7 +26,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
 
-import java.util.Random;
 import java.util.function.Predicate;
 
 @Mod(Glumbis.MOD_ID)
@@ -41,6 +40,7 @@ public class Glumbis {
 
         GlumbisItems.ITEMS.register(bus);
         GlumbisEntities.ENTITIES.register(bus);
+        GlumbisSounds.SOUNDS.register(bus);
 
         bus.addListener(this::registerEntityAttributes);
 

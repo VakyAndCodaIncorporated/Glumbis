@@ -2,26 +2,23 @@ package coda.glumbis.common.entities;
 
 import coda.glumbis.common.entities.ai.control.SmoothFlyingMoveControl;
 import coda.glumbis.common.entities.ai.goals.GlumpGoToTargetGoal;
-import net.minecraft.core.BlockPos;
+import coda.glumbis.common.init.GlumbisSounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
-import net.minecraft.world.entity.ai.util.HoverRandomPos;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
-import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -31,7 +28,6 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
-import java.util.EnumSet;
 
 public class GlumpEntity extends PathfinderMob implements IAnimatable, FlyingAnimal {
     private static final EntityDataAccessor<Boolean> SOGGY = SynchedEntityData.defineId(GlumpEntity.class, EntityDataSerializers.BOOLEAN);
@@ -88,13 +84,24 @@ public class GlumpEntity extends PathfinderMob implements IAnimatable, FlyingAni
     @Override
     public void tick() {
         super.tick();
+        boolean damageTick = tickCount % 20 == 10;
+        boolean soundTick = tickCount % 50 == 10;
 
         if (level.isRainingAt(blockPosition())) {
-            boolean damageTick = tickCount % 20 == 10;
             if (damageTick) {
                 hurt(DamageSource.DROWN, 1.0F);
             }
         }
+
+        if (soundTick) {
+            playSound(GlumbisSounds.GLUMP_FLY.get(), 0.4F, 1.0F);
+        }
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource p_21239_) {
+        return GlumbisSounds.GLUMP_HURT.get();
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
@@ -105,6 +112,8 @@ public class GlumpEntity extends PathfinderMob implements IAnimatable, FlyingAni
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glump.idle", true));
             return PlayState.CONTINUE;
         }
+
+
     }
 
     @Override
