@@ -25,4 +25,14 @@ public class GlumpModel extends AnimatedGeoModel<GlumpEntity> {
     public ResourceLocation getAnimationFileLocation(GlumpEntity animatable) {
         return new ResourceLocation(Glumbis.MOD_ID, "animations/entity/glump.animation.json");
     }
+
+    @Override
+    public void setLivingAnimations(GlumpEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
+        super.setLivingAnimations(entity, uniqueID, customPredicate);
+        IBone root = this.getAnimationProcessor().getBone("root");
+
+        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+        root.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
+        root.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+    }
 }

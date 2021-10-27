@@ -1,7 +1,7 @@
 package coda.glumbis.common.entities;
 
-import coda.glumbis.common.entities.goals.GlumbossKickAttackGoal;
-import coda.glumbis.common.entities.goals.GlumbossSlamAttackGoal;
+import coda.glumbis.common.entities.ai.goals.GlumbossKickAttackGoal;
+import coda.glumbis.common.entities.ai.goals.GlumbossSlamAttackGoal;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;

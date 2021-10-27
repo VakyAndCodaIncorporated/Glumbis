@@ -1,4 +1,4 @@
-package coda.glumbis.common.entities.goals;
+package coda.glumbis.common.entities.ai.goals;
 
 import coda.glumbis.common.entities.GlumbossEntity;
 import net.minecraft.sounds.SoundEvents;
