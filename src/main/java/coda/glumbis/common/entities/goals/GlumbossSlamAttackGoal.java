@@ -46,7 +46,6 @@ public class GlumbossSlamAttackGoal extends GlumbossAttackGoal {
             if (this.timer <= 40) {
                 //todo play a 'woosh' sound here
                 this.timer++;
-                System.out.println(timer);
                 this.entity.setSlamming(true);
                 if (this.timer == 30) {
                     entity.playSound(SoundEvents.GENERIC_EXPLODE, 0.4F, 1.0F);

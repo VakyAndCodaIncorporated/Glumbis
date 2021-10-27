@@ -68,6 +68,11 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
         return this.factory;
     }
 
+    @Override
+    public boolean hurt(DamageSource p_21016_, float p_21017_) {
+        return !p_21016_.isProjectile();
+    }
+
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (getSlamming()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.slam", true));
