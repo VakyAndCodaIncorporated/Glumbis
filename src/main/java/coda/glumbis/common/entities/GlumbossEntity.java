@@ -1,8 +1,10 @@
 package coda.glumbis.common.entities;
 
+import coda.glumbis.common.entities.goals.GlumbossSmashAttackGoal;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -21,6 +23,7 @@ public class GlumbossEntity extends PathfinderMob {
     private int jumpDuration;
     private boolean wasOnGround;
     private int jumpDelayTicks;
+    public AttackType attackType;
 
     public GlumbossEntity(EntityType<? extends GlumbossEntity> p_i48567_1_, Level p_i48567_2_) {
         super(p_i48567_1_, p_i48567_2_);
@@ -32,7 +35,7 @@ public class GlumbossEntity extends PathfinderMob {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(1, new GlumbossSmashAttackGoal(this));
         this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
@@ -41,6 +44,11 @@ public class GlumbossEntity extends PathfinderMob {
 
     public static AttributeSupplier.Builder createAttributes() {
         return createMobAttributes().add(Attributes.MAX_HEALTH, 50.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.ATTACK_DAMAGE, 4.0F).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+    }
+
+    @Override
+    public boolean causeFallDamage(float p_147187_, float p_147188_, DamageSource p_147189_) {
+        return false;
     }
 
     protected float getJumpPower() {
@@ -243,5 +251,9 @@ public class GlumbossEntity extends PathfinderMob {
             }
 
         }
+    }
+
+    public enum AttackType {
+        SMASH
     }
 }
