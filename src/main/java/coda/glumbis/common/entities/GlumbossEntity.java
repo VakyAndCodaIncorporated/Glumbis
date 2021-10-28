@@ -9,7 +9,9 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -31,7 +33,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nullable;
 
 public class GlumbossEntity extends PathfinderMob implements IAnimatable {
-    private final ServerBossEvent bossEvent = (ServerBossEvent)(new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.PROGRESS));
+    private final ServerBossEvent bossEvent = (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.PINK, BossEvent.BossBarOverlay.PROGRESS));
     private static final EntityDataAccessor<Boolean> SLAMMING = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> KICKING = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.BOOLEAN);
     private final AnimationFactory factory = new AnimationFactory(this);
@@ -56,6 +58,27 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
 
     public static AttributeSupplier.Builder createAttributes() {
         return createMobAttributes().add(Attributes.MAX_HEALTH, 50.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.ATTACK_DAMAGE, 6.0F).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+    }
+
+    protected void customServerAiStep() {
+        this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
+        super.customServerAiStep();
+    }
+
+    public void startSeenByPlayer(ServerPlayer p_31483_) {
+        super.startSeenByPlayer(p_31483_);
+        this.bossEvent.addPlayer(p_31483_);
+    }
+
+    public void stopSeenByPlayer(ServerPlayer p_31488_) {
+        super.stopSeenByPlayer(p_31488_);
+        this.bossEvent.removePlayer(p_31488_);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        setPos(4, 75 + Math.sin(tickCount * 0.25), 96);
     }
 
     public void setSlamming(boolean isSlamming) {
