@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -18,7 +19,6 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -35,9 +35,7 @@ public class GlumpEntity extends PathfinderMob implements IAnimatable, FlyingAni
 
     public GlumpEntity(EntityType<? extends GlumpEntity> p_i48567_1_, Level p_i48567_2_) {
         super(p_i48567_1_, p_i48567_2_);
-        this.moveControl = new SmoothFlyingMoveControl(this, 20, true);
-        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
-        this.setPathfindingMalus(BlockPathTypes.WATER_BORDER, 16.0F);
+        this.moveControl = new SmoothFlyingMoveControl(this, 90, true);
     }
 
     @Override
@@ -50,7 +48,7 @@ public class GlumpEntity extends PathfinderMob implements IAnimatable, FlyingAni
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return createMobAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.FLYING_SPEED, 0.35F).add(Attributes.ATTACK_DAMAGE, 2.0F).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+        return createMobAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.265F).add(Attributes.FLYING_SPEED, 0.35F).add(Attributes.ATTACK_DAMAGE, 2.0F).add(Attributes.FOLLOW_RANGE, 32.0D);
     }
 
     @Override
@@ -112,8 +110,6 @@ public class GlumpEntity extends PathfinderMob implements IAnimatable, FlyingAni
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glump.idle", true));
             return PlayState.CONTINUE;
         }
-
-
     }
 
     @Override
