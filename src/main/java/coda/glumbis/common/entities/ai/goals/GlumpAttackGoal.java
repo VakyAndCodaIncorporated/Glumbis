@@ -23,7 +23,7 @@ public class GlumpAttackGoal extends Goal {
     public void tick() {
         super.tick();
         LivingEntity livingEntity = this.entity.getTarget();
-        if(this.entity.distanceToSqr(livingEntity) < 6.35f){
+        if (this.entity.distanceToSqr(livingEntity) < 6.35f) {
             this.entity.getNavigation().stop();
             this.entity.setExploding(true);
             doExplode(this.entity, livingEntity);
@@ -33,9 +33,8 @@ public class GlumpAttackGoal extends Goal {
     public void doExplode(GlumpEntity entity, LivingEntity livingEntity){
         float damage = 1 - Mth.sqrt((float) livingEntity.distanceToSqr(entity)) / 10;
         entity.playSound(SoundEvents.GENERIC_EXPLODE, 0.4F, 1.0F);
-        livingEntity.hurt(DamageSource.mobAttack(entity), (0.5F * damage + 0.5F) * 10);
-        livingEntity.setDeltaMovement(livingEntity.getDeltaMovement().add(livingEntity.position().subtract(entity.position()).normalize().multiply(1.5, 0.8, 1.5)));
-        System.out.println("foo");
+        livingEntity.hurt(DamageSource.mobAttack(entity), (0.5F * damage + 0.5F) * 4);
+        livingEntity.setDeltaMovement(livingEntity.getDeltaMovement().add(livingEntity.position().subtract(entity.position()).normalize().multiply(2.0, 1.2, 2.0)));
         this.entity.kill();
     }
 }

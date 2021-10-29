@@ -28,7 +28,7 @@ public class SummonGlumpGoal extends Goal {
     @Override
     public void tick() {
         super.tick();
-        if( this.entity.getHealth() == 150.0f || this.entity.getHealth() == 100.0f || this.entity.getHealth() == 50.0f) {
+        if (this.entity.getHealth() == 150.0f || this.entity.getHealth() == 100.0f || this.entity.getHealth() == 50.0f) {
             this.entity.setSlamming(false);
             this.entity.setKicking(false);
             if (this.entity.getRandom().nextFloat() < 0.05f) {
@@ -38,7 +38,9 @@ public class SummonGlumpGoal extends Goal {
                     glump.moveTo(blockpos, 0.0f, 0.0f);
                     glump.finalizeSpawn((ServerLevel) this.entity.level,
                             this.entity.level.getCurrentDifficultyAt(blockpos),
-                            MobSpawnType.MOB_SUMMONED, (SpawnGroupData) null, (CompoundTag) null);
+                            MobSpawnType.MOB_SUMMONED,
+                            null,
+                            null);
                     this.entity.level.addFreshEntity(glump);
                     System.out.println("Summoning glump!");
                 }
