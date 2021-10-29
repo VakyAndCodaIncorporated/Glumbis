@@ -9,6 +9,7 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 public class GlumbossModel extends AnimatedGeoModel<GlumbossEntity> {
+    public int blinkTimer;
 
     @Override
     public ResourceLocation getModelLocation(GlumbossEntity object) {
@@ -17,7 +18,26 @@ public class GlumbossModel extends AnimatedGeoModel<GlumbossEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(GlumbossEntity object) {
-        return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glumboss.png");
+        if (object.getSlamming() || object.getKicking()) {
+            return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glumboss_angry.png");
+        }
+        else{
+            if(object.tickCount % 40 == 0){
+                if(object.getRandom().nextFloat() < 0.33){
+                    blinkTimer = 10;
+                }
+            }
+            if(blinkTimer > 0){
+                blinkTimer--;
+                if(blinkTimer > 7){
+                    return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glumboss_angry.png");
+                }
+                return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glumboss_blink.png");
+            }
+            else{
+                return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glumboss.png");
+            }
+        }
     }
 
     @Override

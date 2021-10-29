@@ -8,7 +8,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public class GlumbossKickAttackGoal extends GlumbossAttackGoal {
     private int timer;
-    private final int cooldown = 30;
+    private final int cooldown = 65;
     private int cooldownTimer;
 
     public GlumbossKickAttackGoal(GlumbossEntity entity) {
@@ -18,19 +18,13 @@ public class GlumbossKickAttackGoal extends GlumbossAttackGoal {
     @Override
     public void start() {
         super.start();
-
-//        LivingEntity target = entity.getTarget();
-//        double x = Mth.clamp(target.getX() - entity.getX(), -0.25, 0.25);
-//        double z = Mth.clamp(target.getZ() - entity.getZ(), -0.25, 0.25);
-//        entity.setDeltaMovement(entity.getDeltaMovement().add(x, 0, z));
-
         this.timer = 0;
     }
 
     @Override
     public boolean canUse() {
         LivingEntity target = entity.getTarget();
-        if (target != null) {
+        if (target != null && !this.entity.getSlamming()) {
             return attackType == GlumbossEntity.AttackType.KICK && entity.distanceToSqr(target) <= 25;
         }
         else {
@@ -45,18 +39,22 @@ public class GlumbossKickAttackGoal extends GlumbossAttackGoal {
 
         if (cooldownTimer < cooldown) {
             cooldownTimer++;
+            this.timer = 0;
         }
         else {
             LivingEntity target = entity.getTarget();
 
-            if (target != null && this.timer <= 30) {
+            if (target != null && this.timer <= 20 && entity.distanceToSqr(target) <= 16) {
                 this.timer++;
+                this.entity.getNavigation().stop();
+                this.entity.getLookControl().setLookAt(target, 30.0f, 30.0f);
                 this.entity.setKicking(true);
-                if (this.timer == 15) {
-                    //entity.playSound(SoundEvents.GHAST_SCREAM, 0.4F, 1.0F);
-
+                this.entity.setSlamming(false);
+                if (this.timer == 17) {
                     if (entity.distanceToSqr(target) <= 16) {
                         target.hurt(DamageSource.mobAttack(entity), (float) entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+                        System.out.println(this.entity.getKicking() + ": kicking");
+                        //this.entity.setKicking(false);
                     }
                 }
             }

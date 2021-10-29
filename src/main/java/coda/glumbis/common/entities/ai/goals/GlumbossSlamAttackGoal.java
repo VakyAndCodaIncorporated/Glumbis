@@ -5,6 +5,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 
 public class GlumbossSlamAttackGoal extends GlumbossAttackGoal {
     private int timer;
@@ -44,8 +45,9 @@ public class GlumbossSlamAttackGoal extends GlumbossAttackGoal {
             if (target != null && this.timer <= 45) {
                 this.timer++;
                 this.entity.setSlamming(true);
-
-                //todo play a 'woosh' sound here
+                this.entity.setKicking(false);
+                this.entity.getLookControl().setLookAt(target, 30.0f, 30.0f);
+                this.entity.getNavigation().stop();
                 if (this.timer == 43) {
                     entity.playSound(SoundEvents.GENERIC_EXPLODE, 0.4F, 1.0F);
 
