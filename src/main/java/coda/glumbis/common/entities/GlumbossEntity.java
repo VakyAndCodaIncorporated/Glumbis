@@ -2,6 +2,7 @@ package coda.glumbis.common.entities;
 
 import coda.glumbis.common.entities.ai.goals.GlumbossKickAttackGoal;
 import coda.glumbis.common.entities.ai.goals.GlumbossSlamAttackGoal;
+import coda.glumbis.common.entities.ai.goals.SummonGlumpGoal;
 import coda.glumbis.common.init.GlumbisSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -45,8 +46,9 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new GlumbossSlamAttackGoal(this));
-        this.goalSelector.addGoal(2, new GlumbossKickAttackGoal(this));
+        this.goalSelector.addGoal(5, new GlumbossSlamAttackGoal(this));
+        this.goalSelector.addGoal(6, new GlumbossKickAttackGoal(this));
+        this.goalSelector.addGoal(3, new SummonGlumpGoal(this));
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.9F));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
@@ -55,7 +57,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return createMobAttributes().add(Attributes.MAX_HEALTH, 50.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.ATTACK_DAMAGE, 6.0F).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+        return createMobAttributes().add(Attributes.MAX_HEALTH, 150.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.ATTACK_DAMAGE, 6.0F).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
     }
 
     public void setSlamming(boolean isSlamming) {
@@ -113,12 +115,12 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (getSlamming()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.slam", true));
+        if (getKicking()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.kick", true));
             return PlayState.CONTINUE;
         }
-        else if (getKicking()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.kick", true));
+        else if (getSlamming()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.slam", true));
             return PlayState.CONTINUE;
         }
         else if (event.isMoving()) {
