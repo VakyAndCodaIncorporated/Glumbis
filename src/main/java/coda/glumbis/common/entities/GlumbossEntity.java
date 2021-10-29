@@ -12,7 +12,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -75,12 +74,6 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
     public void stopSeenByPlayer(ServerPlayer p_31488_) {
         super.stopSeenByPlayer(p_31488_);
         this.bossEvent.removePlayer(p_31488_);
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        setPos(4, 75 + Math.sin(tickCount * 0.25), 96);
     }
 
     public void setSlamming(boolean isSlamming) {

@@ -31,12 +31,12 @@ public class GlumpModel extends AnimatedGeoModel<GlumpEntity> {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone root = this.getAnimationProcessor().getBone("root");
         IBone chest = this.getAnimationProcessor().getBone("chest");
-
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+
         chest.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
         root.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
 
-        if(entity.getExploding()){
+        if (entity.getExploding()) {
             root.setScaleX((float) (root.getScaleX() + 0.1));
             root.setScaleY((float) (root.getScaleY() + 0.1));
             root.setScaleZ((float) (root.getScaleZ() + 0.1));

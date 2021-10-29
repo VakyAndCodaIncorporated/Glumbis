@@ -38,6 +38,7 @@ public class GlumpEntity extends Monster implements IAnimatable {
 
     public GlumpEntity(EntityType<? extends GlumpEntity> p_i48567_1_, Level p_i48567_2_) {
         super(p_i48567_1_, p_i48567_2_);
+        this.setNoGravity(true);
     }
 
     protected void defineSynchedData() {
