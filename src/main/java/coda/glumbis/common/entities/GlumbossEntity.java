@@ -31,7 +31,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nullable;
 
 public class GlumbossEntity extends PathfinderMob implements IAnimatable {
-    private final ServerBossEvent bossEvent = (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.PINK, BossEvent.BossBarOverlay.PROGRESS));
+    private final ServerBossEvent bossEvent = (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.WHITE, BossEvent.BossBarOverlay.PROGRESS));
     private static final EntityDataAccessor<Boolean> SLAMMING = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> KICKING = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.BOOLEAN);
     private final AnimationFactory factory = new AnimationFactory(this);
@@ -45,14 +45,13 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(5, new GlumbossSlamAttackGoal(this));
-        this.goalSelector.addGoal(6, new GlumbossKickAttackGoal(this));
-        this.goalSelector.addGoal(7, new GlumbossGoToTargetGoal(this));
-        this.goalSelector.addGoal(3, new SummonGlumpGoal(this));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.9F));
-        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 6.0F));
-        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(6, new MoveTowardsTargetGoal(this, 1.0D, 32));
+        this.goalSelector.addGoal(1, new SummonGlumpGoal(this));
+        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.9F));
+        this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(4, new GlumbossSlamAttackGoal(this));
+        this.goalSelector.addGoal(5, new GlumbossKickAttackGoal(this));
+        this.goalSelector.addGoal(6, new GlumbossGoToTargetGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
@@ -125,8 +124,8 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
     }
 
     @Override
-    public boolean hurt(DamageSource p_21016_, float p_21017_) {
-        return !p_21016_.isProjectile() && super.hurt(p_21016_, p_21017_);
+    public boolean hurt(DamageSource source, float amount) {
+        return !source.isProjectile() && super.hurt(source, amount);
     }
 
     @Override
@@ -135,12 +134,12 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (getSlamming()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.slam", true));
+        if (getKicking()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.kick", false));
             return PlayState.CONTINUE;
         }
-        else if (getKicking()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.kick", true));
+        else if (getSlamming()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.slam", false));
             return PlayState.CONTINUE;
         }
         else if (event.isMoving()) {

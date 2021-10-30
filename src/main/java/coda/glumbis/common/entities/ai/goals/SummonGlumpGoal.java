@@ -4,18 +4,13 @@ import coda.glumbis.common.entities.GlumbossEntity;
 import coda.glumbis.common.entities.GlumpEntity;
 import coda.glumbis.common.init.GlumbisEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.monster.Evoker;
-import net.minecraft.world.entity.monster.Vex;
 
 public class SummonGlumpGoal extends Goal {
     private GlumbossEntity entity;
-    private final int MIN_COOLDOWN = 350;
+    private final int minCooldown = 350;
     private int coolDownTimer;
     public SummonGlumpGoal(GlumbossEntity entity){
         this.entity = entity;
@@ -41,7 +36,7 @@ public class SummonGlumpGoal extends Goal {
     @Override
     public void tick() {
         super.tick();
-        if (this.coolDownTimer <= this.MIN_COOLDOWN + this.entity.getRandom().nextInt(100)) {
+        if (this.coolDownTimer <= this.minCooldown + this.entity.getRandom().nextInt(100)) {
             this.coolDownTimer++;
         }
         else{

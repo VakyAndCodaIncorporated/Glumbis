@@ -20,11 +20,6 @@ public class GlumbossSlamAttackGoal extends GlumbossAttackGoal {
     public void start() {
         super.start();
 
-//        LivingEntity target = entity.getTarget();
-//        double x = Mth.clamp(target.getX() - entity.getX(), -0.25, 0.25);
-//        double z = Mth.clamp(target.getZ() - entity.getZ(), -0.25, 0.25);
-//        entity.setDeltaMovement(entity.getDeltaMovement().add(x, 1.25, z));
-
         this.timer = 0;
     }
 
@@ -49,7 +44,7 @@ public class GlumbossSlamAttackGoal extends GlumbossAttackGoal {
                 this.entity.setKicking(false);
                 this.entity.getLookControl().setLookAt(target, 30.0f, 30.0f);
                 this.entity.getNavigation().stop();
-                System.out.println(this.timer + ": timer");
+                // System.out.println(this.timer + ": timer");
                 if (this.timer == 43) {
                     entity.playSound(SoundEvents.GENERIC_EXPLODE, 0.4F, 1.0F);
                     for (LivingEntity livingEntity : entity.level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(10))) {
@@ -58,6 +53,7 @@ public class GlumbossSlamAttackGoal extends GlumbossAttackGoal {
                         }
                         double distanceToGlumboss = livingEntity.distanceToSqr(entity);
                         if (distanceToGlumboss > 49) {
+                            System.out.println("too far");
                             this.entity.setSlamming(false);
                             continue;
                         }

@@ -1,6 +1,5 @@
 package coda.glumbis.common.entities;
 
-import coda.glumbis.common.entities.ai.control.SmoothFlyingMoveControl;
 import coda.glumbis.common.entities.ai.goals.GlumpAttackGoal;
 import coda.glumbis.common.entities.ai.goals.GlumpGoToTargetGoal;
 import coda.glumbis.common.init.GlumbisSounds;
@@ -11,18 +10,14 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -42,11 +37,6 @@ public class GlumpEntity extends Monster implements IAnimatable {
         this.setNoGravity(true);
     }
 
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(EXPLODING, false);
-    }
-
     @Override
     protected void registerGoals() {
         super.registerGoals();
@@ -58,9 +48,13 @@ public class GlumpEntity extends Monster implements IAnimatable {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return createMobAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.MOVEMENT_SPEED, 0.265F).add(Attributes.FLYING_SPEED, 0.35F).add(Attributes.ATTACK_DAMAGE, 2.0F).add(Attributes.FOLLOW_RANGE, 32.0D);
+        return createMobAttributes().add(Attributes.MAX_HEALTH, 1.0D).add(Attributes.MOVEMENT_SPEED, 0.265F).add(Attributes.FLYING_SPEED, 0.35F).add(Attributes.ATTACK_DAMAGE, 2.0F).add(Attributes.FOLLOW_RANGE, 32.0D);
     }
 
+    @Override
+    protected int getExperienceReward(Player p_21511_) {
+        return 0;
+    }
 
     @Override
     public boolean causeFallDamage(float p_147187_, float p_147188_, DamageSource p_147189_) {
@@ -70,6 +64,11 @@ public class GlumpEntity extends Monster implements IAnimatable {
     @Override
     public AnimationFactory getFactory() {
         return this.factory;
+    }
+
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(EXPLODING, false);
     }
 
     @Override
@@ -88,7 +87,7 @@ public class GlumpEntity extends Monster implements IAnimatable {
         }
         if(this.level.isClientSide()){
             if(this.getRandom().nextFloat() < 0.12f){
-                this.level.addParticle(ParticleTypes.ANGRY_VILLAGER, this.getRandomX(0.5D), this.getRandomY() - 0.25D, this.getRandomZ(0.5D), 0, 0.08d, 0);
+                this.level.addParticle(ParticleTypes.END_ROD, this.getRandomX(0.5D), this.getRandomY() - 0.25D, this.getRandomZ(0.5D), 0, 0.08d, 0);
             }
         }
         if(getExploding()){

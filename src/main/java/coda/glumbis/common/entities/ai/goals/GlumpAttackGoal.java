@@ -23,7 +23,7 @@ public class GlumpAttackGoal extends Goal {
     public void tick() {
         super.tick();
         LivingEntity livingEntity = this.entity.getTarget();
-        if (this.entity.distanceToSqr(livingEntity) < 6.35f) {
+        if (this.entity.distanceToSqr(livingEntity) < 3.5f) {
             this.entity.getNavigation().stop();
             this.entity.setExploding(true);
             doExplode(this.entity, livingEntity);
