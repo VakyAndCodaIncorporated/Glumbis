@@ -99,10 +99,7 @@ public class GlumpEntity extends Monster implements IAnimatable {
         if (soundTick) {
             playSound(GlumbisSounds.GLUMP_FLY.get(), 0.4F, 1.0F);
         }
-        if (tickCount % 50 == 0) {
-            Vec3 vec3 = getViewVector(1.0F);
-            setDeltaMovement(getDeltaMovement().add(vec3.x(), 0, vec3.z()));
-        }
+
     }
 
     @Nullable

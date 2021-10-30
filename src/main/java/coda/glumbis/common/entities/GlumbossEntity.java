@@ -1,8 +1,6 @@
 package coda.glumbis.common.entities;
 
-import coda.glumbis.common.entities.ai.goals.GlumbossKickAttackGoal;
-import coda.glumbis.common.entities.ai.goals.GlumbossSlamAttackGoal;
-import coda.glumbis.common.entities.ai.goals.SummonGlumpGoal;
+import coda.glumbis.common.entities.ai.goals.*;
 import coda.glumbis.common.init.GlumbisSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -49,6 +47,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(5, new GlumbossSlamAttackGoal(this));
         this.goalSelector.addGoal(6, new GlumbossKickAttackGoal(this));
+        this.goalSelector.addGoal(7, new GlumbossGoToTargetGoal(this));
         this.goalSelector.addGoal(3, new SummonGlumpGoal(this));
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.9F));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 6.0F));
@@ -130,13 +129,18 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
         return !p_21016_.isProjectile() && super.hurt(p_21016_, p_21017_);
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+    }
+
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (getKicking()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.kick", true));
+        if (getSlamming()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.slam", true));
             return PlayState.CONTINUE;
         }
-        else if (getSlamming()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.slam", true));
+        else if (getKicking()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.kick", true));
             return PlayState.CONTINUE;
         }
         else if (event.isMoving()) {

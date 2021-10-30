@@ -54,7 +54,7 @@ public class GlumbossKickAttackGoal extends GlumbossAttackGoal {
                     if (entity.distanceToSqr(target) <= 16) {
                         target.hurt(DamageSource.mobAttack(entity), (float) entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
                         System.out.println(this.entity.getKicking() + ": kicking");
-                        //this.entity.setKicking(false);
+                        this.entity.setKicking(false);
                     }
                 }
             }

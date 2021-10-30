@@ -15,27 +15,44 @@ import net.minecraft.world.entity.monster.Vex;
 
 public class SummonGlumpGoal extends Goal {
     private GlumbossEntity entity;
-    
+    private final int MIN_COOLDOWN = 350;
+    private int coolDownTimer;
     public SummonGlumpGoal(GlumbossEntity entity){
         this.entity = entity;
     }
     
     @Override
     public boolean canUse() {
-        return true;
+        return this.entity.getTarget() != null;
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        this.coolDownTimer = 0;
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        this.coolDownTimer = 0;
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.entity.getHealth() == 150.0f || this.entity.getHealth() == 100.0f || this.entity.getHealth() == 50.0f) {
+        if (this.coolDownTimer <= this.MIN_COOLDOWN + this.entity.getRandom().nextInt(100)) {
+            this.coolDownTimer++;
+        }
+        else{
             this.entity.setSlamming(false);
             this.entity.setKicking(false);
             if (this.entity.getRandom().nextFloat() < 0.05f) {
                 for (int i = 0; i < 3; ++i) {
-                    BlockPos blockpos = this.entity.blockPosition().offset(-2 + this.entity.getRandom().nextInt(5), 1, -2 + this.entity.getRandom().nextInt(5));
+                    BlockPos blockpos = this.entity.blockPosition().offset(-2 + this.entity.getRandom().nextInt(5), 0, -2 + this.entity.getRandom().nextInt(5));
                     GlumpEntity glump = GlumbisEntities.GLUMP.get().create(this.entity.level);
                     glump.moveTo(blockpos, 0.0f, 0.0f);
+                    glump.setNoGravity(false);
                     glump.finalizeSpawn((ServerLevel) this.entity.level,
                             this.entity.level.getCurrentDifficultyAt(blockpos),
                             MobSpawnType.MOB_SUMMONED,
@@ -43,6 +60,7 @@ public class SummonGlumpGoal extends Goal {
                             null);
                     this.entity.level.addFreshEntity(glump);
                     System.out.println("Summoning glump!");
+                    this.coolDownTimer = 0;
                 }
             }
         }
