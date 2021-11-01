@@ -41,7 +41,7 @@ public class GlumbossSlamAttackGoal extends GlumbossAttackGoal {
             if (target != null && this.timer <= 45) {
                 this.timer++;
                 this.entity.setSlamming(true);
-                this.entity.setKicking(false);
+                //this.entity.setKicking(false);
                 this.entity.getLookControl().setLookAt(target, 30.0f, 30.0f);
                 this.entity.getNavigation().stop();
                 // System.out.println(this.timer + ": timer");

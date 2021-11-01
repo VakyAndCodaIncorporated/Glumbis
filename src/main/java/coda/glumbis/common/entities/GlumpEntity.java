@@ -31,6 +31,8 @@ import javax.annotation.Nullable;
 public class GlumpEntity extends Monster implements IAnimatable {
     private final AnimationFactory factory = new AnimationFactory(this);
     private static final EntityDataAccessor<Boolean> EXPLODING = SynchedEntityData.defineId(GlumpEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(GlumpEntity.class, EntityDataSerializers.INT);
+
 
     public GlumpEntity(EntityType<? extends GlumpEntity> p_i48567_1_, Level p_i48567_2_) {
         super(p_i48567_1_, p_i48567_2_);
@@ -69,6 +71,7 @@ public class GlumpEntity extends Monster implements IAnimatable {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(EXPLODING, false);
+        this.entityData.define(VARIANT, 0);
     }
 
     @Override
@@ -76,9 +79,21 @@ public class GlumpEntity extends Monster implements IAnimatable {
         super.tick();
         boolean damageTick = tickCount % 20 == 10;
         boolean soundTick = tickCount % 120 == 10;
-        if(tickCount < 10){
+        if(tickCount < 2){
+            int randomVariant = this.getRandom().nextInt(9);
+            if(randomVariant == 8){
+                if(this.getRandom().nextFloat() < 0.05){
+                    this.setVariant(randomVariant);
+                }
+                else{
+                    this.setVariant(randomVariant - 1);
+                }
+            }
+            else{
+                this.setVariant(randomVariant);
+            }
+            System.out.println(this.getVariant());
             this.level.addParticle(ParticleTypes.POOF, this.getRandomX(0.5D), this.getRandomY() - 0.25D, this.getRandomZ(0.5D), 0, 0.08d, 0);
-
         }
         if (level.isRainingAt(blockPosition())) {
             if (damageTick) {
@@ -118,6 +133,11 @@ public class GlumpEntity extends Monster implements IAnimatable {
     }
 
     @Override
+    public void onAddedToWorld() {
+        super.onAddedToWorld();
+    }
+
+    @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "controller", 10, this::predicate));
     }
@@ -129,4 +149,8 @@ public class GlumpEntity extends Monster implements IAnimatable {
     public boolean getExploding(){
         return this.entityData.get(EXPLODING);
     }
+
+    public void setVariant(int variant){this.entityData.set(VARIANT, variant);}
+
+    public int getVariant(){return this.entityData.get(VARIANT);}
 }

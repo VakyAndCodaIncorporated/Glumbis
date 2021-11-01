@@ -25,7 +25,7 @@ public class GlumbossKickAttackGoal extends GlumbossAttackGoal {
     public boolean canUse() {
         LivingEntity target = entity.getTarget();
         if (target != null && !this.entity.getSlamming()) {
-            return attackType == GlumbossEntity.AttackType.KICK && entity.distanceToSqr(target) <= 25;
+            return true;
         }
         else {
             return false;
@@ -35,7 +35,7 @@ public class GlumbossKickAttackGoal extends GlumbossAttackGoal {
     @Override
     public void tick() {
         super.tick();
-
+        System.out.println(this.entity.getKicking() + ": kicking");
 
         if (cooldownTimer < cooldown) {
             cooldownTimer++;
@@ -44,17 +44,20 @@ public class GlumbossKickAttackGoal extends GlumbossAttackGoal {
         else {
             LivingEntity target = entity.getTarget();
 
-            if (target != null && this.timer <= 20 && entity.distanceToSqr(target) <= 16) {
+            if (target != null && this.timer <= 20) {
                 this.timer++;
                 this.entity.getNavigation().stop();
                 this.entity.getLookControl().setLookAt(target, 30.0f, 30.0f);
                 this.entity.setKicking(true);
                 this.entity.setSlamming(false);
                 if (this.timer == 17) {
-                    if (entity.distanceToSqr(target) <= 16) {
+                    if (entity.distanceToSqr(target) <= 20) {
                         target.hurt(DamageSource.mobAttack(entity), (float) entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
                         System.out.println(this.entity.getKicking() + ": kicking");
                         System.out.println(this.entity.getSlamming() + ": slamming");
+                        //this.entity.setKicking(false);
+                    }
+                    else{
                         this.entity.setKicking(false);
                     }
                 }

@@ -18,7 +18,30 @@ public class GlumpModel extends AnimatedGeoModel<GlumpEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(GlumpEntity object) {
-        return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glump/glump_1.png");
+        //System.out.println(object.getVariant());
+        switch(object.getVariant()){
+            case 9:
+                return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glump/glump_0.png");
+            case 1:
+                return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glump/glump_1.png");
+            case 2:
+                return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glump/glump_2.png");
+            case 3:
+                return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glump/glump_3.png");
+            case 4:
+                return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glump/glump_4.png");
+            case 5:
+                return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glump/glump_5.png");
+            case 6:
+                return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glump/glump_6.png");
+            case 7:
+                return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glump/glump_7.png");
+            case 8:
+                return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glump/glump_8.png");
+            default:
+                //haha Coda, you expected that the default one would be glump_0, but it WAS ME, WADOO!
+                return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glump/glump_7.png");
+        }
     }
 
     @Override
