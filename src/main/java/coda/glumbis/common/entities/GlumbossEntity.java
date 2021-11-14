@@ -1,6 +1,7 @@
 package coda.glumbis.common.entities;
 
-import coda.glumbis.common.entities.ai.goals.*;
+import coda.glumbis.common.entities.ai.goals.glumboss.*;
+import coda.glumbis.common.init.GlumbisParticles;
 import coda.glumbis.common.init.GlumbisSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -30,12 +32,10 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
-public class GlumbossEntity extends PathfinderMob implements IAnimatable {
+public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnimationTickable {
     private final ServerBossEvent bossEvent = (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.WHITE, BossEvent.BossBarOverlay.PROGRESS));
-    private static final EntityDataAccessor<Boolean> SLAMMING = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> KICKING = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.BOOLEAN);
     private final AnimationFactory factory = new AnimationFactory(this);
-    public AttackType attackType;
+    private static final EntityDataAccessor<Integer> ATTACK_STATE = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.INT);
 
     public GlumbossEntity(EntityType<? extends GlumbossEntity> p_i48567_1_, Level p_i48567_2_) {
         super(p_i48567_1_, p_i48567_2_);
@@ -45,18 +45,18 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new SummonGlumpGoal(this));
+        this.goalSelector.addGoal(1, new GlumbossStaticChargeGoal(this));
+        this.goalSelector.addGoal(2, new GlumbossSlamGoal(this));
         this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.9F));
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(3, new GlumbossKickGoal(this));
         this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(4, new GlumbossSlamAttackGoal(this));
-        this.goalSelector.addGoal(5, new GlumbossKickAttackGoal(this));
         this.goalSelector.addGoal(6, new GlumbossGoToTargetGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return createMobAttributes().add(Attributes.MAX_HEALTH, 150.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.ATTACK_DAMAGE, 6.0F).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+        return createMobAttributes().add(Attributes.MAX_HEALTH, 150.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.ATTACK_DAMAGE, 12.0F).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
     }
 
     protected void customServerAiStep() {
@@ -74,26 +74,10 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
         this.bossEvent.removePlayer(p_31488_);
     }
 
-    public void setSlamming(boolean isSlamming) {
-        this.entityData.set(SLAMMING, isSlamming);
-    }
-
-    public boolean getSlamming() {
-        return this.entityData.get(SLAMMING);
-    }
-
-    public void setKicking(boolean isKicking) {
-        this.entityData.set(KICKING, isKicking);
-    }
-
-    public boolean getKicking() {
-        return this.entityData.get(KICKING);
-    }
 
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SLAMMING, false);
-        this.entityData.define(KICKING, false);
+        this.entityData.define(ATTACK_STATE, 0);
     }
 
     public void readAdditionalSaveData(CompoundTag p_31474_) {
@@ -131,18 +115,33 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
     @Override
     public void tick() {
         super.tick();
+        System.out.println(this.getState());
+        if(this.getState() == 3){
+            for(int i = 0; i < 3; i++) {
+                this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(1.5D), this.getRandomY() + 0.85D, this.getRandomZ(1.5D), 0, 0.08d, 0);
+            }
+        }
+    }
+
+    @Override
+    public int tickTimer() {
+        return tickCount;
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (getKicking()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.kick", false));
+        if(getState() == 3){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.static_charge", false));
             return PlayState.CONTINUE;
         }
-        else if (getSlamming()) {
+        if(getState() == 2){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.slam", false));
             return PlayState.CONTINUE;
         }
-        else if (event.isMoving()) {
+        if(getState() == 1){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.kick", false));
+            return PlayState.CONTINUE;
+        }
+        if(event.isMoving()){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.walk", true));
             return PlayState.CONTINUE;
         }
@@ -154,7 +153,15 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 10, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, "controller", 2, this::predicate));
+    }
+
+    public int getState(){
+        return this.entityData.get(ATTACK_STATE);
+    }
+
+    public void setState(int state){
+        this.entityData.set(ATTACK_STATE, state);
     }
 
     @Nullable
@@ -180,8 +187,4 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable {
         return 0.4F;
     }
 
-    public enum AttackType {
-        SLAM,
-        KICK
-    }
 }

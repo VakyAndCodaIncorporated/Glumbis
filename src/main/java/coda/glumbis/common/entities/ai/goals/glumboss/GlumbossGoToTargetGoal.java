@@ -1,4 +1,4 @@
-package coda.glumbis.common.entities.ai.goals;
+package coda.glumbis.common.entities.ai.goals.glumboss;
 
 import coda.glumbis.common.entities.GlumbossEntity;
 import coda.glumbis.common.entities.GlumpEntity;
@@ -15,13 +15,13 @@ public class GlumbossGoToTargetGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return !this.entity.getKicking() && !this.entity.getSlamming() && this.entity.getTarget() != null;
+        return this.entity.getTarget() != null;
     }
 
     @Override
     public void tick() {
         LivingEntity livingEntity = entity.getTarget();
-        if (this.entity.tickCount % 20 == 0) {
+        if (this.entity.tickCount % 20 == 0 && this.entity.getState() == 0) {
             this.entity.getLookControl().setLookAt(livingEntity, 30, 30);
             this.entity.getNavigation().moveTo(this.entity.getNavigation().createPath(livingEntity, 1), 1.65d);
         }

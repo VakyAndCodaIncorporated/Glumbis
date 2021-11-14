@@ -4,6 +4,7 @@ import coda.glumbis.common.entities.GlumbossEntity;
 import coda.glumbis.common.entities.GlumpEntity;
 import coda.glumbis.common.init.GlumbisEntities;
 import coda.glumbis.common.init.GlumbisItems;
+import coda.glumbis.common.init.GlumbisParticles;
 import coda.glumbis.common.init.GlumbisSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
@@ -41,6 +42,7 @@ public class Glumbis {
         GlumbisItems.ITEMS.register(bus);
         GlumbisEntities.ENTITIES.register(bus);
         GlumbisSounds.SOUNDS.register(bus);
+        GlumbisParticles.PARTICLES.register(bus);
 
         bus.addListener(this::registerEntityAttributes);
 
