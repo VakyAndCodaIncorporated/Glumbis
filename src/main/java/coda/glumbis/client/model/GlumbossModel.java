@@ -18,7 +18,7 @@ public class GlumbossModel extends AnimatedTickingGeoModel<GlumbossEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(GlumbossEntity object) {
-        return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glumboss.png");
+        return new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glumboss/glumboss.png");
     }
 
     @Override
