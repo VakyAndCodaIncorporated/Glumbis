@@ -26,7 +26,6 @@ public class GlumbossChargedLayer extends GeoLayerRenderer {
         super(entityRendererIn);
     }
 
-
     @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, Entity entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         RenderType cameo =  RenderType.eyes(EYES);
