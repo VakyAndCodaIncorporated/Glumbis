@@ -17,7 +17,7 @@ import net.minecraft.world.phys.Vec3;
 public class GlumbossStaticChargeGoal extends Goal {
     protected GlumbossEntity entity;
     private int timer;
-    private final int COOLDOWN = 20;
+    private final int COOLDOWN = 200;
     private int cooldownTimer;
 
     public GlumbossStaticChargeGoal(GlumbossEntity entity) {

@@ -34,7 +34,6 @@ public class GlumpEntity extends Monster implements IAnimatable {
     private static final EntityDataAccessor<Boolean> EXPLODING = SynchedEntityData.defineId(GlumpEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(GlumpEntity.class, EntityDataSerializers.INT);
 
-
     public GlumpEntity(EntityType<? extends GlumpEntity> p_i48567_1_, Level p_i48567_2_) {
         super(p_i48567_1_, p_i48567_2_);
         this.setNoGravity(true);
