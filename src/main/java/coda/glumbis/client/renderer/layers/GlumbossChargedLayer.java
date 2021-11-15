@@ -18,7 +18,7 @@ import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 public class GlumbossChargedLayer extends GeoLayerRenderer {
-    private static final ResourceLocation POWER = new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glumboss/glumboss_armour_1.png");
+    private static final ResourceLocation POWER = new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glumboss/glumboss_armour.png");
     private static final ResourceLocation EYES = new ResourceLocation(Glumbis.MOD_ID, "textures/entity/glumboss/glumboss_eye_glow.png");
     private static final ResourceLocation MODEL = new ResourceLocation(Glumbis.MOD_ID, "geo/entity/glumboss.geo.json");
 
