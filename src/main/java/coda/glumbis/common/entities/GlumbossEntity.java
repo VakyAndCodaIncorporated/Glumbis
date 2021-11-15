@@ -58,7 +58,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return createMobAttributes().add(Attributes.MAX_HEALTH, 200.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.ATTACK_DAMAGE, 12.0F).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+        return createMobAttributes().add(Attributes.MAX_HEALTH, 200.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.ATTACK_DAMAGE, 12.0F).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
     }
 
     protected void customServerAiStep() {
