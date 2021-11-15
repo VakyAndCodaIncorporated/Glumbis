@@ -45,13 +45,13 @@ public class GlumbossStaticChargeGoal extends Goal {
                         int lightningBoltAmount = entity.isInWaterOrRain() ? 10 : 3;
                         for(int i = 0; i <= lightningBoltAmount; i++) {
                             if (this.entity.level instanceof ServerLevel) {
-                                double x = this.entity.level.getRandom().nextInt(3) + 2;
+                                double x = this.entity.level.getRandom().nextFloat();
                                 if (this.entity.level.getRandom().nextFloat() <= 0.5) {
-                                    x = (x * -1) - 4;
+                                    x = (0.5 * x + 0.5) * 15;
                                 }
-                                double z = this.entity.level.getRandom().nextInt(3) + 2;
+                                double z = this.entity.level.getRandom().nextFloat();
                                 if (this.entity.level.getRandom().nextFloat() <= 0.5) {
-                                    z = (z * -1) - 4;
+                                    z = (0.5 * z + 0.5) * 15;
                                 }
                                 BlockPos blockpos = this.entity.blockPosition().offset(x, 0, z);
                                 if (this.entity.level.canSeeSky(blockpos.above())) {

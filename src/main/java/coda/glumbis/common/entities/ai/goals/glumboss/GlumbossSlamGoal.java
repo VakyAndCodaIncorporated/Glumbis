@@ -64,6 +64,6 @@ public class GlumbossSlamGoal extends Goal {
     }
 
     protected double getAttackReachSqr(LivingEntity entity) {
-        return (double)(entity.getBbWidth() * 2.0F * entity.getBbWidth() * 2.0F + entity.getBbWidth());
+        return entity.getBbWidth() * 2.0F * entity.getBbWidth() * 2.0F + entity.getBbWidth();
     }
 }
