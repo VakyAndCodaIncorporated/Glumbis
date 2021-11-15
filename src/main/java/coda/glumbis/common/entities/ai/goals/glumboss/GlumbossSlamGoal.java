@@ -37,6 +37,7 @@ public class GlumbossSlamGoal extends Goal {
                 if (this.timer <= 60) {
                     this.timer++;
                     this.entity.setState(2);
+                    this.entity.getNavigation().stop();
                     if (this.timer == 35) {
                         this.tryHurtTarget(this.entity, this.entity.distanceTo(this.entity.getTarget()));
                     }

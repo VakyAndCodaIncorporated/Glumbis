@@ -14,6 +14,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -109,13 +110,13 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        return !source.isProjectile() && super.hurt(source, amount);
+            return !source.isProjectile() && super.hurt(source, amount);
     }
 
     @Override
     public void tick() {
         super.tick();
-        System.out.println(this.getState());
+        this.clearFire();
         if(this.getState() == 3){
             for(int i = 0; i < 3; i++) {
                 this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(1.5D), this.getRandomY() + 0.85D, this.getRandomZ(1.5D), 0, 0.08d, 0);

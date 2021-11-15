@@ -33,6 +33,7 @@ public class GlumbossKickGoal extends Goal {
             } else {
                 if (this.timer < 20) {
                     this.timer++;
+                    this.entity.getNavigation().stop();
                     this.entity.setState(1);
                     if (this.timer == 13) {
                         this.tryHurtTarget(this.entity, this.entity.distanceTo(this.entity.getTarget()));
