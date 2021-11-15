@@ -42,7 +42,8 @@ public class GlumbossStaticChargeGoal extends Goal {
                     this.entity.getNavigation().stop();
                     if (this.timer == 42) {
                         this.tryHurtTarget(this.entity, this.entity.distanceTo(this.entity.getTarget()));
-                        for(int i = 0; i <=3; i++) {
+                        int lightningBoltAmount = entity.isInWaterOrRain() ? 10 : 3;
+                        for(int i = 0; i <= lightningBoltAmount; i++) {
                             if (this.entity.level instanceof ServerLevel) {
                                 double x = this.entity.level.getRandom().nextInt(3) + 2;
                                 if (this.entity.level.getRandom().nextFloat() <= 0.5) {
@@ -84,6 +85,6 @@ public class GlumbossStaticChargeGoal extends Goal {
     }
 
     protected double getAttackReachSqr(LivingEntity entity) {
-        return (double)(entity.getBbWidth() * 2.0F * entity.getBbWidth() * 2.0F + entity.getBbWidth());
+        return entity.getBbWidth() * 2.0F * entity.getBbWidth() * 2.0F + entity.getBbWidth();
     }
 }
