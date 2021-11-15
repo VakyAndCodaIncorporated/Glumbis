@@ -24,15 +24,9 @@ public class GlumbossStaticChargeGoal extends Goal {
         this.entity = entity;
     }
 
-
     @Override
     public boolean canUse() {
-        if(this.entity.getTarget() != null){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return this.entity.getTarget() != null;
     }
 
     @Override
@@ -59,7 +53,7 @@ public class GlumbossStaticChargeGoal extends Goal {
                                     z = (z * -1) - 4;
                                 }
                                 BlockPos blockpos = this.entity.blockPosition().offset(x, 0, z);
-                                if (this.entity.level.canSeeSky(blockpos)) {
+                                if (this.entity.level.canSeeSky(blockpos.above())) {
                                     LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(this.entity.level);
                                     lightningbolt.moveTo(blockpos.getX(), blockpos.getY(), blockpos.getZ());
                                     this.entity.level.addFreshEntity(lightningbolt);

@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.BossEvent;
@@ -75,7 +76,6 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
         this.bossEvent.removePlayer(p_31488_);
     }
 
-
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ATTACK_STATE, 0);
@@ -110,7 +110,11 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-            return !source.isProjectile() && super.hurt(source, amount);
+        return !source.isProjectile() && super.hurt(source, amount);
+    }
+
+    @Override
+    public void thunderHit(ServerLevel p_19927_, LightningBolt p_19928_) {
     }
 
     @Override
