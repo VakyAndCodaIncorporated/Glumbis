@@ -1,7 +1,6 @@
 package coda.glumbis.client.model;
 
 import coda.glumbis.Glumbis;
-import coda.glumbis.common.entities.GlumbossEntity;
 import coda.glumbis.common.entities.GlumpEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -59,10 +58,10 @@ public class GlumpModel extends AnimatedGeoModel<GlumpEntity> {
         chest.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
         root.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
 
-        if (entity.getExploding()) {
-            root.setScaleX((float) (root.getScaleX() + 0.1));
-            root.setScaleY((float) (root.getScaleY() + 0.1));
-            root.setScaleZ((float) (root.getScaleZ() + 0.1));
+        if(entity.tickCount % 10 == 0){
+            root.setScaleZ(root.getScaleZ() + entity.getRandom().nextFloat()/10);
+            root.setScaleY(root.getScaleY() + entity.getRandom().nextFloat()/10);
+            root.setScaleX(root.getScaleX() + entity.getRandom().nextFloat()/10);
         }
     }
 }

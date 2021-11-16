@@ -1,6 +1,8 @@
 package coda.glumbis.common.entities.ai.goals.glumboss;
 
 import coda.glumbis.common.entities.GlumbossEntity;
+import coda.glumbis.common.entities.GlumpEntity;
+import coda.glumbis.common.init.GlumbisEntities;
 import coda.glumbis.common.init.GlumbisParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -11,6 +13,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
 
@@ -26,7 +29,7 @@ public class GlumbossStaticChargeGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return this.entity.getTarget() != null;
+        return this.entity.getTarget() != null && this.entity.distanceToSqr(this.entity) < 35.0f;
     }
 
     @Override
@@ -59,6 +62,11 @@ public class GlumbossStaticChargeGoal extends Goal {
                                     lightningbolt.moveTo(blockpos.getX(), blockpos.getY(), blockpos.getZ());
                                     this.entity.level.addFreshEntity(lightningbolt);
                                 }
+                                GlumpEntity glump = GlumbisEntities.GLUMP.get().create(this.entity.level);
+                                glump.moveTo(blockpos.getX(), blockpos.getY(), blockpos.getZ());
+                                glump.setNoGravity(false);
+                                glump.finalizeSpawn((ServerLevel) this.entity.level, this.entity.level.getCurrentDifficultyAt(blockpos), MobSpawnType.MOB_SUMMONED, null, null);
+                                this.entity.level.addFreshEntity(glump);
                             }
                         }
                     }

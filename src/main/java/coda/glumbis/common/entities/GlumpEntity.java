@@ -1,5 +1,7 @@
 package coda.glumbis.common.entities;
 
+import coda.glumbis.common.entities.ai.goals.glump.GlumpAttackGoal;
+import coda.glumbis.common.entities.ai.goals.glump.GlumpPounceGoal;
 import coda.glumbis.common.init.GlumbisParticles;
 import coda.glumbis.common.init.GlumbisSounds;
 import com.ibm.icu.text.MessagePattern;
@@ -8,9 +10,11 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -45,8 +49,8 @@ public class GlumpEntity extends Monster implements IAnimatable {
         super.registerGoals();
         this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
-        //this.goalSelector.addGoal(1, new GlumpGoToTargetGoal(this));
-        //this.goalSelector.addGoal(1, new GlumpAttackGoal(this));
+        this.goalSelector.addGoal(1, new GlumpPounceGoal(this));
+        this.goalSelector.addGoal(1, new GlumpAttackGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
@@ -80,10 +84,7 @@ public class GlumpEntity extends Monster implements IAnimatable {
         super.tick();
         boolean damageTick = tickCount % 20 == 10;
         boolean soundTick = tickCount % 120 == 10;
-        boolean flyTick = tickCount % 20 == 0;
-
         if(tickCount < 2){
-
             int randomVariant = this.getRandom().nextInt(9);
             if(randomVariant == 8){
                 if(this.getRandom().nextFloat() < 0.05){
@@ -105,14 +106,20 @@ public class GlumpEntity extends Monster implements IAnimatable {
             }
         }
         if(this.level.isClientSide()){
-            if(this.getRandom().nextFloat() < 0.12f){
-                this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(0.5D), this.getRandomY() + 0.25D, this.getRandomZ(0.5D), 0, 0.08d, 0);
+            if(this.getRandom().nextFloat() < 0.56f){
+                for(int i = 0; i < 5; i++) {
+                    this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(0.5D), this.getRandomY() + 0.25D, this.getRandomZ(0.5D), 0, 0.08d, 0);
+                }
             }
         }
         if(getExploding()){
             if(this.level.isClientSide()) {
-                this.level.addParticle(ParticleTypes.EXPLOSION, this.getRandomX(0.5D), this.getRandomY() - 0.25D, this.getRandomZ(0.5D), 0, 0.08d, 0);
+                for(int i = 0; i < 20; i++) {
+                    this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(3.5D), (this.getPosition(1.0f).y() - 0.5) , this.getRandomZ(3.5D), 0, this.getRandomY() * 2, 0);
+                }
             }
+            this.setDeltaMovement(0, 0, 0);
+            this.kill();
         }
         if (soundTick) {
             playSound(GlumbisSounds.GLUMP_FLY.get(), 0.4F, 1.0F);
@@ -136,14 +143,14 @@ public class GlumpEntity extends Monster implements IAnimatable {
         }
     }
 
-    @Override
-    public void onAddedToWorld() {
-        super.onAddedToWorld();
-    }
 
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "controller", 10, this::predicate));
+    }
+
+    @Override
+    public void thunderHit(ServerLevel p_19927_, LightningBolt p_19928_) {
     }
 
     public void setExploding(boolean exploding){

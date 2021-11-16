@@ -120,7 +120,6 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     @Override
     public void tick() {
         super.tick();
-        this.clearFire();
         if(this.getState() == 3){
             for(int i = 0; i < 3; i++) {
                 this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(1.5D), this.getRandomY() + 0.85D, this.getRandomZ(1.5D), 0, 0.08d, 0);

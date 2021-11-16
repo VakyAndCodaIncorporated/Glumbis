@@ -9,8 +9,9 @@ import net.minecraft.world.entity.ai.goal.Goal;
 public class GlumbossSlamGoal extends Goal {
     protected GlumbossEntity entity;
     private int timer;
-    private final int COOLDOWN = 200;
+    private final int COOLDOWN = 100;
     private int cooldownTimer;
+
     public GlumbossSlamGoal(GlumbossEntity entity) {
         this.entity = entity;
     }
@@ -18,13 +19,8 @@ public class GlumbossSlamGoal extends Goal {
 
     @Override
     public boolean canUse() {
+        return this.entity.getTarget() != null && this.entity.distanceToSqr(this.entity) < 15.0f;
 
-        if(this.entity.getTarget() != null){
-            return true;
-        }
-        else{
-            return false;
-        }
     }
 
     @Override
@@ -54,12 +50,12 @@ public class GlumbossSlamGoal extends Goal {
     }
 
     protected void tryHurtTarget(GlumbossEntity entity, double distanceTo){
-        if(distanceTo < this.getAttackReachSqr(entity)){
+        if(distanceTo < this.getAttackReachSqr(entity)/1.2){
             LivingEntity target = this.entity.getTarget();
             double distanceToGlumboss = target.distanceToSqr(entity);
             float damage = 1 - Mth.sqrt((float) distanceToGlumboss) / 10;
             target.hurt(DamageSource.mobAttack(entity), (0.5F * damage + 0.5F) * 10);
-            target.setDeltaMovement(target.getDeltaMovement().add(target.position().normalize().multiply(1.04, 1.4, 1.04)));
+            target.setDeltaMovement(target.getDeltaMovement().add(target.position().normalize().multiply(1.4, 1.4, 1.0)));
         }
     }
 

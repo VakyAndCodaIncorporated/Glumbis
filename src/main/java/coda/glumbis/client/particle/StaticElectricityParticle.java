@@ -33,7 +33,7 @@ public class StaticElectricityParticle extends RisingParticle {
 
     @Override
     protected int getLightColor(float f) {
-        return 240 | super.getLightColor(f) & 0xFF0000;
+        return 240;
     }
 
     @OnlyIn(Dist.CLIENT)
