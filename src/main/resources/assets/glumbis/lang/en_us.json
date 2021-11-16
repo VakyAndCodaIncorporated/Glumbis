@@ -14,5 +14,12 @@
   "advancement.glumbis.glumbis_is_awesome.title": "Glumbis is Awesome!!",
   "advancement.glumbis.glumbis_is_awesome.description": "Catch a cat in a sock.",
   "advancement.glumbis.root.title": "Glumbis",
-  "advancement.glumbis.root.description": "Sock cat"
+  "advancement.glumbis.root.description": "Sock cat",
+
+  "glumbis.glumboss.ambient": "Glumboss snarls",
+  "glumbis.glumboss.hurt": "Glumboss hurts",
+  "glumbis.glumboss.death": "Glumboss dies",
+
+  "glumbis.glump.flies": "Glump flies",
+  "glumbis.glump.hurt": "Glump hurts"
 }

@@ -69,6 +69,11 @@ public class GlumpEntity extends Monster implements IAnimatable {
     }
 
     @Override
+    public boolean hurt(DamageSource source, float amount) {
+        return !source.isFire() && super.hurt(source, amount);
+    }
+
+    @Override
     public AnimationFactory getFactory() {
         return this.factory;
     }

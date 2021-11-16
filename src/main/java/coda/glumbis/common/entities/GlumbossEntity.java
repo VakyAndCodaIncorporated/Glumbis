@@ -190,5 +190,4 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     protected float getSoundVolume() {
         return 0.4F;
     }
-
 }
