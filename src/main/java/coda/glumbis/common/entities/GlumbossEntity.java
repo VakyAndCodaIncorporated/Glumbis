@@ -53,7 +53,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(3, new GlumbossKickGoal(this));
         this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(6, new GlumbossGoToTargetGoal(this));
+        this.goalSelector.addGoal(4, new GlumbossGoToTargetGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 

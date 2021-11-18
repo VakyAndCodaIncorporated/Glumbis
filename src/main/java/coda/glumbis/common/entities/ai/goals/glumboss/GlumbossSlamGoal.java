@@ -16,11 +16,9 @@ public class GlumbossSlamGoal extends Goal {
         this.entity = entity;
     }
 
-
     @Override
     public boolean canUse() {
         return this.entity.getTarget() != null && this.entity.distanceToSqr(this.entity) < 15.0f;
-
     }
 
     @Override
@@ -35,7 +33,8 @@ public class GlumbossSlamGoal extends Goal {
                     this.entity.setState(2);
                     this.entity.getNavigation().stop();
                     if (this.timer == 35) {
-                        this.tryHurtTarget(this.entity, this.entity.distanceTo(this.entity.getTarget()));
+                        LivingEntity target = this.entity.getTarget();
+                        this.tryHurtTarget(this.entity, this.entity.distanceTo(target));
                     }
                 } else {
                     this.timer = 0;
@@ -50,12 +49,12 @@ public class GlumbossSlamGoal extends Goal {
     }
 
     protected void tryHurtTarget(GlumbossEntity entity, double distanceTo){
-        if(distanceTo < this.getAttackReachSqr(entity)/1.2){
+        if (distanceTo < this.getAttackReachSqr(entity)/1.2){
             LivingEntity target = this.entity.getTarget();
             double distanceToGlumboss = target.distanceToSqr(entity);
             float damage = 1 - Mth.sqrt((float) distanceToGlumboss) / 10;
             target.hurt(DamageSource.mobAttack(entity), (0.5F * damage + 0.5F) * 10);
-            target.setDeltaMovement(target.getDeltaMovement().add(target.position().normalize().multiply(1.4, 1.4, 1.0)));
+            target.setDeltaMovement(target.getDeltaMovement().add(target.position().normalize().multiply(1.4, 1.4, 1.4)));
         }
     }
 
