@@ -17,6 +17,33 @@
       }
     ]
   },
+  "glumboss.death": {
+    "subtitle": "glumbis.glumboss.death",
+    "sounds": [
+      {
+        "name": "glumbis:glumboss/hurt",
+        "stream": true
+      }
+    ]
+  },
+  "glumboss.charge": {
+    "subtitle": "glumbis.glumboss.charge",
+    "sounds": [
+      {
+        "name": "glumbis:glumboss/charge",
+        "stream": true
+      }
+    ]
+  },
+  "glumboss.slam": {
+    "subtitle": "glumbis.glumboss.slam",
+    "sounds": [
+      {
+        "name": "glumbis:glumboss/slam",
+        "stream": true
+      }
+    ]
+  },
   "glump.hurt": {
     "subtitle": "glumbis.glump.hurt",
     "sounds": [

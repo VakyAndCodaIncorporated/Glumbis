@@ -12,6 +12,9 @@ public class GlumbisSounds {
 
     public static final RegistryObject<SoundEvent> GLUMBOSS_AMBIENT = SOUNDS.register("glumboss.ambient", () -> new SoundEvent(new ResourceLocation(Glumbis.MOD_ID, "glumboss.ambient")));
     public static final RegistryObject<SoundEvent> GLUMBOSS_HURT = SOUNDS.register("glumboss.hurt", () -> new SoundEvent(new ResourceLocation(Glumbis.MOD_ID, "glumboss.hurt")));
+    public static final RegistryObject<SoundEvent> GLUMBOSS_DEATH = SOUNDS.register("glumboss.death", () -> new SoundEvent(new ResourceLocation(Glumbis.MOD_ID, "glumboss.death")));
+    public static final RegistryObject<SoundEvent> GLUMBOSS_CHARGE = SOUNDS.register("glumboss.charge", () -> new SoundEvent(new ResourceLocation(Glumbis.MOD_ID, "glumboss.charge")));
+    public static final RegistryObject<SoundEvent> GLUMBOSS_SLAM = SOUNDS.register("glumboss.slam", () -> new SoundEvent(new ResourceLocation(Glumbis.MOD_ID, "glumboss.slam")));
 
     public static final RegistryObject<SoundEvent> GLUMP_FLY = SOUNDS.register("glump.fly", () -> new SoundEvent(new ResourceLocation(Glumbis.MOD_ID, "glump.fly")));
     public static final RegistryObject<SoundEvent> GLUMP_HURT = SOUNDS.register("glump.hurt", () -> new SoundEvent(new ResourceLocation(Glumbis.MOD_ID, "glump.hurt")));

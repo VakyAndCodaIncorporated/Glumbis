@@ -183,7 +183,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return GlumbisSounds.GLUMBOSS_HURT.get();
+        return GlumbisSounds.GLUMBOSS_DEATH.get();
     }
 
     @Override

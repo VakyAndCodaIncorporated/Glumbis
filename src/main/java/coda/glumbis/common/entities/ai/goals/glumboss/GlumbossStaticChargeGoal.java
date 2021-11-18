@@ -4,6 +4,7 @@ import coda.glumbis.common.entities.GlumbossEntity;
 import coda.glumbis.common.entities.GlumpEntity;
 import coda.glumbis.common.init.GlumbisEntities;
 import coda.glumbis.common.init.GlumbisParticles;
+import coda.glumbis.common.init.GlumbisSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -43,6 +44,9 @@ public class GlumbossStaticChargeGoal extends Goal {
                     this.timer++;
                     this.entity.setState(3);
                     this.entity.getNavigation().stop();
+                    if (this.timer == 1) {
+                        this.entity.playSound(GlumbisSounds.GLUMBOSS_CHARGE.get(), 3.0F, 1.0F);
+                    }
                     if (this.timer == 42) {
                         this.tryHurtTarget(this.entity, this.entity.distanceTo(this.entity.getTarget()));
                         int lightningBoltAmount = entity.isInWaterOrRain() ? 10 : 3;

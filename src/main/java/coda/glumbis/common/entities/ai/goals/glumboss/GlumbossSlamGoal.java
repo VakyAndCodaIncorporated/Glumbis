@@ -1,6 +1,7 @@
 package coda.glumbis.common.entities.ai.goals.glumboss;
 
 import coda.glumbis.common.entities.GlumbossEntity;
+import coda.glumbis.common.init.GlumbisSounds;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,6 +36,7 @@ public class GlumbossSlamGoal extends Goal {
                     if (this.timer == 35) {
                         LivingEntity target = this.entity.getTarget();
                         this.tryHurtTarget(this.entity, this.entity.distanceTo(target));
+                        this.entity.playSound(GlumbisSounds.GLUMBOSS_SLAM.get(), 1.0F, 1.0F);
                     }
                 } else {
                     this.timer = 0;
