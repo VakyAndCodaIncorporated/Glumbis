@@ -54,7 +54,7 @@ public class GlumbossSlamGoal extends Goal {
             double distanceToGlumboss = target.distanceToSqr(entity);
             float damage = 1 - Mth.sqrt((float) distanceToGlumboss) / 10;
             target.hurt(DamageSource.mobAttack(entity), (0.5F * damage + 0.5F) * 10);
-            target.setDeltaMovement(target.getDeltaMovement().add(target.position().multiply(1.4, 1.4, 1.4)));
+            target.setDeltaMovement(target.getDeltaMovement().add(target.position().normalize().multiply(1.0, 1.4, 1.0)));
         }
     }
 
