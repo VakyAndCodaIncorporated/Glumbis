@@ -3,9 +3,13 @@
   "item.glumbis.glumbis": "Glumbis",
   "item.glumbis.socks": "Socks",
   "item.glumbis.soggy_socks": "Soggy Socks",
+  "item.glumbis.catnip": "Catnip",
+  "item.glumbis.catnip_seeds": "Catnip Seeds",
 
   "entity.glumbis.glumboss": "Glumboss",
   "entity.glumbis.glump": "Glump",
+
+  "block.glumbis.catnip": "Catnip",
 
   "advancement.glumbis.soggy_socks.title": "Squishy and Squeaky!",
   "advancement.glumbis.soggy_socks.description": "Get your socks wet.",

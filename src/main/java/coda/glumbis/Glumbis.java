@@ -2,10 +2,7 @@ package coda.glumbis;
 
 import coda.glumbis.common.entities.GlumbossEntity;
 import coda.glumbis.common.entities.GlumpEntity;
-import coda.glumbis.common.init.GlumbisEntities;
-import coda.glumbis.common.init.GlumbisItems;
-import coda.glumbis.common.init.GlumbisParticles;
-import coda.glumbis.common.init.GlumbisSounds;
+import coda.glumbis.common.init.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.*;
@@ -43,6 +40,7 @@ public class Glumbis {
         GlumbisEntities.ENTITIES.register(bus);
         GlumbisSounds.SOUNDS.register(bus);
         GlumbisParticles.PARTICLES.register(bus);
+        GlumbisBlocks.BLOCKS.register(bus);
 
         bus.addListener(this::registerEntityAttributes);
 

@@ -9,10 +9,10 @@ public class GlumbossKickGoal extends Goal {
     private int timer;
     private final int COOLDOWN = 40;
     private int cooldownTimer;
+
     public GlumbossKickGoal(GlumbossEntity entity) {
         this.entity = entity;
     }
-
 
     @Override
     public boolean canUse() {
