@@ -30,36 +30,14 @@ import net.minecraft.world.phys.HitResult;
 import java.util.UUID;
 
 public class GlumbisItem extends Item {
-    public static final String DATA_CREATURE = "CreatureData";
+    public static final String DATA_CAT = "CatData";
 
     public GlumbisItem(Properties p_41383_) {
         super(p_41383_);
     }
 
-    @Override
-    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
-        Level level = player.level;
-        if (containsEntity(stack)) return InteractionResult.PASS;
-
-        if (!target.getPassengers().isEmpty()) target.ejectPassengers();
-        if (target instanceof Cat) {
-            if (!level.isClientSide) {
-                CompoundTag tag = stack.getOrCreateTag();
-                CompoundTag targetTag = target.serializeNBT();
-                targetTag.putString("OwnerName", player.getName().getString());
-                tag.put(DATA_CREATURE, targetTag);
-                stack.setTag(tag);
-                target.discard();
-                player.setItemInHand(hand, stack);
-                level.playSound(null, player.blockPosition(), SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.AMBIENT, 1, 1);
-            }
-        }
-
-        return InteractionResult.sidedSuccess(true);
-    }
-
     private static boolean containsEntity(ItemStack stack) {
-        return stack.hasTag() && stack.getTag().contains(DATA_CREATURE);
+        return stack.hasTag() && stack.getTag().contains(DATA_CAT);
     }
 
     @Override
@@ -75,7 +53,7 @@ public class GlumbisItem extends Item {
     private static InteractionResult releaseEntity(Level level, Player player, ItemStack stack, BlockPos pos, Direction direction) {
         if (!containsEntity(stack)) return InteractionResult.PASS;
 
-        CompoundTag tag = stack.getTag().getCompound(DATA_CREATURE);
+        CompoundTag tag = stack.getTag().getCompound(DATA_CAT);
         EntityType<?> type = EntityType.byString(tag.getString("id")).orElse(null);
         LivingEntity entity;
 
@@ -102,7 +80,7 @@ public class GlumbisItem extends Item {
             entity.moveTo(pos.getX(), pos.getY() + direction.getStepY() + 1.0, pos.getZ(), player.yRotO, 0f);
 
             if (stack.hasCustomHoverName()) entity.setCustomName(stack.getHoverName());
-            stack.removeTagKey(DATA_CREATURE);
+            stack.removeTagKey(DATA_CAT);
             level.addFreshEntity(entity);
             level.playSound(null, entity.blockPosition(), SoundEvents.BARREL_OPEN, SoundSource  .AMBIENT, 1, 1);
         }
@@ -130,7 +108,7 @@ public class GlumbisItem extends Item {
             }
 
             ItemStack stack = context.getItemInHand();
-            CompoundTag tag = stack.getTag().getCompound(DATA_CREATURE);
+            CompoundTag tag = stack.getTag().getCompound(DATA_CAT);
             EntityType<?> type = EntityType.byString(tag.getString("id")).orElse(null);
             LivingEntity entity = (LivingEntity) type.create(context.getLevel());
             if (entity == null) return InteractionResult.FAIL;
@@ -142,7 +120,7 @@ public class GlumbisItem extends Item {
             entity.moveTo(blockpos1.getX() + 0.5, blockpos1.getY(), blockpos1.getZ() + 0.5, context.getPlayer().yRotO, 0f);
 
             if (stack.hasCustomHoverName()) entity.setCustomName(stack.getHoverName());
-            stack.removeTagKey(DATA_CREATURE);
+            stack.removeTagKey(DATA_CAT);
 
             if (context.getLevel().addFreshEntity(entity)) {
                 itemstack.shrink(1);
