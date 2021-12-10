@@ -1,9 +1,6 @@
 package coda.glumbis.common;
 
 import coda.glumbis.Glumbis;
-import coda.glumbis.common.entities.GlumbossEntity;
-import coda.glumbis.common.entities.GlumpEntity;
-import coda.glumbis.common.init.GlumbisEntities;
 import coda.glumbis.common.init.GlumbisItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
@@ -19,7 +16,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
