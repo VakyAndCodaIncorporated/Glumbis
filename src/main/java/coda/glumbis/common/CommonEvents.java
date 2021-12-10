@@ -2,6 +2,10 @@ package coda.glumbis.common;
 
 import coda.glumbis.Glumbis;
 import coda.glumbis.common.init.GlumbisItems;
+import lain.mods.cos.api.CosArmorAPI;
+import lain.mods.cos.api.inventory.CAStacksBase;
+import lain.mods.cos.init.forge.ForgeCosmeticArmorReworked;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -15,13 +19,19 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import java.util.Random;
 import java.util.function.Predicate;
 
 @Mod.EventBusSubscriber(modid = Glumbis.MOD_ID)
@@ -108,6 +118,32 @@ public class CommonEvents {
 
         if (entity instanceof Creeper creeper) {
             creeper.goalSelector.addGoal(0, new AvoidEntityGoal<>(creeper, Player.class, 12.0F, 1.0D, 1.2D, GLUMBIS_IN_PLAYERS_HOTBAR));
+        }
+    }
+
+    @SubscribeEvent
+    public static void playerTick(TickEvent.PlayerTickEvent event) {
+        Player player = event.player;
+
+        if (ModList.get().isLoaded("cosmeticarmorreworked") && CosArmorAPI.getCAStacks(player.getUUID()).getStackInSlot(0).is(GlumbisItems.SOGGY_SOCKS.get())) {
+
+            Random rand = new Random();
+            Level world = player.getCommandSenderWorld();
+            double d0 = rand.nextGaussian() * 0.056D;
+            double d1 = rand.nextGaussian() * 0.034D;
+            double d2 = rand.nextGaussian() * 0.025D;
+            int level = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, CosArmorAPI.getCAStacks(player.getUUID()).getStackInSlot(0));
+
+            if (level > 0) {
+                for (int i = 1; i < level + 1; i++) {
+                    world.addParticle(ParticleTypes.FALLING_WATER, player.getRandomX(0.25D), player.getY() + 0.15D, player.getRandomZ(0.25D), d0, d1, d2);
+                    world.addParticle(ParticleTypes.FALLING_WATER, player.getRandomX(0.25D), player.getY() + 0.15D, player.getRandomZ(0.25D), d0, d1, d2);
+                }
+            }
+            else {
+                world.addParticle(ParticleTypes.FALLING_WATER, player.getRandomX(0.25D), player.getY() + 0.15D, player.getRandomZ(0.25D), d0, d1, d2);
+                world.addParticle(ParticleTypes.FALLING_WATER, player.getRandomX(0.25D), player.getY() + 0.15D, player.getRandomZ(0.25D), d0, d1, d2);
+            }
         }
     }
 }

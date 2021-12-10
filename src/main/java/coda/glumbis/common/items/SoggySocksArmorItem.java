@@ -2,6 +2,9 @@ package coda.glumbis.common.items;
 
 import coda.glumbis.Glumbis;
 import coda.glumbis.common.init.GlumbisItems;
+import lain.mods.cos.api.CosArmorAPI;
+import lain.mods.cos.api.inventory.CAStacksBase;
+import lain.mods.cos.init.forge.ForgeCosmeticArmorReworked;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
