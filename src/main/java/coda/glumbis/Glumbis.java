@@ -34,7 +34,6 @@ public class Glumbis {
 
     public Glumbis() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        IEventBus forgeBus = MinecraftForge.EVENT_BUS;
 
         GlumbisItems.ITEMS.register(bus);
         GlumbisEntities.ENTITIES.register(bus);
