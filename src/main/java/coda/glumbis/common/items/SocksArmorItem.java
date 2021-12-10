@@ -14,7 +14,7 @@ public class SocksArmorItem extends ArmorItem {
     public static final ArmorMaterial MATERIAL = new SockArmorMaterial(Glumbis.MOD_ID + ":socks", 2, new int[]{1, 2, 2, 1}, 9, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, () -> Ingredient.of(Items.STRING));
 
     public SocksArmorItem(EquipmentSlot slot) {
-        super(MATERIAL, slot, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT).stacksTo(1));
+        super(MATERIAL, slot, new Item.Properties().tab(Glumbis.GROUP).stacksTo(1));
     }
 
     @Override

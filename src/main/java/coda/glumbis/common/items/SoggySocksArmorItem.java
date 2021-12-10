@@ -20,7 +20,7 @@ public class SoggySocksArmorItem extends ArmorItem {
     private final Random rand = new Random();
 
     public SoggySocksArmorItem(EquipmentSlot slot) {
-        super(MATERIAL, slot, new Properties().tab(CreativeModeTab.TAB_COMBAT).stacksTo(1));
+        super(MATERIAL, slot, new Properties().tab(Glumbis.GROUP).stacksTo(1));
     }
 
     @Override

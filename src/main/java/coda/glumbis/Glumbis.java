@@ -10,6 +10,7 @@ import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -31,6 +32,12 @@ import java.util.function.Predicate;
 public class Glumbis {
     public static final String MOD_ID = "glumbis";
     public static final Logger LOGGER = LogManager.getLogger();
+    public static final CreativeModeTab GROUP = new CreativeModeTab(MOD_ID) {
+        @Override
+        public ItemStack makeIcon() {
+            return new ItemStack(GlumbisItems.GLUMBIS.get());
+        }
+    };
 
     public Glumbis() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();

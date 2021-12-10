@@ -20,6 +20,8 @@
   "advancement.glumbis.root.title": "Glumbis",
   "advancement.glumbis.root.description": "Sock cat",
 
+  "itemGroup.glumbis": "Glumbis",
+
   "glumbis.glumboss.ambient": "Glumboss snarls",
   "glumbis.glumboss.hurt": "Glumboss hurts",
   "glumbis.glumboss.death": "Glumboss dies",
