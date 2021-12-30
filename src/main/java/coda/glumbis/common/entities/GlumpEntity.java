@@ -2,10 +2,8 @@ package coda.glumbis.common.entities;
 
 import coda.glumbis.common.entities.ai.goals.glump.GlumpAttackGoal;
 import coda.glumbis.common.entities.ai.goals.glump.GlumpPounceGoal;
-import coda.glumbis.common.init.GlumbisParticles;
-import coda.glumbis.common.init.GlumbisSounds;
-import com.ibm.icu.text.MessagePattern;
-import net.minecraft.client.particle.Particle;
+import coda.glumbis.common.registry.GlumbisParticles;
+import coda.glumbis.common.registry.GlumbisSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;

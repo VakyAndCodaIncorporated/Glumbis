@@ -1,10 +1,10 @@
 package coda.glumbis.common;
 
 import coda.glumbis.Glumbis;
-import coda.glumbis.common.init.GlumbisItems;
+import coda.glumbis.common.entities.RocketPropelledGlumpEntity;
+import coda.glumbis.common.registry.GlumbisEntities;
+import coda.glumbis.common.registry.GlumbisItems;
 import lain.mods.cos.api.CosArmorAPI;
-import lain.mods.cos.api.inventory.CAStacksBase;
-import lain.mods.cos.init.forge.ForgeCosmeticArmorReworked;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -18,24 +18,16 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.npc.InventoryCarrier;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.*;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.EnchantWithLevelsFunction;
-import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -43,7 +35,6 @@ import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.List;
 import java.util.Random;
@@ -106,6 +97,24 @@ public class CommonEvents {
                 cat.setLying(true);
                 cat.setOrderedToSit(true);
             }
+        }
+    }
+
+    // todo - this was for testing, remove it later
+    @SubscribeEvent
+    public static void playerLeftClickEmpty(PlayerInteractEvent.LeftClickEmpty event) {
+        Player player = event.getPlayer();
+        Level world = event.getWorld();
+
+        if (!world.isClientSide()) {
+
+            RocketPropelledGlumpEntity rpg = GlumbisEntities.ROCKET_PROPELLED_GLUMP.get().create(event.getWorld());
+
+            rpg.moveTo(player.position());
+
+            Vec3 vec3 = player.getViewVector(1.0F);
+
+            rpg.shoot(vec3.x, vec3.y, vec3.z, 1.0F, 1.0F);
         }
     }
 

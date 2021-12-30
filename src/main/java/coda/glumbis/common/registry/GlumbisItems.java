@@ -1,16 +1,12 @@
-package coda.glumbis.common.init;
+package coda.glumbis.common.registry;
 
 import coda.glumbis.Glumbis;
 import coda.glumbis.common.items.GlumbisItem;
 import coda.glumbis.common.items.SocksArmorItem;
 import coda.glumbis.common.items.SoggySocksArmorItem;
-import net.minecraft.core.Registry;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

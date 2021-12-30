@@ -1,8 +1,8 @@
 package coda.glumbis.common.entities;
 
 import coda.glumbis.common.entities.ai.goals.glumboss.*;
-import coda.glumbis.common.init.GlumbisParticles;
-import coda.glumbis.common.init.GlumbisSounds;
+import coda.glumbis.common.registry.GlumbisParticles;
+import coda.glumbis.common.registry.GlumbisSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;

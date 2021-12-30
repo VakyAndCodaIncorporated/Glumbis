@@ -2,13 +2,10 @@ package coda.glumbis.common.entities.ai.goals.glumboss;
 
 import coda.glumbis.common.entities.GlumbossEntity;
 import coda.glumbis.common.entities.GlumpEntity;
-import coda.glumbis.common.init.GlumbisEntities;
-import coda.glumbis.common.init.GlumbisParticles;
-import coda.glumbis.common.init.GlumbisSounds;
+import coda.glumbis.common.registry.GlumbisEntities;
+import coda.glumbis.common.registry.GlumbisSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -16,7 +13,6 @@ import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.phys.Vec3;
 
 public class GlumbossStaticChargeGoal extends Goal {
     protected GlumbossEntity entity;

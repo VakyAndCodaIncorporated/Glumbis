@@ -1,6 +1,6 @@
 package coda.glumbis.common.blocks;
 
-import coda.glumbis.common.init.GlumbisItems;
+import coda.glumbis.common.registry.GlumbisItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;

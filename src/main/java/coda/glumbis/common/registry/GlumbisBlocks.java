@@ -1,15 +1,8 @@
-package coda.glumbis.common.init;
+package coda.glumbis.common.registry;
 
 import coda.glumbis.Glumbis;
 import coda.glumbis.common.blocks.CatnipBlock;
-import coda.glumbis.common.items.GlumbisItem;
-import coda.glumbis.common.items.SocksArmorItem;
-import coda.glumbis.common.items.SoggySocksArmorItem;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;

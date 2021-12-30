@@ -4,7 +4,7 @@ import coda.glumbis.common.capabilities.CapabilityAttacher;
 import coda.glumbis.common.capabilities.ICatnipCapability;
 import coda.glumbis.common.entities.GlumbossEntity;
 import coda.glumbis.common.entities.GlumpEntity;
-import coda.glumbis.common.init.*;
+import coda.glumbis.common.registry.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.item.CreativeModeTab;

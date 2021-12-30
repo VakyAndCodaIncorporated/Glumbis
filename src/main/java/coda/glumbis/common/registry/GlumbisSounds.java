@@ -1,4 +1,4 @@
-package coda.glumbis.common.init;
+package coda.glumbis.common.registry;
 
 import coda.glumbis.Glumbis;
 import net.minecraft.resources.ResourceLocation;

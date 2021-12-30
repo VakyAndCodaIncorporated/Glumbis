@@ -1,7 +1,7 @@
 package coda.glumbis.common.items;
 
 import coda.glumbis.Glumbis;
-import coda.glumbis.common.init.GlumbisItems;
+import coda.glumbis.common.registry.GlumbisItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;

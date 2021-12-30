@@ -1,7 +1,7 @@
 package coda.glumbis.common.entities.ai.goals.glumboss;
 
 import coda.glumbis.common.entities.GlumbossEntity;
-import coda.glumbis.common.init.GlumbisSounds;
+import coda.glumbis.common.registry.GlumbisSounds;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
