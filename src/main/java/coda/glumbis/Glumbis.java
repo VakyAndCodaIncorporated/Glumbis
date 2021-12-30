@@ -47,8 +47,6 @@ public class Glumbis {
         bus.addListener(this::registerEntityAttributes);
         bus.addListener(this::commonSetup);
 
-        bus.addListener(this::attachCapabilities);
-
         GeckoLib.initialize();
     }
 

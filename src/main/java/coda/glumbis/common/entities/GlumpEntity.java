@@ -130,6 +130,10 @@ public class GlumpEntity extends Monster implements IAnimatable {
             playSound(GlumbisSounds.GLUMP_FLY.get(), 0.4F, 1.0F);
         }
 
+        if (isOnFire()) {
+            setRemainingFireTicks(0);
+        }
+
     }
 
     @Nullable
