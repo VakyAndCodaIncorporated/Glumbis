@@ -1,6 +1,8 @@
 package coda.glumbis.common.entities;
 
 import coda.glumbis.common.registry.GlumbisEntities;
+import coda.glumbis.common.registry.GlumbisParticles;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -42,7 +44,7 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
 
     @Override
     protected float getInertia() {
-        return 0.4F;
+        return super.getInertia();
     }
 
     @Override
@@ -60,7 +62,11 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
         Vec3 vec31 = vec3.normalize().scale(0.05F);
         this.setPosRaw(this.getX() - vec31.x, this.getY() - vec31.y, this.getZ() - vec31.z);
         this.onGround = true;
-        this.playSound(SoundEvents.ARROW_HIT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+    }
+
+    @Override
+    protected boolean shouldBurn() {
+        return false;
     }
 
     @Override
@@ -71,10 +77,30 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
             this.discard();
         }
 
-        if (!isOnGround() && getBlockStateOn().isAir() && getTarget() != null) {
+        if (!level.isClientSide && !isOnGround() && getBlockStateOn().isAir()) {
+            if (getTarget() != null) {
+                // TODO - make it continue straight if it loses its target so it doesnt find a new target
+                Vec3 vec3 = getTarget().position().subtract(position()).normalize().multiply(5, 5, 5);
 
-            setDeltaMovement(getX() - getTarget().getX(), getY() - getTarget().getY(), getZ() - getTarget().getZ());
+                setDeltaMovement(vec3);
+
+                Vec3 rotationVec = getTarget().position().subtract(position());
+                double atan = Math.atan2(rotationVec.z, rotationVec.x) - (Math.PI / 2);
+                double rotXZ = Math.toDegrees(atan);
+                setXRot((float) rotXZ);
+                setYRot((float) -rotationVec.y);
+            }
+            else {
+                // TODO - make it fire straight if theres no nearby targets
+            }
+
         }
+
+        setDeltaMovement(getDeltaMovement().multiply(0.1, 0.1, 0.1));
+    }
+
+    protected ParticleOptions getTrailParticle() {
+        return GlumbisParticles.STATIC_LIGHTNING.get();
     }
 
     public LivingEntity getTarget() {
