@@ -4,6 +4,7 @@ import coda.glumbis.common.registry.GlumbisEntities;
 import coda.glumbis.common.registry.GlumbisParticles;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -85,10 +86,10 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
                 setDeltaMovement(vec3);
 
                 Vec3 rotationVec = getTarget().position().subtract(position());
-                double atan = Math.atan2(rotationVec.z, rotationVec.x) - (Math.PI / 2);
+                double atan = Math.atan2(vec3.z, vec3.x) - (Math.PI / 2);
                 double rotXZ = Math.toDegrees(atan);
                 setXRot((float) rotXZ);
-                setYRot((float) -rotationVec.y);
+                setYRot((float) Mth.atan2(vec3.y, vec3.horizontalDistance()));
             }
             else {
                 // TODO - make it fire straight if theres no nearby targets
