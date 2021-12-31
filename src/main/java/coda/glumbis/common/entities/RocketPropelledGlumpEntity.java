@@ -1,10 +1,12 @@
 package coda.glumbis.common.entities;
 
+import coda.glumbis.common.registry.GlumbisEntities;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -19,11 +21,21 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class RocketPropelledGlumpEntity extends Projectile implements IAnimatable, IAnimationTickable {
+public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implements IAnimatable, IAnimationTickable {
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public RocketPropelledGlumpEntity(EntityType<? extends Projectile> p_37248_, Level p_37249_) {
+    public RocketPropelledGlumpEntity(EntityType<? extends AbstractHurtingProjectile> p_37248_, Level p_37249_) {
         super(p_37248_, p_37249_);
+    }
+
+    public RocketPropelledGlumpEntity(Level p_36861_, double p_36862_, double p_36863_, double p_36864_) {
+        this(GlumbisEntities.ROCKET_PROPELLED_GLUMP.get(), p_36861_);
+        this.setPos(p_36862_, p_36863_, p_36864_);
+    }
+
+    public RocketPropelledGlumpEntity(LivingEntity p_36718_, Level p_36719_) {
+        this(p_36719_, p_36718_.getX(), p_36718_.getEyeY() - (double)0.1F, p_36718_.getZ());
+        this.setOwner(p_36718_);
     }
 
     @Override
@@ -47,7 +59,6 @@ public class RocketPropelledGlumpEntity extends Projectile implements IAnimatabl
         this.setPosRaw(this.getX() - vec31.x, this.getY() - vec31.y, this.getZ() - vec31.z);
         this.onGround = true;
         this.playSound(SoundEvents.ARROW_HIT, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
-
     }
 
     @Override
