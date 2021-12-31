@@ -7,7 +7,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -36,11 +35,14 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
     public RocketPropelledGlumpEntity(LivingEntity p_36718_, Level p_36719_) {
         this(p_36719_, p_36718_.getX(), p_36718_.getEyeY() - (double)0.1F, p_36718_.getZ());
         this.setOwner(p_36718_);
+        this.xPower = 0.5F;
+        this.yPower = 0.5F;
+        this.zPower = 0.5F;
     }
 
     @Override
-    protected void defineSynchedData() {
-
+    protected float getInertia() {
+        return 0.4F;
     }
 
     @Override
