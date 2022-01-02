@@ -105,7 +105,7 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
     }
 
     public LivingEntity getTarget() {
-        return level.getNearestEntity(Chicken.class, TargetingConditions.forCombat(), null, 1.0, 1.0, 1.0, getBoundingBox().inflate(50));
+        return level.getNearestEntity(Chicken.class, TargetingConditions.forCombat(), null, getX(), getY(), getZ(), getBoundingBox().inflate(50));
     }
 
     @Override
