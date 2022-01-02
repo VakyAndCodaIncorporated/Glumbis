@@ -5,6 +5,8 @@
   "item.glumbis.soggy_socks": "Soggy Socks",
   "item.glumbis.catnip": "Catnip",
   "item.glumbis.catnip_seeds": "Catnip Seeds",
+  "item.glumbis.rocket_propelled_glump": "Rocket Propelled Glump",
+  "item.glumbis.glump_cannon": "Glump Cannon",
 
   "entity.glumbis.glumboss": "Glumboss",
   "entity.glumbis.glump": "Glump",
@@ -29,5 +31,6 @@
   "glumbis.glumboss.charge": "Glumboss charge",
 
   "glumbis.glump.fly": "Glump flies",
-  "glumbis.glump.hurt": "Glump hurts"
+  "glumbis.glump.hurt": "Glump hurts",
+  "glumbis.glump.explode": "Glump explodes"
 }

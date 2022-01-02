@@ -2,6 +2,7 @@ package coda.glumbis.common.items;
 
 import coda.glumbis.common.entities.RocketPropelledGlumpEntity;
 import coda.glumbis.common.registry.GlumbisItems;
+import coda.glumbis.common.registry.GlumbisSounds;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -58,7 +59,7 @@ public class GlumpCannonItem extends ProjectileWeaponItem {
 
     public void releaseUsing(ItemStack p_40667_, Level p_40668_, LivingEntity p_40669_, int p_40670_) {
         if (p_40669_ instanceof Player) {
-            Player player = (Player)p_40669_;
+            Player player = (Player) p_40669_;
             ItemStack itemstack = player.getProjectile(p_40667_);
 
             int i = this.getUseDuration(p_40667_) - p_40670_;
@@ -70,43 +71,29 @@ public class GlumpCannonItem extends ProjectileWeaponItem {
                     itemstack = new ItemStack(GlumbisItems.ROCKET_PROPELLED_GLUMP.get());
                 }
 
-                float f = getPowerForTime(i);
-                if (!((double)f < 0.1D)) {
-                    boolean flag1 = player.getAbilities().instabuild || itemstack.getItem() instanceof RocketPropelledGlumpItem;
-                    if (!p_40668_.isClientSide) {
-                        RocketPropelledGlumpItem glumpItem = (RocketPropelledGlumpItem)(itemstack.getItem() instanceof RocketPropelledGlumpItem ? itemstack.getItem() : GlumbisItems.ROCKET_PROPELLED_GLUMP.get());
-                        RocketPropelledGlumpEntity glump = glumpItem.createRPG(p_40668_, player);
-                        glump.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, f * 3.0F, 1.0F);
+                boolean flag1 = player.getAbilities().instabuild || itemstack.getItem() instanceof RocketPropelledGlumpItem;
+                if (!p_40668_.isClientSide) {
+                    RocketPropelledGlumpItem glumpItem = (RocketPropelledGlumpItem) (itemstack.getItem() instanceof RocketPropelledGlumpItem ? itemstack.getItem() : GlumbisItems.ROCKET_PROPELLED_GLUMP.get());
+                    RocketPropelledGlumpEntity glump = glumpItem.createRPG(p_40668_, player);
+                    glump.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.0F, 1.0F);
 
-                        p_40667_.hurtAndBreak(1, player, (p_40665_) -> {
-                            p_40665_.broadcastBreakEvent(player.getUsedItemHand());
-                        });
+                    p_40667_.hurtAndBreak(1, player, (p_40665_) -> {
+                        p_40665_.broadcastBreakEvent(player.getUsedItemHand());
+                    });
 
-                        p_40668_.addFreshEntity(glump);
-                    }
-
-                    p_40668_.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (p_40668_.getRandom().nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-                    if (!flag1 && !player.getAbilities().instabuild) {
-                        itemstack.shrink(1);
-                        if (itemstack.isEmpty()) {
-                            player.getInventory().removeItem(itemstack);
-                        }
-                    }
-
-                    player.awardStat(Stats.ITEM_USED.get(this));
+                    p_40668_.addFreshEntity(glump);
                 }
+
+                p_40668_.playSound(null, player.getX(), player.getY(), player.getZ(), GlumbisSounds.GLUMP_FLY.get(), SoundSource.PLAYERS, 1.0F, 1.0F / (p_40668_.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
+                if (!flag1 && !player.getAbilities().instabuild) {
+                    itemstack.shrink(1);
+                    if (itemstack.isEmpty()) {
+                        player.getInventory().removeItem(itemstack);
+                    }
+                }
+
+                player.awardStat(Stats.ITEM_USED.get(this));
             }
         }
-    }
-
-
-    public static float getPowerForTime(int p_40662_) {
-        float f = (float)p_40662_ / 20.0F;
-        f = (f * f + f * 2.0F) / 3.0F;
-        if (f > 1.0F) {
-            f = 1.0F;
-        }
-
-        return f;
     }
 }

@@ -61,5 +61,14 @@
         "stream": true
       }
     ]
+  },
+  "glump.explode": {
+    "subtitle": "glumbis.glump.explode",
+    "sounds": [
+      {
+        "name": "glumbis:glump/explode",
+        "stream": true
+      }
+    ]
   }
 }
