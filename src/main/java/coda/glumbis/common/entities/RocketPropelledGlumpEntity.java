@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.lwjgl.system.CallbackI;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -54,10 +55,7 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
 
     @Override
     protected void onHitEntity(EntityHitResult result) {
-        super.onHitEntity(result);
-        if (getOwner() instanceof Player player) result.getEntity().hurt(DamageSource.playerAttack(player), 8);
-        discard();
-        this.level.playLocalSound(getX(), getY(), getZ(), GlumbisSounds.GLUMP_EXPLODE.get(), SoundSource.PLAYERS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
+        explode((Player) getOwner());
     }
 
     @Override
@@ -77,11 +75,8 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
 
     @Override
     public void tick() {
-        super.tick();
         if (onGround && tickCount % 30 == 0 && getOwner() instanceof Player player) {
-            level.playLocalSound(getX(), getY(), getZ(), GlumbisSounds.GLUMP_EXPLODE.get(), SoundSource.PLAYERS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
-            tryHurtEntity(player, 5);
-            discard();
+            explode(player);
         }
 
         if (!level.isClientSide && !isOnGround() && getBlockStateOn().isAir()) {
@@ -102,8 +97,22 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
             }
 
         }
+        setDeltaMovement(getDeltaMovement().multiply(0.25, 0.25, 0.25));
 
-        setDeltaMovement(getDeltaMovement().multiply(0.1, 0.1, 0.1));
+        super.tick();
+    }
+
+    private void explode(Player player) {
+        if (level.isClientSide) {
+            level.playLocalSound(getX(), getY(), getZ(), GlumbisSounds.GLUMP_EXPLODE.get(), SoundSource.PLAYERS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
+            for(int i = 0; i < 20; i++) {
+                this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(3.5D), (this.getPosition(1.0f).y() - 0.5) , this.getRandomZ(3.5D), 0, this.getRandomY() * 2, 0);
+            }
+        }
+        else {
+            tryHurtEntity(player, 16);
+            discard();
+        }
     }
 
     protected void tryHurtEntity(Player player, double distanceTo) {
