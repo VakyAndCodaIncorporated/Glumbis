@@ -14,6 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.PathfinderMob;
@@ -110,6 +111,10 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        Entity attacker = source.getDirectEntity();
+        if (attacker.position().y() > position().y() + 2.15 && attacker.position().y() < position().y() + 3) {
+            return super.hurt(source, amount * 1.5F);
+        }
         return !source.isProjectile() && super.hurt(source, amount);
     }
 
@@ -124,6 +129,10 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
             for(int i = 0; i < 3; i++) {
                 this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(1.5D), this.getRandomY() + 0.85D, this.getRandomZ(1.5D), 0, 0.08d, 0);
             }
+        }
+
+        if (tickCount % 100 == 0 && getHealth() > getMaxHealth()) {
+            heal(4);
         }
     }
 

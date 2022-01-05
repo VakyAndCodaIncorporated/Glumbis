@@ -100,7 +100,6 @@ public class GlumpEntity extends Monster implements IAnimatable {
             else{
                 this.setVariant(randomVariant);
             }
-            System.out.println(this.getVariant());
             this.level.addParticle(ParticleTypes.POOF, this.getRandomX(0.5D), this.getRandomY() + 1.25D, this.getRandomZ(0.5D), 0, 0.08d, 0);
         }
         if (level.isRainingAt(blockPosition())) {
@@ -121,6 +120,7 @@ public class GlumpEntity extends Monster implements IAnimatable {
                     this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(3.5D), (this.getPosition(1.0f).y() - 0.5) , this.getRandomZ(3.5D), 0, this.getRandomY() * 2, 0);
                 }
             }
+            playSound(GlumbisSounds.GLUMP_EXPLODE.get(), 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
             this.setDeltaMovement(0, 0, 0);
             this.kill();
         }
