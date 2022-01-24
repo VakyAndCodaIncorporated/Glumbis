@@ -150,7 +150,6 @@ public class GlumpEntity extends Monster implements IAnimatable {
         }
     }
 
-
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "controller", 10, this::predicate));
