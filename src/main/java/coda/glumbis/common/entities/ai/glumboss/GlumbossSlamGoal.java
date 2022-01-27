@@ -1,4 +1,4 @@
-package coda.glumbis.common.entities.ai.goals.glumboss;
+package coda.glumbis.common.entities.ai.glumboss;
 
 import coda.glumbis.common.entities.GlumbossEntity;
 import coda.glumbis.common.registry.GlumbisSounds;

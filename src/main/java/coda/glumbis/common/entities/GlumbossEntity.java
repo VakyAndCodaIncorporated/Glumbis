@@ -1,6 +1,6 @@
 package coda.glumbis.common.entities;
 
-import coda.glumbis.common.entities.ai.goals.glumboss.*;
+import coda.glumbis.common.entities.ai.glumboss.*;
 import coda.glumbis.common.registry.GlumbisParticles;
 import coda.glumbis.common.registry.GlumbisSounds;
 import net.minecraft.nbt.CompoundTag;

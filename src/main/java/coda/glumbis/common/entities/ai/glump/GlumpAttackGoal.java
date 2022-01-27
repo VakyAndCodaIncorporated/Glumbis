@@ -1,11 +1,8 @@
-package coda.glumbis.common.entities.ai.goals.glump;
+package coda.glumbis.common.entities.ai.glump;
 
 import coda.glumbis.common.entities.GlumpEntity;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.phys.Vec3;
 
 public class GlumpAttackGoal extends Goal {
     protected final GlumpEntity entity;

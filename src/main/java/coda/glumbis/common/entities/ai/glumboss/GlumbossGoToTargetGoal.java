@@ -1,10 +1,8 @@
-package coda.glumbis.common.entities.ai.goals.glumboss;
+package coda.glumbis.common.entities.ai.glumboss;
 
 import coda.glumbis.common.entities.GlumbossEntity;
-import coda.glumbis.common.entities.GlumpEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.phys.Vec3;
 
 public class GlumbossGoToTargetGoal extends Goal {
     protected final GlumbossEntity entity;

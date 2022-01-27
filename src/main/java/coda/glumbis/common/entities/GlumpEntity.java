@@ -1,7 +1,7 @@
 package coda.glumbis.common.entities;
 
-import coda.glumbis.common.entities.ai.goals.glump.GlumpAttackGoal;
-import coda.glumbis.common.entities.ai.goals.glump.GlumpPounceGoal;
+import coda.glumbis.common.entities.ai.glump.GlumpAttackGoal;
+import coda.glumbis.common.entities.ai.glump.GlumpPounceGoal;
 import coda.glumbis.common.registry.GlumbisParticles;
 import coda.glumbis.common.registry.GlumbisSounds;
 import net.minecraft.core.particles.ParticleTypes;

@@ -1,4 +1,4 @@
-package coda.glumbis.common.entities.ai.goals.glump;
+package coda.glumbis.common.entities.ai.glump;
 
 import coda.glumbis.common.entities.GlumpEntity;
 import net.minecraft.world.entity.LivingEntity;
