@@ -7,6 +7,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -26,6 +27,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implements IAnimatable, IAnimationTickable {
@@ -74,6 +76,11 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
     }
 
     @Override
+    public boolean isNoGravity() {
+        return true;
+    }
+
+    @Override
     public void tick() {
         if (onGround && tickCount % 30 == 0 && getOwner() instanceof Player player) {
             explode(player);
@@ -82,7 +89,7 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
         if (!level.isClientSide && !isOnGround() && getBlockStateOn().isAir()) {
             if (getTarget() != null) {
                 // TODO - make it continue straight if it loses its target so it doesnt find a new target
-                Vec3 vec3 = getTarget().position().subtract(position()).normalize().multiply(5, 5, 5);
+                Vec3 vec3 = getTarget().position().subtract(position()).normalize();
 
                 setDeltaMovement(vec3);
 
@@ -93,26 +100,28 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
                 setYRot((float) Mth.atan2(vec3.y, vec3.horizontalDistance()));
             }
             else {
-                // TODO - make it fire straight if theres no nearby targets
+                if (getOwner() instanceof Player player) {
+                    Vec3 vec3 = player.getViewVector(1.0F);
+
+                    setDeltaMovement(vec3);
+                }
+
             }
 
         }
-        setDeltaMovement(getDeltaMovement().multiply(0.25, 0.25, 0.25));
+        setDeltaMovement(getDeltaMovement().multiply(0.35, 0.35, 0.35));
 
         super.tick();
     }
 
     private void explode(Player player) {
-        if (level.isClientSide) {
-            level.playLocalSound(getX(), getY(), getZ(), GlumbisSounds.GLUMP_EXPLODE.get(), SoundSource.PLAYERS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
-            for(int i = 0; i < 20; i++) {
-                this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(3.5D), (this.getPosition(1.0f).y() - 0.5) , this.getRandomZ(3.5D), 0, this.getRandomY() * 2, 0);
-            }
+        level.playLocalSound(getX(), getY(), getZ(), GlumbisSounds.GLUMP_EXPLODE.get(), SoundSource.PLAYERS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
+
+        for(int i = 0; i < 20; i++) {
+            this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(3.5D), (this.getPosition(1.0f).y() - 0.5) , this.getRandomZ(3.5D), 0, this.getRandomY() * 2, 0);
         }
-        else {
-            tryHurtEntity(player, 16);
-            discard();
-        }
+        tryHurtEntity(player, 16);
+        discard();
     }
 
     protected void tryHurtEntity(Player player, double distanceTo) {
@@ -136,7 +145,7 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
     }
 
     public LivingEntity getTarget() {
-        return level.getNearestEntity(Chicken.class, TargetingConditions.forCombat(), null, getX(), getY(), getZ(), getBoundingBox().inflate(50));
+        return level.getNearestEntity(LivingEntity.class, TargetingConditions.forCombat(), null, getX(), getY(), getZ(), getBoundingBox().inflate(50));
     }
 
     @Override

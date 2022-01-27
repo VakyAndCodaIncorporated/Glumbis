@@ -77,9 +77,7 @@ public class GlumpCannonItem extends ProjectileWeaponItem {
                     RocketPropelledGlumpEntity glump = glumpItem.createRPG(p_40668_, player);
                     glump.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.0F, 1.0F);
 
-                    p_40667_.hurtAndBreak(1, player, (p_40665_) -> {
-                        p_40665_.broadcastBreakEvent(player.getUsedItemHand());
-                    });
+                    p_40667_.hurtAndBreak(1, player, (p_40665_) -> p_40665_.broadcastBreakEvent(player.getUsedItemHand()));
 
                     p_40668_.addFreshEntity(glump);
                 }
