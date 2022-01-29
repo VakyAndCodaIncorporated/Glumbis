@@ -26,7 +26,7 @@ public class GlumbossStaticChargeGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return this.entity.getTarget() != null && this.entity.distanceToSqr(this.entity.getTarget()) < 35.0f;
+        return this.entity.getTarget() != null;
     }
 
     @Override
