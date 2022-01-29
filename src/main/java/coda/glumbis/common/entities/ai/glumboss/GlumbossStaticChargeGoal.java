@@ -26,13 +26,13 @@ public class GlumbossStaticChargeGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return this.entity.getTarget() != null;
+        return this.entity.getTarget() != null && this.entity.distanceToSqr(this.entity.getTarget()) < 49.0f;
     }
 
     @Override
     public void tick() {
         super.tick();
-        if(this.entity.getState() == 0 || this.entity.getState() == 3) {
+        if (this.entity.getState() == 0 || this.entity.getState() == 3) {
             if (this.cooldownTimer < COOLDOWN) {
                 this.cooldownTimer++;
             } else {
@@ -77,7 +77,7 @@ public class GlumbossStaticChargeGoal extends Goal {
                 }
             }
         }
-        else{
+        else {
             this.stop();
         }
     }
@@ -93,6 +93,6 @@ public class GlumbossStaticChargeGoal extends Goal {
     }
 
     protected double getAttackReachSqr(LivingEntity entity) {
-        return entity.getBbWidth() * 2.0F * entity.getBbWidth() * 2.0F + entity.getBbWidth();
+        return entity.getBbWidth() * 4.0F;
     }
 }

@@ -19,7 +19,7 @@ public class GlumbossSlamGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return this.entity.getTarget() != null && this.entity.distanceToSqr(this.entity.getTarget()) < 15.0f;
+        return this.entity.getTarget() != null && this.entity.distanceToSqr(this.entity.getTarget()) < 49.0f;
     }
 
     @Override
