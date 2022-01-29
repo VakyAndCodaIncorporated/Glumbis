@@ -126,7 +126,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     public void tick() {
         super.tick();
 
-        if(this.getState() == 3){
+        if (this.getState() == 3) {
             for(int i = 0; i < 3; i++) {
                 this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(1.5D), this.getRandomY() + 0.85D, this.getRandomZ(1.5D), 0, 0.08d, 0);
             }
@@ -143,19 +143,19 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if(getState() == 3){
+        if (getState() == 3) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.static_charge", false));
             return PlayState.CONTINUE;
         }
-        if(getState() == 2){
+        if (getState() == 2) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.slam", false));
             return PlayState.CONTINUE;
         }
-        if(getState() == 1){
+        if (getState() == 1) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.kick", false));
             return PlayState.CONTINUE;
         }
-        if(event.isMoving()){
+        if (event.isMoving()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.walk", true));
             return PlayState.CONTINUE;
         }
