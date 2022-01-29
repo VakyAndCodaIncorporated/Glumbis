@@ -21,7 +21,7 @@ public class GlumbossGoToTargetGoal extends Goal {
         LivingEntity livingEntity = entity.getTarget();
         if (this.entity.getState() == 0) {
             this.entity.getLookControl().setLookAt(livingEntity, 30, 30);
-            this.entity.getNavigation().moveTo(this.entity.getNavigation().createPath(livingEntity, 1), 1.65d);
+            this.entity.getNavigation().moveTo(this.entity.getNavigation().createPath(livingEntity, 4), 1.45d);
         }
     }
 
