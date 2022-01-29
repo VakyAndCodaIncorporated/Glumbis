@@ -112,7 +112,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     @Override
     public boolean hurt(DamageSource source, float amount) {
         Entity attacker = source.getDirectEntity();
-        if (attacker.position().y() > position().y() + 2.15 && attacker.position().y() < position().y() + 3) {
+        if (attacker != null && attacker.position().y() > position().y() + 2.15 && attacker.position().y() < position().y() + 3) {
             return super.hurt(source, amount * 1.5F);
         }
         return !source.isProjectile() && super.hurt(source, amount);
@@ -125,7 +125,6 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     @Override
     public void tick() {
         super.tick();
-
 
         if(this.getState() == 3){
             for(int i = 0; i < 3; i++) {
