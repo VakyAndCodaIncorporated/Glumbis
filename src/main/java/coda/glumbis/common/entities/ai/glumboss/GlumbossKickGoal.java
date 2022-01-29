@@ -22,7 +22,7 @@ public class GlumbossKickGoal extends Goal {
     @Override
     public void tick() {
         super.tick();
-        if(this.entity.getState() == 0 || this.entity.getState() == 1) {
+        if (this.entity.getState() == 0 || this.entity.getState() == 1 && canUse()) {
             if (this.cooldownTimer < COOLDOWN) {
                 this.cooldownTimer++;
             } else {
@@ -40,9 +40,16 @@ public class GlumbossKickGoal extends Goal {
                 }
             }
         }
-        else{
+        else {
             this.stop();
         }
+    }
+
+    @Override
+    public void stop() {
+        this.timer = 0;
+        this.cooldownTimer = 0;
+        this.entity.setState(0);
     }
 
     protected void tryHurtTarget(GlumbossEntity entity, double distanceTo){
@@ -52,6 +59,6 @@ public class GlumbossKickGoal extends Goal {
     }
 
     protected double getAttackReachSqr(LivingEntity entity) {
-        return (double)(entity.getBbWidth() * 1.2F * entity.getBbWidth() * 1.2F + entity.getBbWidth());
+        return entity.getBbWidth() * 1.2F * entity.getBbWidth() * 1.2F + entity.getBbWidth();
     }
 }

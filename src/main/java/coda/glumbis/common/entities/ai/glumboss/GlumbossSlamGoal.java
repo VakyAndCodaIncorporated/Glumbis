@@ -19,6 +19,7 @@ public class GlumbossSlamGoal extends Goal {
         this.entity = entity;
     }
 
+    // TODO - make glumboss follow through with the slam goal even if the target is too far away, as nearby entities should still be affected
     @Override
     public boolean canUse() {
         return this.entity.getTarget() != null && this.entity.distanceToSqr(this.entity.getTarget()) < 49.0f;
@@ -27,7 +28,7 @@ public class GlumbossSlamGoal extends Goal {
     @Override
     public void tick() {
         super.tick();
-        if(this.entity.getState() == 0 || this.entity.getState() == 2) {
+        if (this.entity.getState() == 0 || this.entity.getState() == 2 && canUse()) {
             if (this.cooldownTimer < COOLDOWN) {
                 this.cooldownTimer++;
             } else {
@@ -47,9 +48,16 @@ public class GlumbossSlamGoal extends Goal {
                 }
             }
         }
-        else{
+        else {
             this.stop();
         }
+    }
+
+    @Override
+    public void stop() {
+        this.timer = 0;
+        this.cooldownTimer = 0;
+        this.entity.setState(0);
     }
 
     protected void tryHurtNearbyEntities(GlumbossEntity entity, double distanceTo){

@@ -32,7 +32,7 @@ public class GlumbossStaticChargeGoal extends Goal {
     @Override
     public void tick() {
         super.tick();
-        if (this.entity.getState() == 0 || this.entity.getState() == 3) {
+        if (this.entity.getState() == 0 || this.entity.getState() == 3 && canUse()) {
             if (this.cooldownTimer < COOLDOWN) {
                 this.cooldownTimer++;
             } else {
@@ -82,7 +82,15 @@ public class GlumbossStaticChargeGoal extends Goal {
         }
     }
 
-    protected void tryHurtTarget(GlumbossEntity entity, double distanceTo){
+    @Override
+    public void stop() {
+        this.timer = 0;
+        this.cooldownTimer = 0;
+        this.entity.setState(0);
+    }
+
+    // TODO - make this method affect all nearby entities
+    protected void tryHurtTarget(GlumbossEntity entity, double distanceTo) {
         if(distanceTo < this.getAttackReachSqr(entity)){
             LivingEntity target = this.entity.getTarget();
             double distanceToGlumboss = target.distanceToSqr(entity);
