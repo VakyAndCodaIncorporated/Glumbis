@@ -26,7 +26,7 @@ public class GlumbossStaticChargeGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return this.entity.getTarget() != null;
+        return this.entity.getTarget() != null && this.entity.getHealth() < this.entity.getMaxHealth()/2;
     }
 
     @Override

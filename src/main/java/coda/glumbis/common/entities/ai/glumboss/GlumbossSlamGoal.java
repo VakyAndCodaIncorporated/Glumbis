@@ -29,19 +29,19 @@ public class GlumbossSlamGoal extends Goal {
             if (this.cooldownTimer < COOLDOWN) {
                 this.cooldownTimer++;
             } else {
-                if (this.timer <= 60) {
+                if (this.timer <= 40) {
                     this.timer++;
                     this.entity.setState(2);
                     this.entity.getNavigation().stop();
                     if (this.timer == 35) {
                         LivingEntity target = this.entity.getTarget();
                         this.tryHurtTarget(this.entity, this.entity.distanceTo(target));
-                        this.entity.playSound(GlumbisSounds.GLUMBOSS_SLAM.get(), 1.0F, 1.0F);
+                        this.entity.playSound(GlumbisSounds.GLUMBOSS_DEATH.get(), 5.0F, 3.0F);
                     }
                 } else {
+                    this.entity.setState(0);
                     this.timer = 0;
                     this.cooldownTimer = 0;
-                    this.entity.setState(0);
                 }
             }
         }

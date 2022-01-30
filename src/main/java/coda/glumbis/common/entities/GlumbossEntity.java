@@ -24,6 +24,7 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.lwjgl.system.CallbackI;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -125,6 +126,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     @Override
     public void tick() {
         super.tick();
+        System.out.println(this.getState());
         if(this.getState() == 3){
             for(int i = 0; i < 3; i++) {
                 this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(1.5D), this.getRandomY() + 0.85D, this.getRandomZ(1.5D), 0, 0.08d, 0);
@@ -142,6 +144,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+
         if(getState() == 3){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.static_charge", false));
             return PlayState.CONTINUE;
