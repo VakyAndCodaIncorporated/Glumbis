@@ -1,6 +1,7 @@
 modLoader="javafml" #mandatory
 loaderVersion="[37,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 license="All rights reserved"
+
 [[mods]] #mandatory
 modId="glumbis" #mandatory
 version="${file.jarVersion}" #mandatory
@@ -10,12 +11,14 @@ credits="Virtualhel, Ninni, VakyPanda" #optional
 authors="Coda, Wadoo" #optional
 description='''
 Glumbis lets you pick up cats in socks for easy transport!'''
+
 [[dependencies.glumbis]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
     versionRange="[37,)" #mandatory
     ordering="NONE"
     side="BOTH"
+
 [[dependencies.glumbis]]
     modId="minecraft"
     mandatory=true

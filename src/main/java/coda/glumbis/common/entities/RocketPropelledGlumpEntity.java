@@ -86,18 +86,12 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
             explode(player);
         }
 
-        if (!level.isClientSide && !isOnGround() && getBlockStateOn().isAir()) {
+        if (!isOnGround() && getBlockStateOn().isAir()) {
             if (getTarget() != null) {
                 // TODO - make it continue straight if it loses its target so it doesnt find a new target
-                Vec3 vec3 = getTarget().position().subtract(position()).normalize();
-
-                setDeltaMovement(vec3);
-
-                Vec3 rotationVec = getTarget().position().subtract(position());
-                double atan = Math.atan2(vec3.z, vec3.x) - (Math.PI / 2);
-                double rotXZ = Math.toDegrees(atan);
-                setXRot((float) rotXZ);
-                setYRot((float) Mth.atan2(vec3.y, vec3.horizontalDistance()));
+                Vec3 entityToTarget = getTarget().position().subtract(position());
+                Vec3 direction = entityToTarget.normalize();
+                setDeltaMovement(direction);
             }
             else {
                 if (getOwner() instanceof Player player) {
@@ -105,11 +99,15 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
 
                     setDeltaMovement(vec3);
                 }
-
             }
-
         }
+
         setDeltaMovement(getDeltaMovement().multiply(0.35, 0.35, 0.35));
+
+        Vec3 direction = getDeltaMovement();
+        double angle = Mth.atan2(direction.z, direction.x);
+        setYRot((float) Math.toDegrees(angle));
+        // setXRot((float) Mth.atan2(entityToTarget.y, entityToTarget.horizontalDistance()));
 
         super.tick();
     }

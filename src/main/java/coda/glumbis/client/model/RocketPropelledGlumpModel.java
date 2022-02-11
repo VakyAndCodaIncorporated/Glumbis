@@ -56,7 +56,7 @@ public class RocketPropelledGlumpModel extends AnimatedGeoModel<RocketPropelledG
         IBone root = this.getAnimationProcessor().getBone("root");
         IBone chest = this.getAnimationProcessor().getBone("chest");
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        Random random = new Random();
+        Random random = entity.level.getRandom();
 
         chest.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
         root.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
