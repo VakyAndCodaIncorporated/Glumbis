@@ -72,8 +72,7 @@ public class GlumpCannonItem extends ProjectileWeaponItem {
                 }
 
                 if (!p_40668_.isClientSide) {
-                    RocketPropelledGlumpItem glumpItem = (RocketPropelledGlumpItem) (itemstack.getItem() instanceof RocketPropelledGlumpItem ? itemstack.getItem() : GlumbisItems.ROCKET_PROPELLED_GLUMP.get());
-                    RocketPropelledGlumpEntity glump = glumpItem.createRPG(p_40668_, player);
+                    RocketPropelledGlumpEntity glump = createRPG(p_40668_, player);
                     glump.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.0F, 1.0F);
 
                     p_40667_.hurtAndBreak(1, player, (p_40665_) -> p_40665_.broadcastBreakEvent(player.getUsedItemHand()));
@@ -92,5 +91,9 @@ public class GlumpCannonItem extends ProjectileWeaponItem {
                 player.awardStat(Stats.ITEM_USED.get(this));
             }
         }
+    }
+
+    public RocketPropelledGlumpEntity createRPG(Level level, LivingEntity entity) {
+        return new RocketPropelledGlumpEntity(entity, level);
     }
 }
