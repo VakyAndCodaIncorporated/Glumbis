@@ -14,6 +14,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.goal.Goal;
 
+import java.util.List;
+
 public class GlumbossStaticChargeGoal extends Goal {
     protected GlumbossEntity entity;
     private int timer;
@@ -44,7 +46,7 @@ public class GlumbossStaticChargeGoal extends Goal {
                         this.entity.playSound(GlumbisSounds.GLUMBOSS_CHARGE.get(), 3.0F, 1.0F);
                     }
                     if (this.timer == 42) {
-                        this.tryHurtTarget(this.entity, this.entity.distanceTo(this.entity.getTarget()));
+                        this.tryHurtNearbyEntities(this.entity);
                         int lightningBoltAmount = entity.isInWaterOrRain() ? 10 : 3;
                         for(int i = 0; i <= lightningBoltAmount; i++) {
                             if (this.entity.level instanceof ServerLevel) {
@@ -89,18 +91,14 @@ public class GlumbossStaticChargeGoal extends Goal {
         this.entity.setState(0);
     }
 
-    // TODO - make this method affect all nearby entities
-    protected void tryHurtTarget(GlumbossEntity entity, double distanceTo) {
-        if(distanceTo < this.getAttackReachSqr(entity)){
-            LivingEntity target = this.entity.getTarget();
+    protected void tryHurtNearbyEntities(GlumbossEntity entity) {
+        List<LivingEntity> targets = this.entity.level.getEntitiesOfClass(LivingEntity.class, this.entity.getBoundingBox().inflate(5.0));
+        for (LivingEntity target : targets) {
             double distanceToGlumboss = target.distanceToSqr(entity);
             float damage = 1 - Mth.sqrt((float) distanceToGlumboss) / 10;
-            target.hurt(DamageSource.mobAttack(entity), (0.5F * damage + 0.5F) * 10);
-            //target.setDeltaMovement(target.getDeltaMovement().add(target.position().multiply(1.04, 1.4, 1.04)));
-        }
-    }
 
-    protected double getAttackReachSqr(LivingEntity entity) {
-        return entity.getBbWidth() * 4.0F;
+            target.hurt(DamageSource.mobAttack(entity), (0.5F * damage + 0.5F) * 10);
+            //target.setDeltaMovement(target.getDeltaMovement().add(target.position().normalize().multiply(1.0, 1.4, 1.0)));
+        }
     }
 }

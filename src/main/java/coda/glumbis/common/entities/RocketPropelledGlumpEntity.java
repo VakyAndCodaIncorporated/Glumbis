@@ -4,21 +4,19 @@ import coda.glumbis.common.registry.GlumbisEntities;
 import coda.glumbis.common.registry.GlumbisParticles;
 import coda.glumbis.common.registry.GlumbisSounds;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.lwjgl.system.CallbackI;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -27,7 +25,6 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implements IAnimatable, IAnimationTickable {
@@ -57,7 +54,9 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
 
     @Override
     protected void onHitEntity(EntityHitResult result) {
-        explode((Player) getOwner());
+        for (LivingEntity entity : getNearbyEntities()) {
+            explode(entity);
+        }
     }
 
     @Override
@@ -111,33 +110,35 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
         }
         setDeltaMovement(getDeltaMovement().multiply(0.35, 0.35, 0.35));
 
+        if (tickCount > 300) {
+            for (LivingEntity entity : getNearbyEntities()) {
+                this.explode(entity);
+            }
+        }
+
         super.tick();
     }
 
-    private void explode(Player player) {
-        level.playLocalSound(getX(), getY(), getZ(), GlumbisSounds.GLUMP_EXPLODE.get(), SoundSource.PLAYERS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
+    private List<LivingEntity> getNearbyEntities() {
+        return level.getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(50));
+    }
+
+    private void explode(LivingEntity entity) {
+        playSound(GlumbisSounds.GLUMP_EXPLODE.get(),2.0F, 1.0F);
 
         for(int i = 0; i < 20; i++) {
             this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(3.5D), (this.getPosition(1.0f).y() - 0.5) , this.getRandomZ(3.5D), 0, this.getRandomY() * 2, 0);
         }
-        tryHurtEntity(player, 16);
+        tryHurtEntity(entity);
+        System.out.println("exploded");
         discard();
     }
 
-    protected void tryHurtEntity(Player player, double distanceTo) {
-        if (distanceTo < this.getAttackReachSqr(player) / 1.2) {
-            List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(50));
-            for (LivingEntity target : list) {
-                double distanceToGlumboss = target.distanceToSqr(player);
-                float damage = 1 - Mth.sqrt((float) distanceToGlumboss) / 10;
-                target.hurt(DamageSource.playerAttack(player), (0.5F * damage + 0.5F) * 10);
-                target.setDeltaMovement(target.getDeltaMovement().add(target.position().normalize().multiply(1.0, 1.4, 1.0)));
-            }
-        }
-    }
-
-    protected double getAttackReachSqr(LivingEntity entity) {
-        return entity.getBbWidth() * 2.0F * entity.getBbWidth() * 2.0F + entity.getBbWidth();
+    protected void tryHurtEntity(LivingEntity entity) {
+        double distanceTo = distanceToSqr(entity);
+        float damage = 1 - Mth.sqrt((float) distanceTo) / 10;
+        entity.hurt(DamageSource.explosion(entity), (0.5F * damage + 0.5F) * 10);
+        entity.setDeltaMovement(entity.getDeltaMovement().add(entity.getX() - getX(), 0.15, entity.getZ() - getZ()).multiply(0.35, 1.9, 0.35));
     }
 
     protected ParticleOptions getTrailParticle() {

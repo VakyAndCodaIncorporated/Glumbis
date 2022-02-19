@@ -100,24 +100,6 @@ public class CommonEvents {
         }
     }
 
-    // todo - this was for testing, remove it later
-    @SubscribeEvent
-    public static void playerLeftClickEmpty(PlayerInteractEvent.LeftClickEmpty event) {
-        Player player = event.getPlayer();
-        Level world = event.getWorld();
-
-        if (!world.isClientSide()) {
-
-            RocketPropelledGlumpEntity rpg = GlumbisEntities.ROCKET_PROPELLED_GLUMP.get().create(event.getWorld());
-
-            rpg.moveTo(player.position());
-
-            Vec3 vec3 = player.getViewVector(1.0F);
-
-            rpg.shoot(vec3.x, vec3.y, vec3.z, 1.0F, 1.0F);
-        }
-    }
-
     @SubscribeEvent
     public static void onPlayerSleep(PlayerWakeUpEvent event) {
         Player player = event.getPlayer();
