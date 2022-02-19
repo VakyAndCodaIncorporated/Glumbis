@@ -4,6 +4,7 @@ import coda.glumbis.Glumbis;
 import coda.glumbis.common.entities.RocketPropelledGlumpEntity;
 import coda.glumbis.common.registry.GlumbisEntities;
 import coda.glumbis.common.registry.GlumbisItems;
+import coda.glumbis.common.registry.GlumbisParticles;
 import lain.mods.cos.api.CosArmorAPI;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
@@ -20,6 +21,7 @@ import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -27,9 +29,11 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -126,6 +130,16 @@ public class CommonEvents {
 
         if (entity instanceof Creeper creeper) {
             creeper.goalSelector.addGoal(0, new AvoidEntityGoal<>(creeper, Player.class, 12.0F, 1.0D, 1.2D, GLUMBIS_IN_PLAYERS_HOTBAR));
+        }
+    }
+
+    @SubscribeEvent
+    public static void projectileImpact(ProjectileImpactEvent event) {
+        Projectile proj = event.getProjectile();
+        if (proj instanceof RocketPropelledGlumpEntity) {
+            for(int i = 0; i < 20; i++) {
+                proj.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), proj.getRandomX(3.5D), proj.getRandomY(), proj.getRandomZ(3.5D), 0, proj.getRandomY() * 2, 0);
+            }
         }
     }
 

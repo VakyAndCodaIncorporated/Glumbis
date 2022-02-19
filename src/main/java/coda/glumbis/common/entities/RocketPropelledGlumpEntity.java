@@ -96,10 +96,8 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
         // TODO - make it continue straight if it loses its target so it doesnt find a new target
         if (!isOnGround() && getBlockStateOn().isAir()) {
             if (getTarget() != null) {
-                Vec3 entityToTarget = getTarget().position().subtract(position());
-                Vec3 lol = position().vectorTo(getTarget().position());
-                Vec3 direction = entityToTarget.normalize();
-                setDeltaMovement(getDeltaMovement().add(lol).multiply(0.05, 0.05, 0.05));
+                Vec3 entityToTarget = position().vectorTo(getTarget().position());
+                setDeltaMovement(getDeltaMovement().add(entityToTarget).multiply(0.05, 0.05, 0.05));
 
                 System.out.println(getTarget());
             }
@@ -124,11 +122,12 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
     }
 
     private void explode(LivingEntity entity) {
-        // todo - figure out why the sound cant be heard when the player is more than a few blocks away & fix ti
+        // todo - figure out why the sound cant be heard when the player is more than a few blocks away & fix it
         playSound(GlumbisSounds.GLUMP_EXPLODE.get(),2.0F, 1.0F);
 
-        for(int i = 0; i < 20; i++) {
-            this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(3.5D), (this.getPosition(1.0f).y() - 0.5) , this.getRandomZ(3.5D), 0, this.getRandomY() * 2, 0);
+        // todo - fix particles not playing. maybe its because the projectile they are playing from is removed?
+        for(int i = 0; i < 200; i++) {
+            entity.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(3.5D), (this.getPosition(1.0f).y()) , this.getRandomZ(3.5D), 0, this.getRandomY() * 2, 0);
         }
         tryHurtEntity(entity);
         discard();
