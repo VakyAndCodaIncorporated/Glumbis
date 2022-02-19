@@ -92,11 +92,6 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
             }
         }
 
-        // Forget the target if it loses line of sight
-        /*if (getTarget() != null && !getTarget().hasLineOfSight(this)) {
-
-        }*/
-
         // Movement
         // TODO - make it continue straight if it loses its target so it doesnt find a new target
         if (!isOnGround() && getBlockStateOn().isAir()) {
@@ -109,6 +104,7 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
             }
         }
         setDeltaMovement(getDeltaMovement().multiply(0.35, 0.35, 0.35));
+
 
         Vec3 direction = getDeltaMovement();
         double angle = Mth.atan2(direction.z, direction.x);
@@ -129,6 +125,7 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
     }
 
     private void explode(LivingEntity entity) {
+        // todo - figure out why the sound cant be heard when the player is more than a few blocks away & fix ti
         playSound(GlumbisSounds.GLUMP_EXPLODE.get(),2.0F, 1.0F);
 
         for(int i = 0; i < 20; i++) {
@@ -143,11 +140,7 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
         float damage = 1 - Mth.sqrt((float) distanceTo) / 10;
         entity.hurt(DamageSource.explosion(entity), (0.5F * damage + 0.5F) * 2);
 
-        double x = (0.5F * (entity.getX() - getX()) + 0.5F) * 2.0;
-        double z = (0.5F * (entity.getZ() - getZ()) + 0.5F) * 2.0;
-
-        System.out.println("entity = " + entity.getType() + ", x = " + x + ", z = " + z);
-        entity.setDeltaMovement(entity.getDeltaMovement().add(x, 0.15, z));
+        entity.setDeltaMovement(entity.getDeltaMovement().add(entity.position().normalize().multiply(1.0, 1.0, 1.0)));
     }
 
     protected ParticleOptions getTrailParticle() {
