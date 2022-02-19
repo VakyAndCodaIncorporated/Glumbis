@@ -35,5 +35,11 @@ public class GlumbossModel extends AnimatedTickingGeoModel<GlumbossEntity> {
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
         head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
         catBody.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 350F));
+
+        if (entity.isHidden()) {
+            head.setScaleX(2);
+            head.setScaleY(2);
+            head.setScaleZ(2);
+        }
     }
 }

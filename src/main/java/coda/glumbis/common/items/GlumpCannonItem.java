@@ -3,17 +3,18 @@ package coda.glumbis.common.items;
 import coda.glumbis.common.entities.RocketPropelledGlumpEntity;
 import coda.glumbis.common.registry.GlumbisItems;
 import coda.glumbis.common.registry.GlumbisSounds;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.function.Predicate;
 
@@ -46,7 +47,7 @@ public class GlumpCannonItem extends ProjectileWeaponItem {
         ItemStack itemstack = p_40673_.getItemInHand(p_40674_);
         boolean flag = !p_40673_.getProjectile(itemstack).isEmpty();
 
-        InteractionResultHolder<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, p_40672_, p_40673_, p_40674_, flag);
+        InteractionResultHolder<ItemStack> ret = ForgeEventFactory.onArrowNock(itemstack, p_40672_, p_40673_, p_40674_, flag);
         if (ret != null) return ret;
 
         if (!p_40673_.getAbilities().instabuild && !flag) {
@@ -57,13 +58,12 @@ public class GlumpCannonItem extends ProjectileWeaponItem {
         }
     }
 
-    public void releaseUsing(ItemStack p_40667_, Level p_40668_, LivingEntity p_40669_, int p_40670_) {
-        if (p_40669_ instanceof Player) {
-            Player player = (Player) p_40669_;
+    public void releaseUsing(ItemStack p_40667_, Level p_40668_, LivingEntity livingEntity, int p_40670_) {
+        if (livingEntity instanceof Player player) {
             ItemStack itemstack = player.getProjectile(p_40667_);
 
             int i = this.getUseDuration(p_40667_) - p_40670_;
-            i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(p_40667_, p_40668_, player, i, !itemstack.isEmpty());
+            i = ForgeEventFactory.onArrowLoose(p_40667_, p_40668_, player, i, !itemstack.isEmpty());
             if (i < 0) return;
 
             if (!itemstack.isEmpty()) {
@@ -73,11 +73,14 @@ public class GlumpCannonItem extends ProjectileWeaponItem {
 
                 if (!p_40668_.isClientSide) {
                     RocketPropelledGlumpEntity glump = createRPG(p_40668_, player);
-                    glump.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.0F, 1.0F);
+                    glump.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.0F, 1.0F);
 
                     p_40667_.hurtAndBreak(1, player, (p_40665_) -> p_40665_.broadcastBreakEvent(player.getUsedItemHand()));
 
                     p_40668_.addFreshEntity(glump);
+
+                    Vec3 vec3 = livingEntity.getViewVector(1.0F);
+                    glump.setDeltaMovement(vec3);
                 }
 
                 p_40668_.playSound(null, player.getX(), player.getY(), player.getZ(), GlumbisSounds.GLUMP_FLY.get(), SoundSource.PLAYERS, 1.0F, 1.0F / (p_40668_.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);

@@ -36,9 +36,11 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nullable;
 
 public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnimationTickable {
+    private static final EntityDataAccessor<Integer> ATTACK_STATE = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> HIDDEN = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.BOOLEAN);
     private final ServerBossEvent bossEvent = (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.WHITE, BossEvent.BossBarOverlay.PROGRESS));
     private final AnimationFactory factory = new AnimationFactory(this);
-    private static final EntityDataAccessor<Integer> ATTACK_STATE = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.INT);
+    public boolean wasHidden;
 
     public GlumbossEntity(EntityType<? extends GlumbossEntity> p_i48567_1_, Level p_i48567_2_) {
         super(p_i48567_1_, p_i48567_2_);
@@ -48,6 +50,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(0, new GlumbossHideGoal(this));
         this.goalSelector.addGoal(1, new GlumbossStaticChargeGoal(this));
         this.goalSelector.addGoal(2, new GlumbossSlamGoal(this));
         this.goalSelector.addGoal(2, new GlumbossGoToTargetGoal(this));
@@ -80,10 +83,12 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ATTACK_STATE, 0);
+        this.entityData.define(HIDDEN, false);
     }
 
     public void readAdditionalSaveData(CompoundTag p_31474_) {
         super.readAdditionalSaveData(p_31474_);
+        this.entityData.set(HIDDEN, false);
         if (this.hasCustomName()) {
             this.bossEvent.setName(this.getDisplayName());
         }
@@ -126,14 +131,21 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     public void tick() {
         super.tick();
 
+        // Particles
         if (this.getState() == 3) {
             for(int i = 0; i < 3; i++) {
                 this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(1.5D), this.getRandomY() + 0.85D, this.getRandomZ(1.5D), 0, 0.08d, 0);
             }
         }
 
+        // Passive healing
         if (tickCount % 50 == 0 && getHealth() < getMaxHealth()) {
             heal(2);
+        }
+
+        // Set hidden
+        if (!wasHidden && getHealth() < getMaxHealth() / 2) {
+            setHidden(true);
         }
     }
 
@@ -143,6 +155,10 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+/*        if (isHidden()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.hide", false));
+            return PlayState.CONTINUE;
+        }*/
         if (getState() == 3) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.static_charge", false));
             return PlayState.CONTINUE;
@@ -176,6 +192,14 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
 
     public void setState(int state){
         this.entityData.set(ATTACK_STATE, state);
+    }
+
+    public boolean isHidden(){
+        return this.entityData.get(HIDDEN);
+    }
+
+    public void setHidden(boolean hidden){
+        this.entityData.set(HIDDEN, hidden);
     }
 
     @Nullable
