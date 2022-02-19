@@ -71,7 +71,6 @@ public class GlumpCannonItem extends ProjectileWeaponItem {
                     itemstack = new ItemStack(GlumbisItems.ROCKET_PROPELLED_GLUMP.get());
                 }
 
-                boolean flag1 = player.getAbilities().instabuild || itemstack.getItem() instanceof RocketPropelledGlumpItem;
                 if (!p_40668_.isClientSide) {
                     RocketPropelledGlumpItem glumpItem = (RocketPropelledGlumpItem) (itemstack.getItem() instanceof RocketPropelledGlumpItem ? itemstack.getItem() : GlumbisItems.ROCKET_PROPELLED_GLUMP.get());
                     RocketPropelledGlumpEntity glump = glumpItem.createRPG(p_40668_, player);
@@ -83,7 +82,7 @@ public class GlumpCannonItem extends ProjectileWeaponItem {
                 }
 
                 p_40668_.playSound(null, player.getX(), player.getY(), player.getZ(), GlumbisSounds.GLUMP_FLY.get(), SoundSource.PLAYERS, 1.0F, 1.0F / (p_40668_.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
-                if (!flag1 && !player.getAbilities().instabuild) {
+                if (!player.getAbilities().instabuild) {
                     itemstack.shrink(1);
                     if (itemstack.isEmpty()) {
                         player.getInventory().removeItem(itemstack);

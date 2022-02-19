@@ -4,13 +4,13 @@ import coda.glumbis.common.registry.GlumbisEntities;
 import coda.glumbis.common.registry.GlumbisParticles;
 import coda.glumbis.common.registry.GlumbisSounds;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
@@ -26,8 +26,10 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implements IAnimatable, IAnimationTickable {
+    public static final Predicate<LivingEntity> NOT_CATS = (p_20436_) -> !(p_20436_ instanceof GlumpEntity) && !(p_20436_ instanceof GlumbossEntity) && !(p_20436_ instanceof Cat);
     private final AnimationFactory factory = new AnimationFactory(this);
 
     public RocketPropelledGlumpEntity(EntityType<? extends AbstractHurtingProjectile> p_37248_, Level p_37249_) {
@@ -81,38 +83,41 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
 
     @Override
     public void tick() {
-        if (onGround && tickCount % 30 == 0 && getOwner() instanceof Player player) {
-            explode(player);
+
+        // Explode when in ground
+        if (onGround && tickCount % 30 == 0) {
+
+            for (LivingEntity entity : getNearbyEntities()) {
+                explode(entity);
+            }
         }
 
-        if (!level.isClientSide && !isOnGround() && getBlockStateOn().isAir()) {
+        // Forget the target if it loses line of sight
+        /*if (getTarget() != null && !getTarget().hasLineOfSight(this)) {
+
+        }*/
+
+        // Movement
+        // TODO - make it continue straight if it loses its target so it doesnt find a new target
+        if (!isOnGround() && getBlockStateOn().isAir()) {
             if (getTarget() != null) {
-                // TODO - make it continue straight if it loses its target so it doesnt find a new target
-                Vec3 vec3 = getTarget().position().subtract(position()).normalize();
+                Vec3 entityToTarget = getTarget().position().subtract(position());
+                Vec3 direction = entityToTarget.normalize();
+                setDeltaMovement(direction);
 
-                setDeltaMovement(vec3);
-
-                Vec3 rotationVec = getTarget().position().subtract(position());
-                double atan = Math.atan2(vec3.z, vec3.x) - (Math.PI / 2);
-                double rotXZ = Math.toDegrees(atan);
-                setXRot((float) rotXZ);
-                setYRot((float) Mth.atan2(vec3.y, vec3.horizontalDistance()));
+                System.out.println(getTarget());
             }
-            else {
-                if (getOwner() instanceof Player player) {
-                    Vec3 vec3 = player.getViewVector(1.0F);
-
-                    setDeltaMovement(vec3);
-                }
-
-            }
-
         }
         setDeltaMovement(getDeltaMovement().multiply(0.35, 0.35, 0.35));
 
+        Vec3 direction = getDeltaMovement();
+        double angle = Mth.atan2(direction.z, direction.x);
+        setYRot((float) Math.toDegrees(angle));
+
+        // Explode after 15 seconds
         if (tickCount > 300) {
             for (LivingEntity entity : getNearbyEntities()) {
-                this.explode(entity);
+                explode(entity);
             }
         }
 
@@ -120,7 +125,7 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
     }
 
     private List<LivingEntity> getNearbyEntities() {
-        return level.getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(50));
+        return level.getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(10));
     }
 
     private void explode(LivingEntity entity) {
@@ -130,15 +135,19 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
             this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(3.5D), (this.getPosition(1.0f).y() - 0.5) , this.getRandomZ(3.5D), 0, this.getRandomY() * 2, 0);
         }
         tryHurtEntity(entity);
-        System.out.println("exploded");
         discard();
     }
 
     protected void tryHurtEntity(LivingEntity entity) {
         double distanceTo = distanceToSqr(entity);
         float damage = 1 - Mth.sqrt((float) distanceTo) / 10;
-        entity.hurt(DamageSource.explosion(entity), (0.5F * damage + 0.5F) * 10);
-        entity.setDeltaMovement(entity.getDeltaMovement().add(entity.getX() - getX(), 0.15, entity.getZ() - getZ()).multiply(0.35, 1.9, 0.35));
+        entity.hurt(DamageSource.explosion(entity), (0.5F * damage + 0.5F) * 2);
+
+        double x = (0.5F * (entity.getX() - getX()) + 0.5F) * 2.0;
+        double z = (0.5F * (entity.getZ() - getZ()) + 0.5F) * 2.0;
+
+        System.out.println("entity = " + entity.getType() + ", x = " + x + ", z = " + z);
+        entity.setDeltaMovement(entity.getDeltaMovement().add(x, 0.15, z));
     }
 
     protected ParticleOptions getTrailParticle() {
