@@ -18,7 +18,7 @@ public class GlumbisItems {
     public static final RegistryObject<Item> SOCKS = ITEMS.register("socks", () -> new SocksArmorItem(EquipmentSlot.FEET));
     public static final RegistryObject<Item> SOGGY_SOCKS = ITEMS.register("soggy_socks", () -> new SoggySocksArmorItem(EquipmentSlot.FEET));
 
-    public static final RegistryObject<Item> CAT_ESSENCE = ITEMS.register("cat_essence", () -> new Item(new Item.Properties().tab(Glumbis.GROUP).rarity(Rarity.EPIC)));
+    public static final RegistryObject<Item> CAT_ESSENCE = ITEMS.register("cat_essence", () -> new CatEssenceItem(new Item.Properties().tab(Glumbis.GROUP).rarity(Rarity.EPIC)));
 
     public static final RegistryObject<Item> GLUMP_CANNON = ITEMS.register("glump_cannon", () -> new GlumpCannonItem(new Item.Properties().tab(Glumbis.GROUP).stacksTo(1).durability(124)));
     public static final RegistryObject<Item> ROCKET_PROPELLED_GLUMP = ITEMS.register("rocket_propelled_glump", () -> new Item(new Item.Properties().tab(Glumbis.GROUP).stacksTo(16)));
