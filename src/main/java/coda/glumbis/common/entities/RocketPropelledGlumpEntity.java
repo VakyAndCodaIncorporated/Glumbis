@@ -10,6 +10,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.player.Player;
@@ -82,6 +83,12 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
 
     @Override
     public void tick() {
+        super.tick();
+
+        xo = getX();
+        yo = getY();
+        zo = getZ();
+
         if (onGround && tickCount % 30 == 0 && getOwner() instanceof Player player) {
             explode(player);
         }
@@ -104,12 +111,7 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
 
         setDeltaMovement(getDeltaMovement().multiply(0.35, 0.35, 0.35));
 
-        Vec3 direction = getDeltaMovement();
-        double angle = Mth.atan2(direction.z, direction.x);
-        setYRot((float) Math.toDegrees(angle));
-        // setXRot((float) Mth.atan2(entityToTarget.y, entityToTarget.horizontalDistance()));
-
-        super.tick();
+        move(MoverType.SELF, getDeltaMovement());
     }
 
     private void explode(Player player) {
