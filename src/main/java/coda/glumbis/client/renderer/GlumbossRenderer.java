@@ -17,7 +17,6 @@ public class GlumbossRenderer extends GeoEntityRenderer<GlumbossEntity> {
 
     public GlumbossRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new GlumbossModel());
-        this.addLayer(new GlumbossChargedLayer(this));
         this.shadowRadius = 1.0F;
     }
 }

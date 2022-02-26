@@ -8,6 +8,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
@@ -15,6 +16,7 @@ import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
@@ -55,8 +57,11 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
 
     @Override
     protected void onHitEntity(EntityHitResult result) {
-        for (LivingEntity entity : getNearbyEntities()) {
-            explode(entity);
+
+        if (result.getType() == HitResult.Type.ENTITY) {
+            for (LivingEntity entity : getNearbyEntities()) {
+                explode(entity);
+            }
         }
     }
 
@@ -82,9 +87,13 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
 
     @Override
     public void tick() {
-        getTarget();
+        super.tick();
 
-        // Explode when in ground
+        xo = getX();
+        yo = getY();
+        zo = getZ();
+
+        // explode when on ground
         if (onGround && tickCount % 30 == 0) {
 
             for (LivingEntity entity : getNearbyEntities()) {
@@ -92,29 +101,30 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
             }
         }
 
-        // Movement
-        // TODO - make it continue straight if it loses its target so it doesnt find a new target
+
+        // movement
         if (!isOnGround() && getBlockStateOn().isAir()) {
             if (getTarget() != null) {
-                Vec3 entityToTarget = position().vectorTo(getTarget().position());
-                setDeltaMovement(getDeltaMovement().add(entityToTarget).multiply(0.05, 0.05, 0.05));
+                // TODO - make it continue straight if it loses its target so it doesnt find a new target
+                Vec3 entityToTarget = getTarget().position().subtract(position());
+                Vec3 direction = entityToTarget.normalize();
+                setDeltaMovement(direction);
+            }
+            else {
 
-                System.out.println(getTarget());
             }
         }
 
-        Vec3 direction = getDeltaMovement();
-        double angle = Mth.atan2(direction.z, direction.x);
-        setYRot((float) Math.toDegrees(angle));
+        setDeltaMovement(getDeltaMovement().multiply(0.35, 0.35, 0.35));
 
-        // Explode after 15 seconds
+        move(MoverType.SELF, getDeltaMovement());
+
+        // explode after 15 seconds
         if (tickCount > 300) {
             for (LivingEntity entity : getNearbyEntities()) {
                 explode(entity);
             }
         }
-
-        super.tick();
     }
 
     private List<LivingEntity> getNearbyEntities() {
@@ -136,7 +146,7 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
     protected void tryHurtEntity(LivingEntity entity) {
         double distanceTo = distanceToSqr(entity);
         float damage = 1 - Mth.sqrt((float) distanceTo) / 10;
-        entity.hurt(DamageSource.explosion(entity), (0.5F * damage + 0.5F) * 2);
+        entity.hurt(DamageSource.explosion(entity), (0.5F * damage + 0.5F) * 5);
 
         entity.setDeltaMovement(entity.getDeltaMovement().add(entity.position().normalize().multiply(1.0, 1.0, 1.0)));
     }
