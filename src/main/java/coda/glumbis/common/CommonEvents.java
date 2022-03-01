@@ -6,6 +6,9 @@ import coda.glumbis.common.registry.GlumbisEntities;
 import coda.glumbis.common.registry.GlumbisItems;
 import coda.glumbis.common.registry.GlumbisParticles;
 import lain.mods.cos.api.CosArmorAPI;
+import net.minecraft.client.CameraType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -16,6 +19,7 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.animal.Cat;
@@ -24,6 +28,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -130,6 +135,33 @@ public class CommonEvents {
 
         if (entity instanceof Creeper creeper) {
             creeper.goalSelector.addGoal(0, new AvoidEntityGoal<>(creeper, Player.class, 12.0F, 1.0D, 1.2D, GLUMBIS_IN_PLAYERS_HOTBAR));
+        }
+    }
+
+    @SubscribeEvent
+    public static void energizedGear(TickEvent.PlayerTickEvent event) {
+        Player player = event.player;
+        InteractionHand hand = event.player.getUsedItemHand();
+        ItemStack stack = player.getItemInHand(hand);
+
+        if (stack.is(Items.NETHERITE_SWORD)) {
+            CompoundTag tag = stack.getOrCreateTag();
+
+            tag.putInt("Energized", 100);
+
+            if (stack.getTag().get("Energized") != null && stack.getTag().getInt("Energized") > 0) {
+
+                Level level = player.level;
+
+                // account for skin customizability
+                Vec3 pos = new Vec3(player.getMainArm() == HumanoidArm.LEFT ? 0.3 : -0.3, 0.95, 0.95).yRot(-player.yBodyRot * ((float) Math.PI / 180f)).add(player.getX(), player.getY(), player.getZ());
+
+                // todo - make the particles only render to others players & if the player is in first person. we cant get the camera from the player, so idk what to do
+                if (!Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
+                    level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), pos.x(), pos.y(), pos.z(), 0, 0.05, 0);
+                }
+                System.out.println(pos);
+            }
         }
     }
 
