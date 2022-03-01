@@ -2,6 +2,7 @@ package coda.glumbis;
 
 import coda.glumbis.common.entities.GlumbossEntity;
 import coda.glumbis.common.entities.GlumpEntity;
+import coda.glumbis.common.entities.RocketPropelledGlumpEntity;
 import coda.glumbis.common.registry.*;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -41,5 +42,6 @@ public class Glumbis {
     private void registerEntityAttributes(EntityAttributeCreationEvent event) {
         event.put(GlumbisEntities.GLUMBOSS.get(), GlumbossEntity.createAttributes().build());
         event.put(GlumbisEntities.GLUMP.get(), GlumpEntity.createAttributes().build());
+        event.put(GlumbisEntities.ROCKET_PROPELLED_GLUMP.get(), RocketPropelledGlumpEntity.createAttributes().build());
     }
 }

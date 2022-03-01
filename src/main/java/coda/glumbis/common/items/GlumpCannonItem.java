@@ -1,6 +1,7 @@
 package coda.glumbis.common.items;
 
 import coda.glumbis.common.entities.RocketPropelledGlumpEntity;
+import coda.glumbis.common.registry.GlumbisEntities;
 import coda.glumbis.common.registry.GlumbisItems;
 import coda.glumbis.common.registry.GlumbisSounds;
 import net.minecraft.sounds.SoundSource;
@@ -58,12 +59,12 @@ public class GlumpCannonItem extends ProjectileWeaponItem {
         }
     }
 
-    public void releaseUsing(ItemStack p_40667_, Level p_40668_, LivingEntity livingEntity, int p_40670_) {
+    public void releaseUsing(ItemStack p_40667_, Level level, LivingEntity livingEntity, int p_40670_) {
         if (livingEntity instanceof Player player) {
             ItemStack itemstack = player.getProjectile(p_40667_);
 
             int i = this.getUseDuration(p_40667_) - p_40670_;
-            i = ForgeEventFactory.onArrowLoose(p_40667_, p_40668_, player, i, !itemstack.isEmpty());
+            i = ForgeEventFactory.onArrowLoose(p_40667_, level, player, i, !itemstack.isEmpty());
             if (i < 0) return;
 
             if (!itemstack.isEmpty()) {
@@ -71,19 +72,20 @@ public class GlumpCannonItem extends ProjectileWeaponItem {
                     itemstack = new ItemStack(GlumbisItems.ROCKET_PROPELLED_GLUMP.get());
                 }
 
-                if (!p_40668_.isClientSide) {
-                    RocketPropelledGlumpEntity glump = createRPG(p_40668_, player);
-                    glump.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.0F, 1.0F);
+                if (!level.isClientSide) {
+                    RocketPropelledGlumpEntity glump = createRPG(level);
+                    glump.moveTo(player.position());
+                    glump.owner = player;
 
                     p_40667_.hurtAndBreak(1, player, (p_40665_) -> p_40665_.broadcastBreakEvent(player.getUsedItemHand()));
 
-                    p_40668_.addFreshEntity(glump);
+                    level.addFreshEntity(glump);
 
                     Vec3 vec3 = livingEntity.getViewVector(1.0F);
                     glump.setDeltaMovement(vec3);
                 }
 
-                p_40668_.playSound(null, player.getX(), player.getY(), player.getZ(), GlumbisSounds.GLUMP_FLY.get(), SoundSource.PLAYERS, 1.0F, 1.0F / (p_40668_.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
+                level.playSound(null, player.getX(), player.getY(), player.getZ(), GlumbisSounds.GLUMP_FLY.get(), SoundSource.PLAYERS, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
                 if (!player.getAbilities().instabuild) {
                     itemstack.shrink(1);
                     if (itemstack.isEmpty()) {
@@ -96,7 +98,7 @@ public class GlumpCannonItem extends ProjectileWeaponItem {
         }
     }
 
-    public RocketPropelledGlumpEntity createRPG(Level level, LivingEntity entity) {
-        return new RocketPropelledGlumpEntity(entity, level);
+    public RocketPropelledGlumpEntity createRPG(Level level) {
+        return new RocketPropelledGlumpEntity(GlumbisEntities.ROCKET_PROPELLED_GLUMP.get(), level);
     }
 }

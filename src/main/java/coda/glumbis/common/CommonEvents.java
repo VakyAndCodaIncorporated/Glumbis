@@ -134,16 +134,6 @@ public class CommonEvents {
     }
 
     @SubscribeEvent
-    public static void projectileImpact(ProjectileImpactEvent event) {
-        Projectile proj = event.getProjectile();
-        if (proj instanceof RocketPropelledGlumpEntity) {
-            for(int i = 0; i < 20; i++) {
-                proj.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), proj.getRandomX(3.5D), proj.getRandomY(), proj.getRandomZ(3.5D), 0, proj.getRandomY() * 2, 0);
-            }
-        }
-    }
-
-    @SubscribeEvent
     public static void playerTick(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
 

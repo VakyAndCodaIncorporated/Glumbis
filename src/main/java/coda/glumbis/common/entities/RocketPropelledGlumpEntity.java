@@ -1,23 +1,24 @@
 package coda.glumbis.common.entities;
 
-import coda.glumbis.common.registry.GlumbisEntities;
 import coda.glumbis.common.registry.GlumbisParticles;
 import coda.glumbis.common.registry.GlumbisSounds;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -29,55 +30,18 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implements IAnimatable, IAnimationTickable {
+public class RocketPropelledGlumpEntity extends PathfinderMob implements IAnimatable, IAnimationTickable {
     public static final Predicate<LivingEntity> NO_CATS = (p_20436_) -> !(p_20436_ instanceof GlumpEntity) && !(p_20436_ instanceof GlumbossEntity) && !(p_20436_ instanceof Cat);
     private final AnimationFactory factory = new AnimationFactory(this);
+    public Player owner;
 
-    public RocketPropelledGlumpEntity(EntityType<? extends AbstractHurtingProjectile> p_37248_, Level p_37249_) {
+    public RocketPropelledGlumpEntity(EntityType<? extends PathfinderMob> p_37248_, Level p_37249_) {
         super(p_37248_, p_37249_);
+        this.lookControl = new SmoothSwimmingLookControl(this, 90);
     }
 
-    public RocketPropelledGlumpEntity(Level p_36861_, double p_36862_, double p_36863_, double p_36864_) {
-        this(GlumbisEntities.ROCKET_PROPELLED_GLUMP.get(), p_36861_);
-        this.setPos(p_36862_, p_36863_, p_36864_);
-    }
-
-    public RocketPropelledGlumpEntity(LivingEntity p_36718_, Level p_36719_) {
-        this(p_36719_, p_36718_.getX(), p_36718_.getEyeY() - (double)0.1F, p_36718_.getZ());
-        this.setOwner(p_36718_);
-        this.xPower = 0.5F;
-        this.yPower = 0.5F;
-        this.zPower = 0.5F;
-    }
-
-    @Override
-    protected float getInertia() {
-        return super.getInertia();
-    }
-
-    @Override
-    protected void onHitEntity(EntityHitResult result) {
-
-        if (result.getType() == HitResult.Type.ENTITY) {
-            for (LivingEntity entity : getNearbyEntities()) {
-                explode(entity);
-            }
-        }
-    }
-
-    @Override
-    protected void onHitBlock(BlockHitResult p_36755_) {
-        super.onHitBlock(p_36755_);
-        Vec3 vec3 = p_36755_.getLocation().subtract(this.getX(), this.getY(), this.getZ());
-        this.setDeltaMovement(vec3);
-        Vec3 vec31 = vec3.normalize().scale(0.05F);
-        this.setPosRaw(this.getX() - vec31.x, this.getY() - vec31.y, this.getZ() - vec31.z);
-        this.onGround = true;
-    }
-
-    @Override
-    protected boolean shouldBurn() {
-        return false;
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.5F).add(Attributes.ATTACK_DAMAGE, 0.0F);
     }
 
     @Override
@@ -86,24 +50,96 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
     }
 
     @Override
+    public boolean hurt(DamageSource pSource, float pAmount) {
+        if (pSource != DamageSource.OUT_OF_WORLD && this.isInvulnerableTo(pSource)) {
+            return false;
+        } else {
+            this.markHurt();
+            Entity entity = pSource.getEntity();
+            if (entity != null) {
+                Vec3 vec3 = entity.getLookAngle();
+                this.setDeltaMovement(vec3);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public static boolean lookAt(RocketPropelledGlumpEntity rpgEntity, LivingEntity entity, double range) {
+        Vec3 vec3 = rpgEntity.getViewVector(1.0F).normalize();
+        Vec3 vec31 = new Vec3(entity.getX() - rpgEntity.getX(), entity.getY() - rpgEntity.getEyeY(), entity.getZ() - rpgEntity.getZ());
+        double d0 = vec31.length();
+        vec31 = vec31.normalize();
+        double d1 = vec3.dot(vec31);
+        return d1 > 1.0D - range / d0;
+    }
+
+    @Override
     public void tick() {
         super.tick();
 
-        xo = getX();
-        yo = getY();
-        zo = getZ();
-
-        // explode when on ground
-        if (onGround && tickCount % 30 == 0) {
-
-            for (LivingEntity entity : getNearbyEntities()) {
-                explode(entity);
+        // get a new target
+        if (getTarget() == null) {
+            for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(50), NO_CATS)) {
+                if (entity != null && !(entity instanceof RocketPropelledGlumpEntity) && entity != owner && lookAt(this, entity, 30F)) {
+                    setTarget(entity);
+                }
             }
         }
 
+        // movement
+
+        double d0 = this.getX() + getDeltaMovement().x;
+        double d1 = this.getY() + getDeltaMovement().y;
+        double d2 = this.getZ() + getDeltaMovement().z;
+        /*
+        Vec3 vec3 = this.getDeltaMovement();
+        ProjectileUtil.rotateTowardsMovement(this, 0.2F);
+        float f = 0.95F;
+        if (this.isInWater()) {
+            for(int i = 0; i < 4; ++i) {
+                this.level.addParticle(ParticleTypes.BUBBLE, d0 - vec3.x * 0.25D, d1 - vec3.y * 0.25D, d2 - vec3.z * 0.25D, vec3.x, vec3.y, vec3.z);
+            }
+
+            f = 0.8F;
+        }
+
+        this.setDeltaMovement(vec3.add(0.5F, 0.5F, 0.5F).scale(f));
+        this.setPos(d0, d1, d2);
+        */
+
+        // particles
+        this.level.addParticle(this.getTrailParticle(), d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
+
+        // explode when on ground
+        if (getFeetBlockState().isRedstoneConductor(level, blockPosition()) && tickCount % 30 == 0) {
+
+            for (LivingEntity entity : getNearbyEntities()) {
+                //explode(entity);
+            }
+        }
 
         // movement
         if (!isOnGround() && getBlockStateOn().isAir()) {
+            float f = (float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F;
+            setYRot(this.rotlerp(getYRot(), f, 90F));
+            yBodyRot = getYRot();
+            yHeadRot = getYRot();
+
+            float f1 = (float)(getAttributeValue(Attributes.MOVEMENT_SPEED));
+            double d4 = Math.sqrt(d0 * d0 + d2 * d2);
+            if (Math.abs(d1) > (double)1.0E-5F || Math.abs(d4) > (double)1.0E-5F) {
+                float f2 = -((float)(Mth.atan2(d1, d4) * (double)(180F / (float)Math.PI)));
+                f2 = Mth.clamp(Mth.wrapDegrees(f2), -90F, 90F);
+                setXRot(this.rotlerp(getXRot(), f2, 5.0F));
+            }
+
+            float f4 = Mth.cos(getXRot() * ((float)Math.PI / 180F));
+            float f3 = Mth.sin(getXRot() * ((float)Math.PI / 180F));
+            zza = f4 * f1;
+            yya = -f3 * f1;
+
             if (getTarget() != null) {
                 // TODO - make it continue straight if it loses its target so it doesnt find a new target
                 Vec3 entityToTarget = getTarget().position().subtract(position());
@@ -111,7 +147,7 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
                 setDeltaMovement(direction);
             }
             else {
-
+                setDeltaMovement(getViewVector(1.0F));
             }
         }
 
@@ -119,10 +155,17 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
 
         move(MoverType.SELF, getDeltaMovement());
 
-        // explode after 15 seconds
-        if (tickCount > 300) {
+        // explode after 20 seconds
+        if (tickCount > 400) {
             for (LivingEntity entity : getNearbyEntities()) {
                 explode(entity);
+            }
+        }
+
+        // explode on contact with an entity
+        for (LivingEntity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.3D))) {
+            if (entity != owner && entity.isAlive()) {
+                //explode(entity);
             }
         }
     }
@@ -136,8 +179,9 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
         playSound(GlumbisSounds.GLUMP_EXPLODE.get(),2.0F, 1.0F);
 
         // todo - fix particles not playing. maybe its because the projectile they are playing from is removed?
-        for(int i = 0; i < 200; i++) {
-            entity.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(3.5D), (this.getPosition(1.0f).y()) , this.getRandomZ(3.5D), 0, this.getRandomY() * 2, 0);
+        for(int i = 0; i < 50; i++) {
+            entity.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(3.5D), this.getPosition(1.0f).y() + (random.nextDouble() * 2) , this.getRandomZ(3.5D), 0, this.getRandomY() * 2, 0);
+            entity.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(3.5D), this.getPosition(1.0f).y() + (random.nextDouble() * 2) , this.getRandomZ(3.5D), 0, this.getRandomY() * 2, 0);
         }
         tryHurtEntity(entity);
         discard();
@@ -153,22 +197,6 @@ public class RocketPropelledGlumpEntity extends AbstractHurtingProjectile implem
 
     protected ParticleOptions getTrailParticle() {
         return GlumbisParticles.STATIC_LIGHTNING.get();
-    }
-
-    public LivingEntity getTarget() {
-        for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(50), NO_CATS)) {
-            if (entity != null) {
-                if (entity == getOwner()) {
-                    continue;
-                }
-                return entity;
-            }
-            else {
-                continue;
-            }
-        }
-
-        return null;
     }
 
     @Override
