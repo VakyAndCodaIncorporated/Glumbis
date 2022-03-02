@@ -160,7 +160,6 @@ public class CommonEvents {
 
                 if (armor.getTag().get("Energized") != null && armor.getTag().getInt("Energized") > 0) {
 
-                    // todo - make this a translatable text component
                     armor.setHoverName(new TranslatableComponent("gear.glumbis.energized").append(armor.getItem().getName(armor)).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
 
                     // todo - make the particles only render to others players & if the player is in first person. we cant get the camera from the player, so idk what to do
@@ -194,7 +193,6 @@ public class CommonEvents {
 
             if (stack.getTag().get("Energized") != null && stack.getTag().getInt("Energized") > 0) {
 
-                // todo - make this a translatable text component
                 stack.setHoverName(new TranslatableComponent("gear.glumbis.energized").append(stack.getItem().getName(stack)).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
 
                 // account for skin customizability & camera mode
