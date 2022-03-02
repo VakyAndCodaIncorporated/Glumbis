@@ -35,5 +35,7 @@
 
   "glumbis.glump.fly": "Glump flies",
   "glumbis.glump.hurt": "Glump hurts",
-  "glumbis.glump.explode": "Glump explodes"
+  "glumbis.glump.explode": "Glump explodes",
+
+  "gear.glumbis.energized": "Energized "
 }

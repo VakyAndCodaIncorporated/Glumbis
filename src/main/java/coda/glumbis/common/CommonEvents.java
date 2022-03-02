@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -160,7 +161,7 @@ public class CommonEvents {
                 if (armor.getTag().get("Energized") != null && armor.getTag().getInt("Energized") > 0) {
 
                     // todo - make this a translatable text component
-                    armor.setHoverName(new TextComponent("Energized ").append(armor.getItem().getName(armor)).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
+                    armor.setHoverName(new TranslatableComponent("gear.glumbis.energized").append(armor.getItem().getName(armor)).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
 
                     // todo - make the particles only render to others players & if the player is in first person. we cant get the camera from the player, so idk what to do
                     //if (!Minecraft.getInstance().options.getCameraType().isFirstPerson())
@@ -194,7 +195,7 @@ public class CommonEvents {
             if (stack.getTag().get("Energized") != null && stack.getTag().getInt("Energized") > 0) {
 
                 // todo - make this a translatable text component
-                stack.setHoverName(new TextComponent("Energized ").append(stack.getItem().getName(stack)).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
+                stack.setHoverName(new TranslatableComponent("gear.glumbis.energized").append(stack.getItem().getName(stack)).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
 
                 // account for skin customizability & camera mode
                 boolean camera = Minecraft.getInstance().options.getCameraType().isFirstPerson();
