@@ -8,6 +8,7 @@
   "item.glumbis.rocket_propelled_glump": "Rocket Propelled Glump",
   "item.glumbis.glump_cannon": "Glump Cannon",
   "item.glumbis.cat_essence": "Essence of Cat",
+  "item.glumbis.glumbo": "Glumbo",
 
   "entity.glumbis.glumboss": "Glumboss",
   "entity.glumbis.glump": "Glump",
@@ -34,5 +35,7 @@
 
   "glumbis.glump.fly": "Glump flies",
   "glumbis.glump.hurt": "Glump hurts",
-  "glumbis.glump.explode": "Glump explodes"
+  "glumbis.glump.explode": "Glump explodes",
+
+  "gear.glumbis.energized": "Energized "
 }

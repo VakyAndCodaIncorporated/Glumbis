@@ -30,7 +30,7 @@ public class CatEssenceItem extends Item {
 
         if (entity != null) {
             entity.setNoGravity(true);
-            entity.setExtendedLifetime();
+            //entity.setExtendedLifetime();
             for (int j = 0; j < 10; j++) {
                 entity.level.addParticle(new DustParticleOptions(new Vector3f(COLORS2[j]), 1.0F), entity.getX(), entity.getY() + 0.1F, entity.getZ(), 0, 0, 0);
             }
@@ -40,7 +40,6 @@ public class CatEssenceItem extends Item {
                 entity.setDeltaMovement(vec3);
             }
         }
-        super.onEntityItemUpdate(stack, entity);
         return false;
     }
 
