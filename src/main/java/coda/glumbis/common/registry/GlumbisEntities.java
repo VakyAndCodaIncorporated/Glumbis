@@ -1,6 +1,7 @@
 package coda.glumbis.common.registry;
 
 import coda.glumbis.Glumbis;
+import coda.glumbis.common.entities.BigSockEntity;
 import coda.glumbis.common.entities.GlumbossEntity;
 import coda.glumbis.common.entities.GlumpEntity;
 import coda.glumbis.common.entities.RocketPropelledGlumpEntity;
@@ -18,6 +19,7 @@ public class GlumbisEntities {
     public static final RegistryObject<EntityType<GlumpEntity>> GLUMP = create("glump", EntityType.Builder.of(GlumpEntity::new, MobCategory.CREATURE).sized(0.6f, 0.9f));
 
     public static final RegistryObject<EntityType<RocketPropelledGlumpEntity>> ROCKET_PROPELLED_GLUMP = create("rocket_propelled_glump", EntityType.Builder.of(RocketPropelledGlumpEntity::new, MobCategory.MISC).sized(0.25f, 0.25f));
+    public static final RegistryObject<EntityType<BigSockEntity>> BIG_SOCK = create("big_sock", EntityType.Builder.of(BigSockEntity::new, MobCategory.MISC).sized(1.35f, 2.4f));
 
     private static <T extends Entity> RegistryObject<EntityType<T>> create(String name, EntityType.Builder<T> builder) {
         return ENTITIES.register(name, () -> builder.build(Glumbis.MOD_ID + "." + name));

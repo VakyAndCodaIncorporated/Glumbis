@@ -1,6 +1,7 @@
 package coda.glumbis.client;
 
 import coda.glumbis.Glumbis;
+import coda.glumbis.client.renderer.BigSockRenderer;
 import coda.glumbis.client.renderer.GlumbossRenderer;
 import coda.glumbis.client.renderer.GlumpRenderer;
 import coda.glumbis.client.renderer.RocketPropelledGlumpRenderer;
@@ -24,6 +25,7 @@ public class ClientEvents {
         EntityRenderers.register(GlumbisEntities.GLUMBOSS.get(), GlumbossRenderer::new);
         EntityRenderers.register(GlumbisEntities.GLUMP.get(), GlumpRenderer::new);
         EntityRenderers.register(GlumbisEntities.ROCKET_PROPELLED_GLUMP.get(), RocketPropelledGlumpRenderer::new);
+        EntityRenderers.register(GlumbisEntities.BIG_SOCK.get(), BigSockRenderer::new);
 
         ItemBlockRenderTypes.setRenderLayer(GlumbisBlocks.CATNIP.get(), RenderType.cutout());
     }

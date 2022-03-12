@@ -1,5 +1,6 @@
 package coda.glumbis;
 
+import coda.glumbis.common.entities.BigSockEntity;
 import coda.glumbis.common.entities.GlumbossEntity;
 import coda.glumbis.common.entities.GlumpEntity;
 import coda.glumbis.common.entities.RocketPropelledGlumpEntity;
@@ -43,5 +44,6 @@ public class Glumbis {
         event.put(GlumbisEntities.GLUMBOSS.get(), GlumbossEntity.createAttributes().build());
         event.put(GlumbisEntities.GLUMP.get(), GlumpEntity.createAttributes().build());
         event.put(GlumbisEntities.ROCKET_PROPELLED_GLUMP.get(), RocketPropelledGlumpEntity.createAttributes().build());
+        event.put(GlumbisEntities.BIG_SOCK.get(), BigSockEntity.createAttributes().build());
     }
 }
