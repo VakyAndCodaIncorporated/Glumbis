@@ -32,7 +32,6 @@ public class GlumbossSlamGoal extends Goal {
 
     @Override
     public void tick() {
-        super.tick();
         if (canUse()) {
             if (this.cooldownTimer < COOLDOWN) {
                 this.cooldownTimer++;
