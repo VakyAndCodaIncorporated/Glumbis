@@ -3,6 +3,7 @@ package coda.glumbis.common.entities;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.ToggleKeyMapping;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -41,6 +42,7 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 	public InteractionResult mobInteract(Player player, InteractionHand hand) {
 		if (!this.isVehicle()) {
 			player.startRiding(this);
+			player.setYRot(getYRot());
 			return super.mobInteract(player, hand);
 		}
 		return super.mobInteract(player, hand);
@@ -67,6 +69,16 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 	@Override
 	public void tick() {
 		super.tick();
+
+		if (getSpeed() > 0.09 && isVehicle()) {
+			LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
+
+			this.setYRot(passenger.getYRot());
+			this.yRotO = this.getYRot();
+			this.setRot(this.getYRot(), this.getXRot());
+			this.yBodyRot = this.getYRot();
+			this.yHeadRot = this.yBodyRot;
+		}
 	}
 
 	@Override
@@ -76,11 +88,11 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 				this.setSpeed(0.3F);
 				LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
 
-				this.setYRot(passenger.getYRot());
+/*				this.setYRot(passenger.getYRot());
 				this.yRotO = this.getYRot();
 				this.setRot(this.getYRot(), this.getXRot());
 				this.yBodyRot = this.getYRot();
-				this.yHeadRot = this.yBodyRot;
+				this.yHeadRot = this.yBodyRot;*/
 
 				super.travel(jump(pos));
 			}
@@ -120,6 +132,11 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 		}
 
 		return new Vec3(0, pos.y, f1);
+	}
+
+	@Override
+	public double getPassengersRidingOffset() {
+		return 1.25;
 	}
 
 	@Nullable

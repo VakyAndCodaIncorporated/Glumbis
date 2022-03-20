@@ -2,7 +2,6 @@ package coda.glumbis.client.model;
 
 import coda.glumbis.Glumbis;
 import coda.glumbis.common.entities.BigSockEntity;
-import coda.glumbis.common.entities.GlumbossEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -34,6 +33,6 @@ public class BigSockModel extends AnimatedTickingGeoModel<BigSockEntity> {
 
         if (entity.getControllingPassenger() == null) return;
 
-        root.setRotationY((float) ((Math.PI - extraData.netHeadYaw * Math.PI / 180F)));
+        root.setRotationY((float) ((extraData.netHeadYaw * Math.PI / 180F)));
     }
 }
