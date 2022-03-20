@@ -37,9 +37,6 @@ public class GlumbossModel extends AnimatedTickingGeoModel<GlumbossEntity> {
         catBody.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 350F));
 
         if (entity.isHidden()) {
-            head.setScaleX(2);
-            head.setScaleY(2);
-            head.setScaleZ(2);
         }
     }
 }

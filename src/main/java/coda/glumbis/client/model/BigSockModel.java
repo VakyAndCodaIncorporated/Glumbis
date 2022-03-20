@@ -29,5 +29,11 @@ public class BigSockModel extends AnimatedTickingGeoModel<BigSockEntity> {
     @Override
     public void setLivingAnimations(BigSockEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
+        IBone root = this.getAnimationProcessor().getBone("root");
+        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+
+        if (entity.getControllingPassenger() == null) return;
+
+        root.setRotationY((float) ((Math.PI - extraData.netHeadYaw * Math.PI / 180F)));
     }
 }

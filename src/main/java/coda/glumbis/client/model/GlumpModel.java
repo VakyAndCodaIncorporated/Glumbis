@@ -58,7 +58,7 @@ public class GlumpModel extends AnimatedGeoModel<GlumpEntity> {
         chest.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
         root.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
 
-        if(entity.tickCount % 10 == 0){
+        if (entity.tickCount % 10 == 0) {
             root.setScaleZ(root.getScaleZ() + entity.getRandom().nextFloat()/10);
             root.setScaleY(root.getScaleY() + entity.getRandom().nextFloat()/10);
             root.setScaleX(root.getScaleX() + entity.getRandom().nextFloat()/10);

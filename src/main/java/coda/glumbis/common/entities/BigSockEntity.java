@@ -1,11 +1,15 @@
 package coda.glumbis.common.entities;
 
-import javax.annotation.Nullable;
-
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.ToggleKeyMapping;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -14,14 +18,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.ForgeHooksClient;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+
+import javax.annotation.Nullable;
 
 public class BigSockEntity extends Animal implements IAnimatable, IAnimationTickable {
 	private final AnimationFactory factory = new AnimationFactory(this);
@@ -54,26 +60,66 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 	}
 
 	@Override
+	public boolean causeFallDamage(float pFallDistance, float pMultiplier, DamageSource pSource) {
+		return false;
+	}
+
+	@Override
+	public void tick() {
+		super.tick();
+	}
+
+	@Override
 	public void travel(Vec3 pos) {
 		if (this.isAlive()) {
 			if (this.isVehicle()) {
-				LivingEntity livingentity = (LivingEntity) this.getControllingPassenger();
-				this.setYRot(livingentity.getYRot());
+				this.setSpeed(0.3F);
+				LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
+
+				this.setYRot(passenger.getYRot());
 				this.yRotO = this.getYRot();
-				this.setXRot(livingentity.getXRot() * 0.5F);
 				this.setRot(this.getYRot(), this.getXRot());
 				this.yBodyRot = this.getYRot();
 				this.yHeadRot = this.yBodyRot;
-				float f = livingentity.xxa * 0.5F;
-				float f1 = livingentity.zza;
-				if (f1 <= 0.0F) {
-					f1 *= 0.25F;
-				}
 
-				this.setSpeed(0.3F);
-				super.travel(new Vec3(f, pos.y, f1));
+				super.travel(jump(pos));
+			}
+			else {
+				super.travel(Vec3.ZERO);
 			}
 		}
+
+	}
+
+	private Vec3 jump(Vec3 pos) {
+		LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
+		float f1 = passenger.zza;
+		if (f1 <= 0.0F) {
+			f1 *= 0.25F;
+		}
+
+		if (Minecraft.getInstance().options.keyUp.isDown() && isOnGround()) {
+			double x, z;
+
+			float yRot = passenger.getViewYRot(1.0F);
+
+			x = -Mth.sin((float) (yRot * Math.PI/180F)) * 3.5F;
+			z = Mth.cos((float) (yRot * Math.PI/180F)) * 3.5F;
+
+			setDeltaMovement(x, 1, z);
+		}
+		else if (Minecraft.getInstance().options.keyDown.isDown() && isOnGround()) {
+			double x, z;
+
+			float yRot = passenger.getViewYRot(1.0F);
+
+			x = Mth.sin((float) (yRot * Math.PI/180F)) * 1.5F;
+			z = -Mth.cos((float) (yRot * Math.PI/180F)) * 1.5F;
+
+			setDeltaMovement(x, 0.5, z);
+		}
+
+		return new Vec3(0, pos.y, f1);
 	}
 
 	@Nullable
