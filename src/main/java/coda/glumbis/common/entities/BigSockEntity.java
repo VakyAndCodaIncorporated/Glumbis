@@ -73,11 +73,6 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 		if (getSpeed() > 0.09 && isVehicle()) {
 			LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
 
-			this.setYRot(passenger.getYRot());
-			this.yRotO = this.getYRot();
-			this.setRot(this.getYRot(), this.getXRot());
-			this.yBodyRot = this.getYRot();
-			this.yHeadRot = this.yBodyRot;
 		}
 	}
 
@@ -88,11 +83,7 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 				this.setSpeed(0.3F);
 				LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
 
-/*				this.setYRot(passenger.getYRot());
-				this.yRotO = this.getYRot();
-				this.setRot(this.getYRot(), this.getXRot());
-				this.yBodyRot = this.getYRot();
-				this.yHeadRot = this.yBodyRot;*/
+				this.setYRot(passenger.getYHeadRot());
 
 				super.travel(jump(pos));
 			}
@@ -110,23 +101,22 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 			f1 *= 0.25F;
 		}
 
-		if (Minecraft.getInstance().options.keyUp.isDown() && isOnGround()) {
-			double x, z;
+		float distance = 3.5F;
+		double x, z;
 
+		if (Minecraft.getInstance().options.keyUp.isDown() && isOnGround()) {
 			float yRot = passenger.getViewYRot(1.0F);
 
-			x = -Mth.sin((float) (yRot * Math.PI/180F)) * 3.5F;
-			z = Mth.cos((float) (yRot * Math.PI/180F)) * 3.5F;
+			x = -Mth.sin((float) (yRot * Math.PI/180F)) * distance;
+			z = Mth.cos((float) (yRot * Math.PI/180F)) * distance;
 
 			setDeltaMovement(x, 1, z);
 		}
 		else if (Minecraft.getInstance().options.keyDown.isDown() && isOnGround()) {
-			double x, z;
-
 			float yRot = passenger.getViewYRot(1.0F);
 
-			x = Mth.sin((float) (yRot * Math.PI/180F)) * 1.5F;
-			z = -Mth.cos((float) (yRot * Math.PI/180F)) * 1.5F;
+			x = Mth.sin((float) (yRot * Math.PI/180F)) * (distance / 2);
+			z = -Mth.cos((float) (yRot * Math.PI/180F)) * (distance / 2);
 
 			setDeltaMovement(x, 0.5, z);
 		}
