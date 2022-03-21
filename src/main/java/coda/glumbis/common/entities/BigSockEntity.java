@@ -1,11 +1,7 @@
 package coda.glumbis.common.entities;
 
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.ToggleKeyMapping;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -19,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.ForgeHooksClient;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -73,9 +68,8 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 		if (getSpeed() > 0.09 && isVehicle()) {
 			LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
 
-			if (passenger instanceof Player player) {
-				player.shouldRiderSit();
-			}
+			this.setYRot(passenger.yBodyRot);
+
 		}
 	}
 
@@ -89,9 +83,6 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 		if (this.isAlive()) {
 			if (this.isVehicle()) {
 				this.setSpeed(0.3F);
-				LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
-
-				this.setYRot(passenger.yBodyRot);
 
 				super.travel(jump(pos));
 			}
@@ -100,6 +91,11 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 			}
 		}
 
+	}
+
+	@Override
+	public boolean canBeRiddenInWater(Entity rider) {
+		return true;
 	}
 
 	private Vec3 jump(Vec3 pos) {
@@ -134,7 +130,7 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 
 	@Override
 	public double getPassengersRidingOffset() {
-		return 1.25;
+		return 1.0;
 	}
 
 	@Nullable
