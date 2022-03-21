@@ -73,7 +73,15 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 		if (getSpeed() > 0.09 && isVehicle()) {
 			LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
 
+			if (passenger instanceof Player player) {
+				player.shouldRiderSit();
+			}
 		}
+	}
+
+	@Override
+	public boolean shouldRiderSit() {
+		return false;
 	}
 
 	@Override
@@ -83,7 +91,7 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 				this.setSpeed(0.3F);
 				LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
 
-				this.setYRot(passenger.getYHeadRot());
+				this.setYRot(passenger.yBodyRot);
 
 				super.travel(jump(pos));
 			}
