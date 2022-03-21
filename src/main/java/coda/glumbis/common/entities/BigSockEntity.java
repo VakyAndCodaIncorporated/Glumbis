@@ -125,6 +125,10 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 			setDeltaMovement(x, 0.5, z);
 		}
 
+		if (isInWater() && !isOnGround()) {
+			return new Vec3(0, pos.y, 0);
+		}
+
 		return new Vec3(0, pos.y, f1);
 	}
 
