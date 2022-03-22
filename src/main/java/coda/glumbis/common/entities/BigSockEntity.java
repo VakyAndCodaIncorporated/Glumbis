@@ -1,5 +1,6 @@
 package coda.glumbis.common.entities;
 
+import coda.glumbis.common.registry.GlumbisItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -12,8 +13,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
@@ -36,10 +39,17 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 	@Override
 	public InteractionResult mobInteract(Player player, InteractionHand hand) {
 		if (!this.isVehicle()) {
-			player.startRiding(this);
-			player.setYRot(getYRot());
+			if (player.isShiftKeyDown()) {
+				discard();
+				spawnAtLocation(new ItemStack(GlumbisItems.BIG_SOCK.get()));
+			}
+			else {
+				player.startRiding(this);
+				player.setYRot(getYRot());
+			}
 			return super.mobInteract(player, hand);
 		}
+
 		return super.mobInteract(player, hand);
 	}
 
@@ -69,8 +79,17 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 			LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
 
 			this.setYRot(passenger.yBodyRot);
-
 		}
+	}
+
+	@Override
+	public boolean hurt(DamageSource pSource, float pAmount) {
+		return pSource == DamageSource.OUT_OF_WORLD && super.hurt(pSource, pAmount);
+	}
+
+	@Override
+	public ItemStack getPickedResult(HitResult target) {
+		return new ItemStack(GlumbisItems.BIG_SOCK.get());
 	}
 
 	@Override
@@ -105,7 +124,7 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 			f1 *= 0.25F;
 		}
 
-		float distance = 3.5F;
+		float distance = 2.0F;
 		double x, z;
 
 		if (Minecraft.getInstance().options.keyUp.isDown() && isOnGround()) {
@@ -114,7 +133,7 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 			x = -Mth.sin((float) (yRot * Math.PI/180F)) * distance;
 			z = Mth.cos((float) (yRot * Math.PI/180F)) * distance;
 
-			setDeltaMovement(x, 1, z);
+			setDeltaMovement(x, distance * 0.3, z);
 		}
 		else if (Minecraft.getInstance().options.keyDown.isDown() && isOnGround()) {
 			float yRot = passenger.getViewYRot(1.0F);
@@ -122,7 +141,7 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 			x = Mth.sin((float) (yRot * Math.PI/180F)) * (distance / 2);
 			z = -Mth.cos((float) (yRot * Math.PI/180F)) * (distance / 2);
 
-			setDeltaMovement(x, 0.5, z);
+			setDeltaMovement(x, distance * 0.3, z);
 		}
 
 		if (isInWater() && !isOnGround()) {
