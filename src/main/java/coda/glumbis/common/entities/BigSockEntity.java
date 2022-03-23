@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -43,6 +44,7 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 			if (player.isShiftKeyDown()) {
 				discard();
 				spawnAtLocation(new ItemStack(GlumbisItems.BIG_SOCK.get()));
+				player.playSound(SoundEvents.WOOL_BREAK, 1.0F, 1.0F);
 			}
 			else {
 				player.startRiding(this);
@@ -78,11 +80,9 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 			float f = (float)Mth.ceil(this.fallDistance - 1.0F);
 			if (!pState.isAir()) {
 				double d0 = Math.min(0.2F + f / 15.0F, 2.5D);
-				int i = (int)(200.0D * d0);
+				int i = (int)(1000D * d0);
 				if (!pState.addLandingEffects((ServerLevel)this.level, pPos, pState, this, i)) {
-					for (int j = 0; j < 8; j++) {
-						((ServerLevel)this.level).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, pState).setPos(pPos), this.getX(), this.getY(), this.getZ(), i, 0.0D, 0.0D, 0.0D, 0.15D);
-					}
+					((ServerLevel)this.level).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, pState).setPos(pPos), this.getX(), this.getY(), this.getZ(), i, 0.0D, 0.0D, 0.0D, 0.15D);
 				}
 			}
 		}
