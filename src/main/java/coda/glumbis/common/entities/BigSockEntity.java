@@ -1,8 +1,9 @@
 package coda.glumbis.common.entities;
 
 import coda.glumbis.common.registry.GlumbisItems;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -72,10 +73,28 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 	}
 
 	@Override
+	protected void checkFallDamage(double pY, boolean pOnGround, BlockState pState, BlockPos pPos) {
+		if (!this.level.isClientSide && this.fallDistance > 1.0F && pOnGround) {
+			float f = (float)Mth.ceil(this.fallDistance - 1.0F);
+			if (!pState.isAir()) {
+				double d0 = Math.min(0.2F + f / 15.0F, 2.5D);
+				int i = (int)(200.0D * d0);
+				if (!pState.addLandingEffects((ServerLevel)this.level, pPos, pState, this, i)) {
+					for (int j = 0; j < 8; j++) {
+						((ServerLevel)this.level).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, pState).setPos(pPos), this.getX(), this.getY(), this.getZ(), i, 0.0D, 0.0D, 0.0D, 0.15D);
+					}
+				}
+			}
+		}
+
+		super.checkFallDamage(pY, pOnGround, pState, pPos);
+	}
+
+	@Override
 	public void tick() {
 		super.tick();
 
-		if (getSpeed() > 0.09 && isVehicle()) {
+		if (isVehicle()) {
 			LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
 
 			this.setYRot(passenger.yBodyRot);
@@ -118,6 +137,8 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 	}
 
 	private Vec3 jump(Vec3 pos) {
+		if (!(getControllingPassenger() instanceof LivingEntity)) return Vec3.ZERO;
+
 		LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
 		float f1 = passenger.zza;
 		if (f1 <= 0.0F) {
@@ -127,21 +148,21 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 		float distance = 2.0F;
 		double x, z;
 
-		if (Minecraft.getInstance().options.keyUp.isDown() && isOnGround()) {
+		if (f1 > 0 && isOnGround()) {
 			float yRot = passenger.getViewYRot(1.0F);
 
 			x = -Mth.sin((float) (yRot * Math.PI/180F)) * distance;
 			z = Mth.cos((float) (yRot * Math.PI/180F)) * distance;
 
-			setDeltaMovement(x, distance * 0.3, z);
+			setDeltaMovement(x, distance * 0.45, z);
 		}
-		else if (Minecraft.getInstance().options.keyDown.isDown() && isOnGround()) {
+		else if (f1 < 0 && isOnGround()) {
 			float yRot = passenger.getViewYRot(1.0F);
 
 			x = Mth.sin((float) (yRot * Math.PI/180F)) * (distance / 2);
 			z = -Mth.cos((float) (yRot * Math.PI/180F)) * (distance / 2);
 
-			setDeltaMovement(x, distance * 0.3, z);
+			setDeltaMovement(x, distance * 0.45, z);
 		}
 
 		if (isInWater() && !isOnGround()) {
