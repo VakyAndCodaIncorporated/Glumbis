@@ -1,6 +1,7 @@
 package coda.glumbis.common.entities;
 
 import coda.glumbis.common.registry.GlumbisItems;
+import coda.glumbis.common.registry.GlumbisSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -155,6 +156,7 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 			z = Mth.cos((float) (yRot * Math.PI/180F)) * distance;
 
 			setDeltaMovement(x, distance * 0.45, z);
+			playSound(GlumbisSounds.BIG_SOCK_JUMP.get(), Math.min(random.nextFloat() + 0.4F, 1.0F), 1.0F);
 		}
 		else if (f1 < 0 && isOnGround()) {
 			float yRot = passenger.getViewYRot(1.0F);
@@ -163,6 +165,7 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 			z = -Mth.cos((float) (yRot * Math.PI/180F)) * (distance / 2);
 
 			setDeltaMovement(x, distance * 0.45, z);
+			playSound(GlumbisSounds.BIG_SOCK_JUMP.get(), Math.min(random.nextFloat() + 0.4F, 1.0F), 1.0F);
 		}
 
 		if (isInWater() && !isOnGround()) {

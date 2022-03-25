@@ -70,5 +70,14 @@
         "stream": true
       }
     ]
+  },
+  "big_sock.jump": {
+    "subtitle": "glumbis.big_sock.jump",
+    "sounds": [
+      {
+        "name": "glumbis:jump",
+        "stream": true
+      }
+    ]
   }
 }
