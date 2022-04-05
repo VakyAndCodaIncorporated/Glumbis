@@ -167,7 +167,11 @@ public class GlumpEntity extends Monster implements IAnimatable {
         return this.entityData.get(EXPLODING);
     }
 
-    public void setVariant(int variant){this.entityData.set(VARIANT, variant);}
+    public void setVariant(int variant) {
+        this.entityData.set(VARIANT, variant);
+    }
 
-    public int getVariant(){return this.entityData.get(VARIANT);}
+    public int getVariant() {
+        return this.entityData.get(VARIANT);
+    }
 }
