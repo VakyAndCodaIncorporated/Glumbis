@@ -10,6 +10,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Random;
+
 public class CatEssenceItem extends Item {
 
     public CatEssenceItem(Properties builder) {
@@ -29,15 +31,22 @@ public class CatEssenceItem extends Item {
         });
 
         if (entity != null) {
+
             entity.setNoGravity(true);
             //entity.setExtendedLifetime();
-            for (int j = 0; j < 10; j++) {
-                entity.level.addParticle(new DustParticleOptions(new Vector3f(COLORS2[j]), 1.0F), entity.getX(), entity.getY() + 0.1F, entity.getZ(), 0, 0, 0);
+            for (int j = 0; j < 3; j++) {
+                Random random = new Random();
+                entity.level.addParticle(new DustParticleOptions(new Vector3f(COLORS2[j]), 1.0F), entity.getX() - 0.2d + (random.nextDouble()/2d), entity.getY() + (random.nextDouble() / 2.0d),  entity.getZ() - 0.2d + (random.nextDouble()/2d), 0, 0, 0);
             }
 
             Vec3 vec3 = entity.getDeltaMovement();
             if (!entity.level.isClientSide) {
-                entity.setDeltaMovement(vec3);
+                if(entity.tickCount > 60){
+                entity.setDeltaMovement(vec3.subtract(0d, -0.3d, 0d));
+                }
+                else {
+                    entity.setDeltaMovement(vec3);
+                }
             }
         }
         return false;

@@ -1,8 +1,11 @@
 package coda.glumbis.common.entities;
 
-import coda.glumbis.common.entities.ai.glumboss.*;
+import coda.glumbis.common.entities.ai.glumboss.BaseGlumbossAttackGoal;
+import coda.glumbis.common.entities.ai.glumboss.GlumbossKickGoal;
+import coda.glumbis.common.entities.ai.glumboss.GlumbossSlamGoal;
 import coda.glumbis.common.registry.GlumbisParticles;
 import coda.glumbis.common.registry.GlumbisSounds;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -14,13 +17,15 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -36,33 +41,39 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nullable;
 
 public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnimationTickable {
-    private static final EntityDataAccessor<Integer> ATTACK_STATE = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Boolean> HIDDEN = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.BOOLEAN);
     private final ServerBossEvent bossEvent = (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.WHITE, BossEvent.BossBarOverlay.PROGRESS));
-    private final AnimationFactory factory = new AnimationFactory(this);
-    public boolean wasHidden;
+    private static final EntityDataAccessor<Integer> ANIM_STATE = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.INT);
+    private int timer;
+    //private static final EntityDataAccessor<Boolean> CHARGED = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.BOOLEAN);
 
-    public GlumbossEntity(EntityType<? extends GlumbossEntity> p_i48567_1_, Level p_i48567_2_) {
-        super(p_i48567_1_, p_i48567_2_);
+    private final AnimationFactory factory = new AnimationFactory(this);
+
+    public GlumbossEntity(EntityType<? extends GlumbossEntity> entity, Level level) {
+        super(entity, level);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(0, new GlumbossHideGoal(this));
-        this.goalSelector.addGoal(1, new GlumbossStaticChargeGoal(this));
-        this.goalSelector.addGoal(2, new GlumbossSlamGoal(this));
-        this.goalSelector.addGoal(2, new GlumbossGoToTargetGoal(this));
-        this.goalSelector.addGoal(3, new GlumbossKickGoal(this));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.9F));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 6.0F));
+
+        this.goalSelector.addGoal(2, new GlumbossSlamGoal(this, 30, 40, 2,18, 18, true, 4f));
+        this.goalSelector.addGoal(3, new GlumbossKickGoal(this, 20, 35, 1,4, 4, true, 5f));
+
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return createMobAttributes().add(Attributes.MAX_HEALTH, 200.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.ATTACK_DAMAGE, 12.0F).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+        return createMobAttributes().add(Attributes.MAX_HEALTH, 20.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.ATTACK_DAMAGE, 12.0F).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+    }
+
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ANIM_STATE, 0);
+        //this.entityData.define(CHARGED, false);
     }
 
     protected void customServerAiStep() {
@@ -80,15 +91,8 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
         this.bossEvent.removePlayer(p_31488_);
     }
 
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ATTACK_STATE, 0);
-        this.entityData.define(HIDDEN, false);
-    }
-
     public void readAdditionalSaveData(CompoundTag p_31474_) {
         super.readAdditionalSaveData(p_31474_);
-        this.entityData.set(HIDDEN, false);
         if (this.hasCustomName()) {
             this.bossEvent.setName(this.getDisplayName());
         }
@@ -98,6 +102,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
         super.setCustomName(p_31476_);
         this.bossEvent.setName(this.getDisplayName());
     }
+
 
     @Override
     public boolean causeFallDamage(float p_147187_, float p_147188_, DamageSource p_147189_) {
@@ -115,15 +120,6 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        Entity attacker = source.getDirectEntity();
-        if (attacker != null && attacker.position().y() > position().y() + 2.15 && attacker.position().y() < position().y() + 3) {
-            return super.hurt(source, amount * 1.5F);
-        }
-        return !source.isProjectile() && super.hurt(source, amount);
-    }
-
-    @Override
     public void thunderHit(ServerLevel p_19927_, LightningBolt p_19928_) {
     }
 
@@ -131,22 +127,6 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     public void tick() {
         super.tick();
 
-        // Particles
-        if (this.getState() == 3) {
-            for(int i = 0; i < 3; i++) {
-                this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(1.5D), this.getRandomY() + 0.85D, this.getRandomZ(1.5D), 0, 0.08d, 0);
-            }
-        }
-
-        // Passive healing
-        if (tickCount % 50 == 0 && getHealth() < getMaxHealth()) {
-            heal(2);
-        }
-
-        // Set hidden
-        if (!wasHidden && getHealth() < getMaxHealth() / 2) {
-            setHidden(true);
-        }
     }
 
     @Override
@@ -155,51 +135,31 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-/*        if (isHidden()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.hide", false));
-            return PlayState.CONTINUE;
-        }*/
-        if (getState() == 3) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.static_charge", false));
-            return PlayState.CONTINUE;
+        switch (getAnimState()) {
+            case 0:
+                if(event.isMoving()){
+                    event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.walk", true));
+                    return PlayState.CONTINUE;
+                }
+                if(!event.isMoving()){
+                    event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.idle", true));
+                    return PlayState.CONTINUE;
+                }
+                return PlayState.CONTINUE;
+            case 1:
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.kick", false));
+                return PlayState.CONTINUE;
+            case 2:
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.slam", false));
+                return PlayState.CONTINUE;
+
         }
-        if (getState() == 2) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.slam", false));
-            return PlayState.CONTINUE;
-        }
-        if (getState() == 1) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.kick", false));
-            return PlayState.CONTINUE;
-        }
-        if (event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.walk", true));
-            return PlayState.CONTINUE;
-        }
-        else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.idle", true));
-            return PlayState.CONTINUE;
-        }
+        return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "controller", 2, this::predicate));
-    }
-
-    public int getState(){
-        return this.entityData.get(ATTACK_STATE);
-    }
-
-    public void setState(int state){
-        this.entityData.set(ATTACK_STATE, state);
-    }
-
-    public boolean isHidden(){
-        return this.entityData.get(HIDDEN);
-    }
-
-    public void setHidden(boolean hidden){
-        this.entityData.set(HIDDEN, hidden);
     }
 
     @Nullable
@@ -224,4 +184,20 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     protected float getSoundVolume() {
         return 0.4F;
     }
+
+    public void setAnimState(int animState){
+        this.entityData.set(ANIM_STATE, animState);
+    }
+
+    public int getAnimState(){
+        return this.entityData.get(ANIM_STATE);
+    }
+
+   /* public void setCharged(boolean charged){
+       this.entityData.set(CHARGED, charged);
+    }
+
+    public boolean getCharged(){
+        return this.entityData.get(CHARGED);
+    }*/
 }

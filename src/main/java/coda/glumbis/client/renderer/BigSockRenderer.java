@@ -4,7 +4,6 @@ import coda.glumbis.client.model.BigSockModel;
 import coda.glumbis.common.entities.BigSockEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
-import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
 public class BigSockRenderer extends GeoEntityRenderer<BigSockEntity> {
 

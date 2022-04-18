@@ -1,7 +1,6 @@
 package coda.glumbis.client.model;
 
 import coda.glumbis.Glumbis;
-import coda.glumbis.common.entities.GlumpEntity;
 import coda.glumbis.common.entities.RocketPropelledGlumpEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;

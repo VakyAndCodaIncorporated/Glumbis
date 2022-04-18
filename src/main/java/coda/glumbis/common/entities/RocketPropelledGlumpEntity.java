@@ -2,23 +2,17 @@ package coda.glumbis.common.entities;
 
 import coda.glumbis.common.registry.GlumbisParticles;
 import coda.glumbis.common.registry.GlumbisSounds;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -123,7 +117,7 @@ public class RocketPropelledGlumpEntity extends PathfinderMob implements IAnimat
         // movement
         if (!isOnGround() && getBlockStateOn().isAir()) {
             float f = (float)(Mth.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F;
-            setYRot(this.rotlerp(getYRot(), f, 90F));
+            //setYRot(this.rotLerp(getYRot(), f, 90F));
             yBodyRot = getYRot();
             yHeadRot = getYRot();
 
@@ -132,7 +126,7 @@ public class RocketPropelledGlumpEntity extends PathfinderMob implements IAnimat
             if (Math.abs(d1) > (double)1.0E-5F || Math.abs(d4) > (double)1.0E-5F) {
                 float f2 = -((float)(Mth.atan2(d1, d4) * (double)(180F / (float)Math.PI)));
                 f2 = Mth.clamp(Mth.wrapDegrees(f2), -90F, 90F);
-                setXRot(this.rotlerp(getXRot(), f2, 5.0F));
+                //setXRot(this.rotlerp(getXRot(), f2, 5.0F));
             }
 
             float f4 = Mth.cos(getXRot() * ((float)Math.PI / 180F));

@@ -88,6 +88,8 @@ public class GlumpEntity extends Monster implements IAnimatable {
         boolean damageTick = tickCount % 20 == 10;
         boolean soundTick = tickCount % 120 == 10;
         if(tickCount < 2){
+            this.setYRot(45f);
+            this.setYHeadRot(45f);
             int randomVariant = this.getRandom().nextInt(9);
             if(randomVariant == 8){
                 if(this.getRandom().nextFloat() < 0.05){

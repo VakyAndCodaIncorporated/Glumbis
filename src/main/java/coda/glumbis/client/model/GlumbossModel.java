@@ -5,7 +5,6 @@ import coda.glumbis.common.entities.GlumbossEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
@@ -35,8 +34,5 @@ public class GlumbossModel extends AnimatedTickingGeoModel<GlumbossEntity> {
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
         head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
         catBody.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 350F));
-
-        if (entity.isHidden()) {
-        }
     }
 }

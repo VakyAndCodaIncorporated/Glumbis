@@ -22,7 +22,7 @@ public class GlumbossChargedLayer extends GeoLayerRenderer<GlumbossEntity> {
     @Override
     public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, GlumbossEntity entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         RenderType cameo =  RenderType.eyes(EYES);
-        if((entityLivingBaseIn).getState() == 3) {
+        /*if((entityLivingBaseIn).getState() == 3) {
             matrixStackIn.pushPose();
             float f = ((float) entityLivingBaseIn.tickCount + partialTicks);
             matrixStackIn.scale(1.05f, 1.05f, 1.05f);
@@ -33,7 +33,8 @@ public class GlumbossChargedLayer extends GeoLayerRenderer<GlumbossEntity> {
             matrixStackIn.popPose();
             this.getRenderer().render(this.getEntityModel().getModel(MODEL), entityLivingBaseIn, partialTicks, cameo, matrixStackIn, bufferIn,
                     bufferIn.getBuffer(cameo), packedLightIn, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
-        }
+            }
+         */
     }
     protected float xOffset(float f) {
         return (float) (f * 0.01);
