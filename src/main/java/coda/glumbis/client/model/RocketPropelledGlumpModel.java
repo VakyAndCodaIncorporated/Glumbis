@@ -57,12 +57,16 @@ public class RocketPropelledGlumpModel extends AnimatedGeoModel<RocketPropelledG
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
         Random random = new Random();
 
-        root.setRotationX(extraData.headPitch * ((float)Math.PI / 180F));
-        root.setRotationY(extraData.netHeadYaw * ((float)Math.PI / 180F));
+       // root.setRotationX(extraData.headPitch * ((float)Math.PI / 180F));
+            root.setRotationX(random.nextInt(1500));
+            //root.setRotationY(extraData.netHeadYaw * ((float)Math.PI / 180F));
+            root.setRotationZ(random.nextInt(1500));
+
+
 
         if (entity.tickCount % 10 == 0) {
 
-            root.setScaleZ(root.getScaleZ() + random.nextFloat() / 10);
+            root.setScaleX(root.getScaleZ() + random.nextFloat() / 10);
             root.setScaleY(root.getScaleY() + random.nextFloat() / 10);
             root.setScaleX(root.getScaleX() + random.nextFloat() / 10);
         }

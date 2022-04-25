@@ -29,7 +29,7 @@ public class GlumpAttackGoal extends Goal {
             cooldownTimer++;
         } else {
             LivingEntity livingEntity = entity.getTarget();
-            if (this.entity.distanceToSqr(livingEntity) < 3.0f) {
+            if (this.entity.distanceToSqr(livingEntity) < 1.0f) {
                 this.entity.doHurtTarget(livingEntity);
                 this.entity.setExploding(true);
                 this.cooldownTimer = 0;

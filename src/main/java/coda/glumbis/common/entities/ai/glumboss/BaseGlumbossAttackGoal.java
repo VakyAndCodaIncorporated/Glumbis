@@ -11,7 +11,7 @@ public class BaseGlumbossAttackGoal extends Goal {
     public int timer;
     public final int timerEnd;
     public int coolDown;
-    public final int coolDownEnd;
+    public int coolDownEnd;
     public int animation;
     public final int frameStart;
     public final int frameEnd;
@@ -37,10 +37,15 @@ public class BaseGlumbossAttackGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (glumboss.isAlive() && this.glumboss.getTarget() != null) {
-                return true;
+        if (glumboss.isAlive() && this.glumboss.getTarget() != null && this.glumboss.getAnimState() != 4) {
+            return true;
         }
-            return false;
+        return false;
+    }
+
+    @Override
+    public boolean requiresUpdateEveryTick() {
+        return true;
     }
 
     @Override
@@ -57,11 +62,17 @@ public class BaseGlumbossAttackGoal extends Goal {
     @Override
     public void tick() {
         super.tick();
-        if(glumboss.getAnimState() == 0 || glumboss.getAnimState() == animation) {
+        System.out.println(isInRange);
+        if(glumboss.getAnimState() == 0 || glumboss.getAnimState() == animation && glumboss.getAnimState() != 4) {
             //moves to the entity if theyre too far away
             if (glumboss.getTarget() != null) {
-                if (glumboss.distanceTo(glumboss.getTarget()) > range) {
+                if (glumboss.distanceTo(glumboss.getTarget())  < 5) {
+                    System.out.println("hi");
                     glumboss.getNavigation().moveTo(glumboss.getTarget(), 1.8f);
+                }
+                else{
+                    glumboss.getNavigation().stop();
+                    isInRange = true;
                 }
             }
             if (coolDown <= coolDownEnd) {
@@ -69,8 +80,8 @@ public class BaseGlumbossAttackGoal extends Goal {
                 timer = 0;
             } else {
                 //starts a timer at 0 and loops all the way to however long the animation is
-                if (timer <= timerEnd) {
-                    timer += 1;
+                if (timer <= timerEnd && isInRange) {
+                    timer ++;
                     glumboss.setAnimState(animation);
                     if (shouldStopMoving) {
                         glumboss.getNavigation().stop();
@@ -90,6 +101,14 @@ public class BaseGlumbossAttackGoal extends Goal {
         }
     }
 
+    @Override
+    public void stop() {
+        glumboss.setAnimState(0);
+        this.coolDown = 0;
+        this.timer = 0;
+        this.isInRange = false;
+        super.stop();
+    }
 
     public void attack(){
     }

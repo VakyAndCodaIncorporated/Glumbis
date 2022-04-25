@@ -74,15 +74,14 @@ public class GlumpCannonItem extends ProjectileWeaponItem {
 
                 if (!level.isClientSide) {
                     RocketPropelledGlumpEntity glump = createRPG(level);
-                    glump.moveTo(player.position());
+                    glump.moveTo(player.position().add(0.0d, 0.6d, 0.0d));
                     glump.owner = player;
-
+                    glump.setOwner(livingEntity);
                     p_40667_.hurtAndBreak(1, player, (p_40665_) -> p_40665_.broadcastBreakEvent(player.getUsedItemHand()));
+                    glump.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.4F, 1.0F);
 
                     level.addFreshEntity(glump);
 
-                    Vec3 vec3 = livingEntity.getViewVector(1.0F);
-                    glump.setDeltaMovement(vec3);
                 }
 
                 level.playSound(null, player.getX(), player.getY(), player.getZ(), GlumbisSounds.GLUMP_FLY.get(), SoundSource.PLAYERS, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);

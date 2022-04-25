@@ -1,6 +1,7 @@
 package coda.glumbis.common.entities.ai.glumboss;
 
 import coda.glumbis.common.entities.GlumbossEntity;
+import coda.glumbis.common.entities.GlumpEntity;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.TextComponent;
@@ -38,6 +39,13 @@ public class GlumbossSlamGoal extends BaseGlumbossAttackGoal {
         this.shouldStopMoving = shouldStopMoving;
     }
 
+    @Override
+    public boolean canUse() {
+        if(this.glumboss.getCharged()) {
+            return false;
+        }
+        return super.canUse();
+    }
 
     @Override
     public void start() {
@@ -47,15 +55,16 @@ public class GlumbossSlamGoal extends BaseGlumbossAttackGoal {
 
     @Override
     public void tick() {
-        super.tick();
+        if(!this.glumboss.getCharged()) {
+            super.tick();
+        }
     }
-
 
     public void attack() {
         LivingEntity target = this.glumboss.getTarget();
             this.glumboss.playSound(SoundEvents.GENERIC_EXPLODE, 0.4f, 1f);
-            for (LivingEntity livingentity : this.glumboss.level.getEntitiesOfClass(LivingEntity.class, this.glumboss.getBoundingBox().inflate(12.2D, 3.0D, 12.2D))) {
-                if (livingentity != this.glumboss) {
+            for (LivingEntity livingentity : this.glumboss.level.getEntitiesOfClass(LivingEntity.class, this.glumboss.getBoundingBox().inflate(5.2D, 0.4D, 5.2D).move(0d, -0.5, 0d))) {
+                if (livingentity != this.glumboss && !(livingentity instanceof GlumpEntity)) {
                     this.glumboss.doHurtTarget(livingentity);
                     livingentity.setDeltaMovement(0d, 1.0d, 0d);
                 }

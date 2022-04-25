@@ -40,6 +40,17 @@ public class GlumbossKickGoal extends BaseGlumbossAttackGoal {
 
 
     @Override
+    public boolean canUse() {
+        if (this.glumboss.getTarget() != null && !this.glumboss.getCharged()) {
+            if(this.glumboss.getTarget().isOnGround()){
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    @Override
     public void start() {
         super.start();
         coolDown = 0;
@@ -47,13 +58,15 @@ public class GlumbossKickGoal extends BaseGlumbossAttackGoal {
 
     @Override
     public void tick() {
-        super.tick();
+        if(!this.glumboss.getCharged()) {
+            super.tick();
+        }
     }
 
 
     public void attack() {
         LivingEntity target = this.glumboss.getTarget();
-        if(this.glumboss.distanceTo(target) < 6.5f) {
+        if(this.glumboss.distanceTo(target) < 3.5f) {
             this.glumboss.doHurtTarget(this.glumboss.getTarget());
             this.glumboss.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 0.4f, 1f);
             target.setDeltaMovement(target.getDeltaMovement().add(0d, 0.2d, 0d));
