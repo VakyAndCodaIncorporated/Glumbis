@@ -1,6 +1,9 @@
 package coda.glumbis.common.entities;
 
-import coda.glumbis.common.entities.ai.glumboss.*;
+import coda.glumbis.common.entities.ai.glumboss.GlumbossGlumpGoal;
+import coda.glumbis.common.entities.ai.glumboss.GlumbossKickGoal;
+import coda.glumbis.common.entities.ai.glumboss.GlumbossLightningStrikeGoal;
+import coda.glumbis.common.entities.ai.glumboss.GlumbossSlamGoal;
 import coda.glumbis.common.registry.GlumbisParticles;
 import coda.glumbis.common.registry.GlumbisSounds;
 import net.minecraft.core.BlockPos;
@@ -16,6 +19,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.PathfinderMob;
@@ -126,6 +130,15 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
 
     @Override
     public void thunderHit(ServerLevel p_19927_, LightningBolt p_19928_) {
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        Entity attacker = source.getDirectEntity();
+        if (attacker != null && attacker.position().y() > position().y() + 2.15 && attacker.position().y() < position().y() + 3) {
+            return super.hurt(source, amount * 1.5F);
+        }
+        return !source.isProjectile() && super.hurt(source, amount);
     }
 
     @Override
