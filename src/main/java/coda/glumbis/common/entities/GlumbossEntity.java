@@ -71,7 +71,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return createMobAttributes().add(Attributes.MAX_HEALTH, 200.0D).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.ATTACK_DAMAGE, 3.0F).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+        return createMobAttributes().add(Attributes.MAX_HEALTH, 200.0D).add(Attributes.FOLLOW_RANGE, 25F).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.ATTACK_DAMAGE, 3.0F).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
     }
 
     protected void defineSynchedData() {
@@ -164,6 +164,9 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
                 timer++;
                 this.getNavigation().stop();
                 this.setDeltaMovement(this.getDeltaMovement().multiply(0d, 1d, 0d));
+                if(timer == 20){
+                    this.playSound(GlumbisSounds.GLUMBOSS_CHARGE.get(), 1f, 1f);
+                }
                 if(timer == 130){
                     BlockPos blockpos = this.blockPosition();
                     setCharged(true);
