@@ -2,14 +2,10 @@ package coda.glumbis.common;
 
 import coda.glumbis.Glumbis;
 import coda.glumbis.common.registry.GlumbisItems;
-import coda.glumbis.common.registry.GlumbisParticles;
-//import lain.mods.cos.api.CosArmorAPI;
-import net.minecraft.client.Minecraft;
+import lain.mods.cos.api.CosArmorAPI;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -17,7 +13,6 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.animal.Cat;
@@ -25,14 +20,12 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -134,7 +127,7 @@ public class CommonEvents {
         }
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public static void energizedGear(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
         InteractionHand hand = event.player.getUsedItemHand();
@@ -164,10 +157,10 @@ public class CommonEvents {
 
                             level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), player.getRandomX(1), player.getY() + (i * 0.4) + 0.25, player.getRandomZ(1), 0, 0.05, 0);
 
-                            /*System.out.println(i);
+                            *//*System.out.println(i);
                             System.out.println("Armor Amount = " + armorAmount);
                             System.out.println("Particle Amount = " + particleAmount);
-                            System.out.println("Did check pass? " + (player.getRandom().nextFloat() < particleAmount ? "Yes." : "No."));*/
+                            System.out.println("Did check pass? " + (player.getRandom().nextFloat() < particleAmount ? "Yes." : "No."));*//*
                         }
                     }
                 }
@@ -196,13 +189,13 @@ public class CommonEvents {
                 }
             }
         }
-    }
+    }*/
 
     @SubscribeEvent
     public static void playerTick(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
 
-       /* if (ModList.get().isLoaded("cosmeticarmorreworked") && CosArmorAPI.getCAStacks(player.getUUID()).getStackInSlot(0).is(GlumbisItems.SOGGY_SOCKS.get())) {
+        if (ModList.get().isLoaded("cosmeticarmorreworked") && CosArmorAPI.getCAStacks(player.getUUID()).getStackInSlot(0).is(GlumbisItems.SOGGY_SOCKS.get())) {
 
             Random rand = new Random();
             Level world = player.getCommandSenderWorld();
@@ -222,6 +215,5 @@ public class CommonEvents {
                 world.addParticle(ParticleTypes.FALLING_WATER, player.getRandomX(0.25D), player.getY() + 0.15D, player.getRandomZ(0.25D), d0, d1, d2);
             }
         }
-    */
     }
 }

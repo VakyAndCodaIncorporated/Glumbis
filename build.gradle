@@ -138,6 +138,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+    maven { url "https://www.cursemaven.com" }
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 }
 
@@ -145,7 +146,7 @@ dependencies {
 
     minecraft 'net.minecraftforge:forge:1.18.2-40.0.52'
     implementation fg.deobf('software.bernie.geckolib:geckolib-1.18-forge:3.0.15')
-    //implementation fg.deobf('curse.maven:cosmetic-armor-reworked-237307:3738144')
+    implementation fg.deobf('curse.maven:cosmetic-armor-reworked-237307:3738144')
 
 
 }

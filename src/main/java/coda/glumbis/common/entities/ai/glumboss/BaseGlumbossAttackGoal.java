@@ -1,10 +1,7 @@
 package coda.glumbis.common.entities.ai.glumboss;
 
 import coda.glumbis.common.entities.GlumbossEntity;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.player.Player;
 
 public class BaseGlumbossAttackGoal extends Goal {
     public GlumbossEntity glumboss;
@@ -19,7 +16,7 @@ public class BaseGlumbossAttackGoal extends Goal {
     public float range;
     public boolean isInRange;
 
-    public BaseGlumbossAttackGoal(GlumbossEntity glumboss, int timerEnd, int coolDownEnd, int animation, int frameStart, int frameEnd, boolean shouldStopMoving, float range){
+    public BaseGlumbossAttackGoal(GlumbossEntity glumboss, int timerEnd, int coolDownEnd, int animation, int frameStart, int frameEnd, boolean shouldStopMoving, float range) {
         this.glumboss = glumboss;
         //how long the animation is in ticks
         this.timerEnd = timerEnd;
@@ -33,6 +30,8 @@ public class BaseGlumbossAttackGoal extends Goal {
         this.frameEnd = frameEnd;
         //stops the entity from moving when plays its animation
         this.shouldStopMoving = shouldStopMoving;
+        //the range where the entity will attack
+        this.range = range;
     }
 
     @Override

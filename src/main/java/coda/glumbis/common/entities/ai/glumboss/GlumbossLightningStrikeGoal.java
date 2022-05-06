@@ -2,7 +2,6 @@ package coda.glumbis.common.entities.ai.glumboss;
 
 import coda.glumbis.common.entities.GlumbossEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
@@ -76,7 +75,7 @@ public class GlumbossLightningStrikeGoal extends BaseGlumbossAttackGoal {
                 }
             }
         }
-        else{
+        else {
             for (int i = 0; i < 5; i++) {
                 lightningPos = vec3.add(Math.sin(this.glumboss.tickCount + i), 0d, Math.cos(this.glumboss.tickCount + i));
                 BlockPos blockpos = this.glumboss.blockPosition();
