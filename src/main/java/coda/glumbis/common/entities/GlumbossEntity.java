@@ -46,10 +46,10 @@ import javax.annotation.Nullable;
 public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnimationTickable {
     private final ServerBossEvent bossEvent = (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.WHITE, BossEvent.BossBarOverlay.PROGRESS));
     private static final EntityDataAccessor<Integer> ANIM_STATE = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.INT);
-    private int timer;
-    public int slamTimer;
     private static final EntityDataAccessor<Boolean> HALFHEALTH = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> CHARGED = SynchedEntityData.defineId(GlumbossEntity.class, EntityDataSerializers.BOOLEAN);
+    private int timer;
+    public int slamTimer;
 
     private final AnimationFactory factory = new AnimationFactory(this);
 
@@ -75,7 +75,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return createMobAttributes().add(Attributes.MAX_HEALTH, 200.0D).add(Attributes.FOLLOW_RANGE, 25F).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.ATTACK_DAMAGE, 3.0F).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+        return createMobAttributes().add(Attributes.MAX_HEALTH, 200.0D).add(Attributes.FOLLOW_RANGE, 25F).add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.ATTACK_DAMAGE, 3.0F).add(Attributes.KNOCKBACK_RESISTANCE, 1.0D).add(Attributes.ATTACK_KNOCKBACK, 1.0D).add(Attributes.ARMOR, 4.0D);
     }
 
     protected void defineSynchedData() {
@@ -135,8 +135,12 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     public boolean hurt(DamageSource source, float amount) {
         Entity attacker = source.getDirectEntity();
         if (attacker != null && attacker.position().y() > position().y() + 2.15 && attacker.position().y() < position().y() + 3) {
-            return super.hurt(source, amount * 1.5F);
+            return super.hurt(source, amount * 0.75F);
         }
+        else if (this.getAnimState() == 5) {
+            amount = amount/2;
+        }
+
         return !source.isProjectile() && super.hurt(source, amount);
     }
 
@@ -165,6 +169,13 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
         }
         else{
             slamTimer = 0;
+        }
+
+        if (this.getAnimState() == 3 || this.getAnimState() == 4) {
+            setInvulnerable(true);
+        }
+        else {
+            setInvulnerable(false);
         }
 
         if(this.getHealth() < this.getMaxHealth()/2 && !this.getHalfHealth() && this.getAnimState() == 0){

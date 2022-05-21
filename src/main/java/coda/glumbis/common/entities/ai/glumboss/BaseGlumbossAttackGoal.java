@@ -61,12 +61,11 @@ public class BaseGlumbossAttackGoal extends Goal {
     @Override
     public void tick() {
         super.tick();
-        System.out.println(isInRange);
+        //System.out.println(isInRange);
         if(glumboss.getAnimState() == 0 || glumboss.getAnimState() == animation && glumboss.getAnimState() != 4) {
             //moves to the entity if theyre too far away
             if (glumboss.getTarget() != null) {
                 if (glumboss.distanceTo(glumboss.getTarget())  < range) {
-                    System.out.println("hi");
                     isInRange = true;
                     glumboss.getNavigation().moveTo(glumboss.getTarget(), 1.8f);
                     glumboss.getNavigation().stop();

@@ -48,14 +48,14 @@ public class GlumbossLightningStrikeGoal extends BaseGlumbossAttackGoal {
     @Override
     public void start() {
         super.start();
+
+        glumboss.setInvulnerable(true);
     }
 
     @Override
     public void tick() {
 
         if (this.glumboss.getCharged()) {
-
-            this.glumboss.setInvulnerable(canUse());
             super.tick();
         }
     }
@@ -63,7 +63,6 @@ public class GlumbossLightningStrikeGoal extends BaseGlumbossAttackGoal {
     @Override
     public void stop() {
         super.stop();
-
     }
 
     public void attack() {
