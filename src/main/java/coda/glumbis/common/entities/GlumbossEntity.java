@@ -112,7 +112,6 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
         this.bossEvent.setName(this.getDisplayName());
     }
 
-
     @Override
     public boolean causeFallDamage(float p_147187_, float p_147188_, DamageSource p_147189_) {
         return false;

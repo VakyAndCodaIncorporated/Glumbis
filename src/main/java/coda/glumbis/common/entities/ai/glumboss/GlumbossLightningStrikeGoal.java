@@ -53,11 +53,18 @@ public class GlumbossLightningStrikeGoal extends BaseGlumbossAttackGoal {
     @Override
     public void tick() {
 
-        if(this.glumboss.getCharged()) {
+        if (this.glumboss.getCharged()) {
+
+            this.glumboss.setInvulnerable(canUse());
             super.tick();
         }
     }
 
+    @Override
+    public void stop() {
+        super.stop();
+
+    }
 
     public void attack() {
         LivingEntity target = this.glumboss.getTarget();

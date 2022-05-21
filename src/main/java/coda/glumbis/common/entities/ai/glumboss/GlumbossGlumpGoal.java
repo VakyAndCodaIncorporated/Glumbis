@@ -65,6 +65,8 @@ public class GlumbossGlumpGoal extends BaseGlumbossAttackGoal {
         if(this.glumboss.getCharged()){
             this.coolDownEnd = coolDown/2;
         }
+        this.glumboss.setInvulnerable(canUse());
+
         super.tick();
     }
 
