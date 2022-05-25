@@ -39,10 +39,7 @@ public class GlumbossLightningStrikeGoal extends BaseGlumbossAttackGoal {
 
     @Override
     public boolean canUse() {
-        if (this.glumboss.getTarget() != null) {
-           return true;
-            }
-        return false;
+        return this.glumboss.getTarget() != null;
     }
 
     @Override
