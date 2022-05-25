@@ -17,6 +17,7 @@ public class CatEssenceItem extends Item {
         super(builder);
     }
 
+    // todo - figure out why cat essence despawns so fast and fix it
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
         Vec3[] COLORS2 = Util.make(new Vec3[16], (p_154319_) -> {
@@ -32,7 +33,6 @@ public class CatEssenceItem extends Item {
         if (entity != null) {
 
             entity.setNoGravity(true);
-            //entity.setExtendedLifetime();
             for (int j = 0; j < 3; j++) {
                 Random random = new Random();
                 entity.level.addParticle(new DustParticleOptions(new Vector3f(COLORS2[j]), 1.0F), entity.getX() - 0.2d + (random.nextDouble()/2d), entity.getY() + (random.nextDouble() / 2.0d),  entity.getZ() - 0.2d + (random.nextDouble()/2d), 0, 0, 0);
