@@ -185,6 +185,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
         if(this.getAnimState() == 4){
             if(timer <= 150){
                 timer++;
+                setInvulnerable(true);
                 this.getNavigation().stop();
                 this.setDeltaMovement(this.getDeltaMovement().multiply(0d, 1d, 0d));
                 if(timer == 20){
@@ -209,6 +210,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
             }
             else{
                 this.setAnimState(0);
+                setInvulnerable(false);
             }
         }
         else{
