@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "glumbis",
+  "version": "${version}",
+  "name": "Glumbis",
+  "description": "Glumbis lets you pick up cats in socks for easy transport!",
+  "authors": ["Coda", "Wadoo"],
+  "contributors": ["Virtualhel", "Ninni", "VakyPanda", "Rover656"],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "All rights reserved",
+  "icon": "glumbis_logo.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "coda.glumbis.fabric.GlumbisFabric"
+    ],
+    "client": [
+      "coda.glumbis.client.fabric.GlumbisClientFabric"
+    ]
+  },
+  "mixins": [
+    "glumbis-fabriclike.mixins.json"
+  ],
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=${minecraft_version}",
+    "architectury": ">=${architectury_version}",
+    "geckolib3": ">=${geckolib_version}"
+  }
+}

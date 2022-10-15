@@ -1,0 +1,50 @@
+modLoader = "javafml"
+loaderVersion = "[${forge_loader_version},)"
+#issueTrackerURL = ""
+license = "All rights reserved"
+
+[[mods]]
+modId = "glumbis"
+version = "${version}"
+displayName = "Glumbis"
+authors = "Coda, Wadoo"
+credits="Virtualhel, Ninni, VakyPanda, Rover656"
+description = '''
+Glumbis lets you pick up cats in socks for easy transport!
+'''
+logoFile = "glumbis_logo.png"
+
+[[dependencies.glumbis]]
+modId = "forge"
+mandatory = true
+versionRange = "[${forge_min_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.glumbis]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[${minecraft_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.glumbis]]
+modId = "architectury"
+mandatory = true
+versionRange = "[${architectury_version},)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.glumbis]]
+modId = "geckolib3"
+mandatory = true
+versionRange = "[${geckolib_version},)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.glumbis]]
+modId = "cosmeticarmorreworked"
+mandatory = false
+versionRange = "[${cosmetic_armor_reworked_version},)"
+ordering = "AFTER"
+side = "BOTH"
