@@ -1,0 +1,37 @@
+{
+  "display": {
+    "icon": {
+      "item": "glumbis:glumbis"
+    },
+    "title": {
+      "translate": "advancement.glumbis.glumbis_is_awesome.title"
+    },
+    "description": {
+      "translate": "advancement.glumbis.glumbis_is_awesome.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "glumbis:main/root",
+  "criteria": {
+    "inventory_changed": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "glumbis:glumbis"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "inventory_changed"
+    ]
+  ]
+}

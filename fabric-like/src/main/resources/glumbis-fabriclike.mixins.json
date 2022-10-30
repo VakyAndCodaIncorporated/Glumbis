@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "coda.glumbis.mixin.fabriclike",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "client.LivingEntityRendererMixin"
+  ],
+  "mixins": [
+    "InventoryMixin",
+    "ItemEntityMixin",
+    "PlayerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

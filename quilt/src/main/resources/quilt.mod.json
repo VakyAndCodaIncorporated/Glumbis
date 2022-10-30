@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "group": "${group}",
+    "id": "glumbis",
+    "version": "${version}",
+    "name": "Glumbis",
+    "description": "Glumbis lets you pick up cats in socks for easy transport!",
+    "authors": ["Coda", "Wadoo"],
+    "contributors": ["Virtualhel", "Ninni", "VakyPanda", "Rover656"],
+    "contact": {
+      "sources": "https://github.com/architectury/architectury-templates"
+    },
+    "license": "All rights reserved",
+    "icon": "glumbis_logo.png",
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "environment": "*",
+    "entrypoints": {
+      "init": [
+        "coda.glumbis.quilt.GlumbisQuilt"
+      ],
+      "client_init": [
+        "coda.glumbis.client.quilt.GlumbisClientQuilt"
+      ]
+    },
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "version": "*"
+      },
+      {
+        "id": "quilt_base",
+        "version": "*"
+      },
+      {
+        "id": "minecraft",
+        "version": ">=${minecraft_version}"
+      },
+      {
+        "id": "architectury",
+        "version": ">=${architectury_version}"
+      },
+      {
+        "id": "geckolib3",
+        "version": ">=${geckolib_version}"
+      }
+    ]
+  },
+  "mixin": [
+    "glumbis-fabriclike.mixins.json"
+  ]
+}

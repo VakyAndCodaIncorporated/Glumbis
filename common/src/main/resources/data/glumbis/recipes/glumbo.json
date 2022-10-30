@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "tag": "minecraft:fishes"
+    },
+    {
+      "item": "glumbis:cat_essence"
+    },
+    {
+      "item": "glumbis:catnip"
+    }
+  ],
+  "result": {
+    "item": "glumbis:glumbo",
+    "count": 1
+  }
+}
