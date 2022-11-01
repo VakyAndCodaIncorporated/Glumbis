@@ -3,21 +3,15 @@ package coda.glumbis.common.entities;
 import coda.glumbis.common.registry.GlumbisSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -28,7 +22,6 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.Random;
 import java.util.function.Predicate;
 
 public class RocketPropelledGlumpEntity extends AbstractArrow implements IAnimatable, IAnimationTickable {
