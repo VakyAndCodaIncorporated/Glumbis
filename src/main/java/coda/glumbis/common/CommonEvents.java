@@ -2,10 +2,16 @@ package coda.glumbis.common;
 
 import coda.glumbis.Glumbis;
 import coda.glumbis.common.registry.GlumbisItems;
+import coda.glumbis.common.registry.GlumbisParticles;
 import lain.mods.cos.api.CosArmorAPI;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -13,6 +19,7 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.animal.Cat;
@@ -20,14 +27,17 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -127,7 +137,7 @@ public class CommonEvents {
         }
     }
 
-    /*@SubscribeEvent
+    @SubscribeEvent
     public static void energizedGear(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
         InteractionHand hand = event.player.getUsedItemHand();
@@ -139,7 +149,7 @@ public class CommonEvents {
 
             if (slot.getType().equals(EquipmentSlot.Type.ARMOR)) {
                 CompoundTag tag = armor.getOrCreateTag();
-                tag.putInt("Energized", 100);
+                tag.putInt("Energized", 3);
 
                 if (armor.getTag().get("Energized") != null && armor.getTag().getInt("Energized") > 0) {
 
@@ -156,27 +166,33 @@ public class CommonEvents {
                             int i = slot.getIndex();
 
                             level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), player.getRandomX(1), player.getY() + (i * 0.4) + 0.25, player.getRandomZ(1), 0, 0.05, 0);
-
-                            *//*System.out.println(i);
-                            System.out.println("Armor Amount = " + armorAmount);
-                            System.out.println("Particle Amount = " + particleAmount);
-                            System.out.println("Did check pass? " + (player.getRandom().nextFloat() < particleAmount ? "Yes." : "No."));*//*
                         }
                     }
                 }
             }
         }
 
-        if (stack.is(Items.NETHERITE_SWORD)) {
+        if (stack.is(Items.IRON_SWORD)) {
             CompoundTag tag = stack.getOrCreateTag();
 
             // todo - needs a (boolean) tag for if its energized AND the energized amount
             // todo - also i think the energized amount should only go down when you attack / take damage (armor), because otherwise the item pops up and down when the tag changes
-            tag.putInt("Energized", 100);
 
-            if (stack.getTag().get("Energized") != null && stack.getTag().getInt("Energized") > 0) {
+            if (tag.get("Energized") == null && !stack.isDamaged()) {
+                tag.putInt("Energized", 3);
+            }
 
-                stack.setHoverName(new TranslatableComponent("gear.glumbis.energized").append(stack.getItem().getName(stack)).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
+            CompoundTag compoundtag = stack.getTagElement("display");
+            String nameStr = compoundtag.contains("Name") ? compoundtag.getString("Name") : stack.getItem().getName(stack).getString();
+
+            if (tag.getInt("Energized") == 0) {
+                tag.remove("Energized");
+                stack.resetHoverName();
+            }
+
+            if (stack.getTag() != null && stack.getTag().get("Energized") != null && stack.getTag().getInt("Energized") > 0) {
+
+                //stack.setHoverName(new TranslatableComponent("gear.glumbis.energized").append(new TextComponent(nameStr)).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
 
                 // account for skin customizability & camera mode
                 boolean camera = Minecraft.getInstance().options.getCameraType().isFirstPerson();
@@ -189,7 +205,24 @@ public class CommonEvents {
                 }
             }
         }
-    }*/
+    }
+
+    @SubscribeEvent
+    public static void itemAttack(AttackEntityEvent e) {
+        Player player = e.getPlayer();
+        InteractionHand hand = player.getUsedItemHand();
+        ItemStack stack = player.getItemInHand(hand);
+
+        if (stack.getTag() != null && stack.getTag().get("Energized") != null) {
+            int i = stack.getTag().getInt("Energized");
+
+            System.out.println("d");
+
+            if (i > 0) {
+                stack.getTag().putInt("Energized", i - 1);
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void playerTick(TickEvent.PlayerTickEvent event) {
