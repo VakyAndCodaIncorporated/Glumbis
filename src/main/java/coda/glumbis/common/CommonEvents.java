@@ -177,20 +177,15 @@ public class CommonEvents {
                 tag.putString("CachedName", stack.getHoverName().getString());
             }
 
-            // todo - needs a (boolean) tag for if its energized AND the energized amount
-            // todo - also i think the energized amount should only go down when you attack / take damage (armor), because otherwise the item pops up and down when the tag changes
-
             if (tag.get("Energized") == null && /*todo - remove temporary !isDamaged check*/!stack.isDamaged()) {
-                tag.putInt("Energized", 3);
+                tag.putInt("Energized", 100);
             }
 
             if (stack.getTag() != null && stack.getTag().get("Energized") != null && stack.getTag().getInt("Energized") > 0) {
 
-                Component flag = tag.contains("CachedName") ? new TextComponent(tag.getString("CachedName")) : stack.getItem().getName(stack);
+                Component name = tag.contains("CachedName") ? new TextComponent(tag.getString("CachedName")) : stack.getItem().getName(stack);
+                stack.setHoverName(new TranslatableComponent("gear.glumbis.energized").append(name).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
 
-                stack.setHoverName(new TranslatableComponent("gear.glumbis.energized").append(flag).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
-
-                // todo - account for left hand/right hand - maybe done
                 boolean camera = Minecraft.getInstance().options.getCameraType().isFirstPerson();
                 Vec3 pos = new Vec3(player.getMainArm() == HumanoidArm.LEFT ? 0.3 : -0.3, 0.95, camera ? 0.2 : 1.0).yRot(-player.yBodyRot * ((float) Math.PI / 180f)).add(player.getX(), player.getY(), player.getZ());
 

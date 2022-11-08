@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.network.chat.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -62,25 +63,25 @@ public class ClientEvents {
             List<Component> list = e.getToolTip();
 
             if (stack.getTag() != null && stack.getTag().get("Energized") != null) {
-                MutableComponent empty = new TextComponent("");
+                MutableComponent empty = new TextComponent("⚡ - ").withStyle(Style.EMPTY.withColor(0x9eb8ff).withBold(true));
 
-                int level = stack.getTag().getInt("Energized");
+                int mth = (stack.getTag().getInt("Energized") / 10) + 1;
+                int level = Mth.clamp(mth, (stack.getTag().getInt("Energized") / 10) + 1, 10);
 
                 if (level > 0) {
-                    MutableComponent emptyBolt = new TextComponent("⚡").withStyle(Style.EMPTY.withColor(ChatFormatting.DARK_GRAY).withBold(false));
-                    MutableComponent litBolt = new TextComponent("⚡").withStyle(Style.EMPTY.withColor(0x9eb8ff).withBold(true));
+                    MutableComponent emptyBolt = new TextComponent("▌").withStyle(Style.EMPTY.withColor(ChatFormatting.DARK_GRAY));
+                    MutableComponent litBolt = new TextComponent("▌").withStyle(Style.EMPTY.withColor(0x9eb8ff));
 
                     for (int i = 0; i < level; i++) {
                         empty.append(litBolt);
                     }
-                    if (level < 3) {
+                    for (int i = level; i < 10; i++) {
                         empty.append(emptyBolt);
-
-                        if (level < 2) {
-                            empty.append(emptyBolt);
-                        }
                     }
                 }
+
+                empty.append(new TextComponent(String.format(" - %s", stack.getTag().getInt("Energized"))).withStyle(Style.EMPTY.withColor(0x9eb8ff)))
+                        .append("%").withStyle(Style.EMPTY.withColor(0x9eb8ff));
 
                 list.add(1, empty);
             }
