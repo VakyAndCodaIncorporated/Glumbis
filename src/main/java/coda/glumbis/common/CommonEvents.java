@@ -4,14 +4,12 @@ import coda.glumbis.Glumbis;
 import coda.glumbis.common.registry.GlumbisItems;
 import coda.glumbis.common.registry.GlumbisParticles;
 import lain.mods.cos.api.CosArmorAPI;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -175,33 +173,36 @@ public class CommonEvents {
         if (stack.is(Items.IRON_SWORD)) {
             CompoundTag tag = stack.getOrCreateTag();
 
+            if (tag.get("Energized") == null) {
+                tag.putString("CachedName", stack.getHoverName().getString());
+            }
+
             // todo - needs a (boolean) tag for if its energized AND the energized amount
             // todo - also i think the energized amount should only go down when you attack / take damage (armor), because otherwise the item pops up and down when the tag changes
 
-            if (tag.get("Energized") == null && !stack.isDamaged()) {
+            if (tag.get("Energized") == null && /*todo - remove temporary !isDamaged check*/!stack.isDamaged()) {
                 tag.putInt("Energized", 3);
-            }
-
-            CompoundTag compoundtag = stack.getTagElement("display");
-            String nameStr = compoundtag.contains("Name") ? compoundtag.getString("Name") : stack.getItem().getName(stack).getString();
-
-            if (tag.getInt("Energized") == 0) {
-                tag.remove("Energized");
-                stack.resetHoverName();
             }
 
             if (stack.getTag() != null && stack.getTag().get("Energized") != null && stack.getTag().getInt("Energized") > 0) {
 
-                //stack.setHoverName(new TranslatableComponent("gear.glumbis.energized").append(new TextComponent(nameStr)).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
+                Component flag = tag.contains("CachedName") ? new TextComponent(tag.getString("CachedName")) : stack.getItem().getName(stack);
 
-                // account for skin customizability & camera mode
+                stack.setHoverName(new TranslatableComponent("gear.glumbis.energized").append(flag).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
+
+                // todo - account for left hand/right hand - maybe done
                 boolean camera = Minecraft.getInstance().options.getCameraType().isFirstPerson();
                 Vec3 pos = new Vec3(player.getMainArm() == HumanoidArm.LEFT ? 0.3 : -0.3, 0.95, camera ? 0.2 : 1.0).yRot(-player.yBodyRot * ((float) Math.PI / 180f)).add(player.getX(), player.getY(), player.getZ());
 
-                // todo - make the particles only render to others players & if the player is in first person. we cant get the camera from the player, so idk what to do
-                //if (!Minecraft.getInstance().options.getCameraType().isFirstPerson())
                 if (player.tickCount % 40 == 0) {
                     level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), pos.x(), pos.y(), pos.z(), 0, 0.05, 0);
+                }
+            }
+            else if (tag.getInt("Energized") == 0) {
+                tag.remove("Energized");
+
+                if (tag.contains("CachedName")) {
+                    stack.setHoverName(new TextComponent(tag.getString("CachedName")).withStyle(Style.EMPTY.withItalic(false)));
                 }
             }
         }
@@ -215,8 +216,6 @@ public class CommonEvents {
 
         if (stack.getTag() != null && stack.getTag().get("Energized") != null) {
             int i = stack.getTag().getInt("Energized");
-
-            System.out.println("d");
 
             if (i > 0) {
                 stack.getTag().putInt("Energized", i - 1);
