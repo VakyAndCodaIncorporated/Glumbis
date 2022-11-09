@@ -35,6 +35,8 @@ public class Glumbis {
         GlumbisSounds.SOUNDS.register(bus);
         GlumbisParticles.PARTICLES.register(bus);
         GlumbisBlocks.BLOCKS.register(bus);
+        GlumbisMenus.MENU_TYPES.register(bus);
+        GlumbisBlockEntities.BLOCK_ENTITIES.register(bus);
 
         bus.addListener(this::registerEntityAttributes);
         bus.addListener(this::commonSetup);
