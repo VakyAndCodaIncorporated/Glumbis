@@ -9,11 +9,8 @@ import coda.glumbis.common.registry.GlumbisMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.*;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
@@ -41,6 +38,10 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
         for(int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
+    }
+
+    public GlumpCoilMenu(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
+        this(windowId, playerInventory, getTileEntity(playerInventory, data));
     }
 
     private boolean canBeEnergized(ItemStack stack) {
@@ -93,11 +94,6 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
         }
 
         return itemstack;
-    }
-
-
-    public GlumpCoilMenu(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
-        this(windowId, playerInventory, getTileEntity(playerInventory, data));
     }
 
     private static GlumpCoilBlockEntity getTileEntity(final Inventory playerInventory, final FriendlyByteBuf data) {

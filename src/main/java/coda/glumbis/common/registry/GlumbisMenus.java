@@ -11,5 +11,5 @@ import net.minecraftforge.registries.RegistryObject;
 public class GlumbisMenus {
     public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, Glumbis.MOD_ID);
 
-    public static final RegistryObject<MenuType<GlumpCoilMenu>> GLUMP_COIL = MENU_TYPES.register("blender", () -> IForgeMenuType.create(GlumpCoilMenu::new));
+    public static final RegistryObject<MenuType<GlumpCoilMenu>> GLUMP_COIL = MENU_TYPES.register("glump_coil", () -> IForgeMenuType.create(GlumpCoilMenu::new));
 }

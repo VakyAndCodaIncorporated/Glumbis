@@ -5,13 +5,17 @@ import coda.glumbis.common.menu.GlumpCoilMenu;
 import coda.glumbis.common.registry.GlumbisBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -25,6 +29,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IAnimatable {
     private final AnimationFactory factory = new AnimationFactory(this);
     private final NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
+    public int energyLevel = 0;
 
     public GlumpCoilBlockEntity(BlockPos pos, BlockState state) {
         super(GlumbisBlockEntities.GLUMP_COIL.get(), pos, state);
@@ -71,17 +76,31 @@ public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IA
     @Override
     public void setItem(int slot, ItemStack stack) {
         ItemStack itemstack = this.items.get(slot);
-        boolean flag = !stack.isEmpty() && stack.sameItem(itemstack) && ItemStack.tagMatches(stack, itemstack);
         this.items.set(slot, stack);
 
         if (stack.getCount() > this.getMaxStackSize()) {
             stack.setCount(this.getMaxStackSize());
         }
 
-        if (slot == 0 && !flag) {
-            //this.cookingTotalTime = getTotalCookTime(this.level, this.recipeType, this);
-            //this.cookingProgress = 0;
-            //this.setChanged();
+        boolean flag1 = stack.getTag() != null && stack.getTag().get("Energized") != null;
+        if (flag1) {
+            int energy = stack.getTag().getInt("Energized");
+
+            if (slot == 0 && !stack.isEmpty() && flag1 && energy < 100) {
+                int energyUsed = 100 - energy;
+
+                this.energyLevel = energyLevel - energyUsed;
+                this.setChanged();
+            }
+        }
+    }
+
+    public static void serverTick(Level level, BlockPos pos, BlockState state, GlumpCoilBlockEntity coil) {
+        if (coil.energyLevel < 400) {
+            if (level.isThundering() && level.getGameTime() % 4 == 0) {
+                coil.energyLevel += 2;
+                System.out.println("Energy level: " + coil.energyLevel);
+            }
         }
     }
 

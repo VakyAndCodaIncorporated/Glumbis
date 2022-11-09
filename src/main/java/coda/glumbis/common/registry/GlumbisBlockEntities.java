@@ -10,6 +10,6 @@ import net.minecraftforge.registries.RegistryObject;
 public class GlumbisBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Glumbis.MOD_ID);
 
-    public static final RegistryObject<BlockEntityType<GlumpCoilBlockEntity>> GLUMP_COIL = BLOCK_ENTITIES.register("blender", () -> BlockEntityType.Builder.of(GlumpCoilBlockEntity::new, GlumbisBlocks.GLUMP_COIL.get()).build(null));
+    public static final RegistryObject<BlockEntityType<GlumpCoilBlockEntity>> GLUMP_COIL = BLOCK_ENTITIES.register("glump_coil", () -> BlockEntityType.Builder.of(GlumpCoilBlockEntity::new, GlumbisBlocks.GLUMP_COIL.get()).build(null));
 
 }

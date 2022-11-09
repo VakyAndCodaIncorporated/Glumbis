@@ -15,6 +15,8 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -42,6 +44,17 @@ public class GlumpCoilBlock extends BaseEntityBlock {
 
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState p_153213_, BlockEntityType<T> type) {
+        return createGlumpCoilTicker(level, type, GlumbisBlockEntities.GLUMP_COIL.get());
+    }
+
+    @Nullable
+    protected static <T extends BlockEntity> BlockEntityTicker<T> createGlumpCoilTicker(Level p_151988_, BlockEntityType<T> p_151989_, BlockEntityType<? extends GlumpCoilBlockEntity> p_151990_) {
+        return p_151988_.isClientSide ? null : createTickerHelper(p_151989_, p_151990_, GlumpCoilBlockEntity::serverTick);
     }
 
     @Override
