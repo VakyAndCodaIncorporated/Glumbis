@@ -7,9 +7,14 @@ import coda.glumbis.common.registry.GlumbisBlocks;
 import coda.glumbis.common.registry.GlumbisItems;
 import coda.glumbis.common.registry.GlumbisMenus;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.*;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.ResultContainer;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -19,14 +24,21 @@ import java.util.Objects;
 public class GlumpCoilMenu extends AbstractContainerMenu {
     public final GlumpCoilBlockEntity glumpCoilBlockEntity;
     private final ContainerLevelAccess access;
+    private final ResultContainer resultSlots = new ResultContainer();
+    private final Container inputSlots = new SimpleContainer(2) {
+        public void setChanged() {
+            super.setChanged();
+            GlumpCoilMenu.this.slotsChanged(this);
+        }
+    };
 
     public GlumpCoilMenu(final int windowId, final Inventory playerInventory, GlumpCoilBlockEntity blockEntity) {
         super(GlumbisMenus.GLUMP_COIL.get(), windowId);
         this.glumpCoilBlockEntity = blockEntity;
         this.access = ContainerLevelAccess.create(Objects.requireNonNull(glumpCoilBlockEntity.getLevel()), glumpCoilBlockEntity.getBlockPos());
 
-        this.addSlot(new Slot(blockEntity, 0, 27, 47));
-        this.addSlot(new CatEssenceSlot(blockEntity, 1, 76, 47));
+        this.addSlot(new Slot(inputSlots, 0, 27, 47));
+        this.addSlot(new CatEssenceSlot(inputSlots, 1, 76, 47));
         this.addSlot(new GlumpCoilResultSlot(blockEntity, 2, 134, 47));
 
         for(int i = 0; i < 3; ++i) {
@@ -46,6 +58,39 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
 
     private boolean canBeEnergized(ItemStack stack) {
         return stack.getItem() instanceof SwordItem; // todo - make this work with all gear
+    }
+
+    public void slotsChanged(Container p_39778_) {
+        super.slotsChanged(p_39778_);
+        if (p_39778_ == inputSlots) {
+            this.createResult();
+        }
+    }
+
+    public void createResult() {
+        ItemStack gearItem = getSlot(0).getItem();
+        ItemStack essenceItem = getSlot(1).getItem();
+
+        if (gearItem.isEmpty() || essenceItem.isEmpty()) {
+            this.resultSlots.setItem(0, ItemStack.EMPTY);
+        }
+        else {
+
+            if (gearItem.getTag().get("Energized") != null) {
+                int energy = gearItem.getTag().getInt("Energized");
+                int energyUsed = 100 - energy;
+
+                if (gearItem.getTag().get("Energized") != null) {
+                    glumpCoilBlockEntity.energyLevel = glumpCoilBlockEntity.energyLevel - energyUsed;
+
+                    gearItem.getTag().putInt("Energized", gearItem.getTag().getInt("Energized") + energyUsed);
+                    moveItemStackTo(gearItem, 1, 2, false); // todo - <--- fix this
+                }
+
+            }
+            this.resultSlots.setItem(0, gearItem);
+        }
+
     }
 
     public ItemStack quickMoveStack(Player player, int index) {

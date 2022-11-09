@@ -90,6 +90,7 @@ public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IA
             if (slot == 0 && !stack.isEmpty() && flag1 && energy < 100) {
                 int energyUsed = 100 - energy;
 
+                removeItem(0, 1);
                 this.energyLevel = energyLevel - energyUsed;
                 this.setChanged();
             }
