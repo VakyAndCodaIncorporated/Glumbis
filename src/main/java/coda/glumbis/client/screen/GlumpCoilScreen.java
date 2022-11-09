@@ -50,13 +50,10 @@ public class GlumpCoilScreen extends AbstractContainerScreen<GlumpCoilMenu> {
         int y = (this.height - this.imageHeight) / 2;
         this.blit(matrixStack, x, y, 0, 0, this.imageWidth, this.imageHeight);
 
-        int energyLevel = 200;
+        int energyLevel = menu.glumpCoilBlockEntity.energyLevel;
 
         if (energyLevel > 0) {
-            float blitAmount = 106F / energyLevel * 100; // todo - fix the bar inverting %
-
-            // 106 pixels - width
-            // 200 / ((106 / 200) * 100)
+            float blitAmount = 106F * (energyLevel / 400F);
 
             this.blit(matrixStack, leftPos + 21, topPos + 9, 0, 173, (int) blitAmount, 20);
         }

@@ -2,6 +2,7 @@ package coda.glumbis.common.blocks;
 
 import coda.glumbis.common.blocks.entities.GlumpCoilBlockEntity;
 import coda.glumbis.common.registry.GlumbisBlockEntities;
+import coda.glumbis.common.registry.GlumbisParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -23,6 +24,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Random;
 
 public class GlumpCoilBlock extends BaseEntityBlock {
     protected static final VoxelShape SHAPE = Block.box(2.5D, 0.0D, 2.5D, 13.5D, 10.0D, 13.5D);
@@ -52,9 +55,20 @@ public class GlumpCoilBlock extends BaseEntityBlock {
         return createGlumpCoilTicker(level, type, GlumbisBlockEntities.GLUMP_COIL.get());
     }
 
-    @Nullable
-    protected static <T extends BlockEntity> BlockEntityTicker<T> createGlumpCoilTicker(Level p_151988_, BlockEntityType<T> p_151989_, BlockEntityType<? extends GlumpCoilBlockEntity> p_151990_) {
-        return p_151988_.isClientSide ? null : createTickerHelper(p_151989_, p_151990_, GlumpCoilBlockEntity::serverTick);
+    public static <T extends BlockEntity> BlockEntityTicker<T> createGlumpCoilTicker(Level p_151988_, BlockEntityType<T> p_151989_, BlockEntityType<? extends GlumpCoilBlockEntity> p_151990_) {
+        return createTickerHelper(p_151989_, p_151990_, GlumpCoilBlockEntity::serverTick);
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, Random random) {
+        if (level.getBlockEntity(pos) instanceof GlumpCoilBlockEntity coil) {
+            int i = (coil.energyLevel / 100);
+
+            for (int j = 1; j < i; j++) {
+                level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), pos.getX() + 0.35D + random.nextDouble(0.25D), pos.getY() + 1.8D, pos.getZ() + 0.35D + random.nextDouble(0.25D), 0D, 0D, 0D);
+            }
+
+        }
     }
 
     @Override

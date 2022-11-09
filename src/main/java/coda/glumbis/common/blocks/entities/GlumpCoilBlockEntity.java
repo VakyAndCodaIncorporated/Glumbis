@@ -3,6 +3,7 @@ package coda.glumbis.common.blocks.entities;
 import coda.glumbis.Glumbis;
 import coda.glumbis.common.menu.GlumpCoilMenu;
 import coda.glumbis.common.registry.GlumbisBlockEntities;
+import net.minecraft.client.renderer.texture.Tickable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -26,7 +27,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IAnimatable {
+public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IAnimatable, Tickable {
     private final AnimationFactory factory = new AnimationFactory(this);
     private final NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
     public int energyLevel = 0;
@@ -99,7 +100,15 @@ public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IA
         if (coil.energyLevel < 400) {
             if (level.isThundering() && level.getGameTime() % 4 == 0) {
                 coil.energyLevel += 2;
-                System.out.println("Energy level: " + coil.energyLevel);
+            }
+        }
+    }
+
+    @Override
+    public void tick() {
+        if (energyLevel < 400) {
+            if (level.isThundering() && level.getGameTime() % 4 == 0) {
+                energyLevel += 2;
             }
         }
     }
