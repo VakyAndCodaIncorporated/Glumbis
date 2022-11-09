@@ -33,8 +33,19 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
         this.glumpCoilBlockEntity = blockEntity;
         this.access = ContainerLevelAccess.create(Objects.requireNonNull(glumpCoilBlockEntity.getLevel()), glumpCoilBlockEntity.getBlockPos());
 
-        this.addSlot(new Slot(inputSlots, 0, 27, 47));
-        this.addSlot(new CatEssenceSlot(inputSlots, 1, 76, 47));
+        this.addSlot(new Slot(inputSlots, 0, 27, 47) {
+
+            @Override
+            public void onTake(Player p_150645_, ItemStack p_150646_) {
+                GlumpCoilMenu.this.onTakeInput();
+            }
+        });
+        this.addSlot(new CatEssenceSlot(inputSlots, 1, 76, 47) {
+            @Override
+            public void onTake(Player p_150645_, ItemStack p_150646_) {
+                GlumpCoilMenu.this.onTakeInput();
+            }
+        });
         this.addSlot(new Slot(blockEntity, 2, 134, 47) {
 
             public boolean mayPlace(ItemStack stack) {
@@ -46,7 +57,7 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
             }
 
             public void onTake(Player player, ItemStack stack) {
-                GlumpCoilMenu.this.onTake();
+                GlumpCoilMenu.this.onTake(stack);
             }
         });
 
@@ -61,15 +72,26 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
         }
     }
 
-    private void onTake() {
+    private void onTake(ItemStack stack) {
         this.shrinkStackInSlot(0);
         this.shrinkStackInSlot(1);
+
+        int energy = stack.getTag().getInt("Energized");
+        int energyLevel = glumpCoilBlockEntity.energyLevel;
+        int energyNeeded = 100 - energy;
+        int energyUsed = Math.min(energyLevel, energyNeeded);
+        glumpCoilBlockEntity.energyLevel = energyLevel - energyUsed;
+
+    }
+
+    private void onTakeInput() {
+        this.shrinkStackInSlot(2);
     }
 
     private void shrinkStackInSlot(int p_40271_) {
-        ItemStack itemstack = this.inputSlots.getItem(p_40271_);
+        ItemStack itemstack = this.slots.get(p_40271_).getItem();
         itemstack.shrink(1);
-        this.inputSlots.setItem(p_40271_, itemstack);
+        this.slots.get(p_40271_).container.setItem(p_40271_, itemstack);
     }
 
     public GlumpCoilMenu(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
@@ -99,15 +121,14 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
             if (gearItem.getTag().get("Energized") != null) {
                 int energy = gearItem.getTag().getInt("Energized");
                 int energyLevel = glumpCoilBlockEntity.energyLevel;
-                int energyUsed = Math.min(100 - energy, energyLevel);
+                int energyNeeded = 100 - energy;
+                int energyUsed = Math.min(energyLevel, energyNeeded); // todo - fix the amount of energy the process consumes
 
                 if (gearItem.getTag().get("Energized") != null) {
-                    glumpCoilBlockEntity.energyLevel = energyLevel - energyUsed;
-
                     ItemStack result = gearItem.copy();
 
                     result.getOrCreateTag().putInt("Energized", gearItem.getTag().getInt("Energized") + energyUsed);
-                    `
+
                     setItem(2, 1, result);
                     glumpCoilBlockEntity.removeItem(0, 1);
                 }
