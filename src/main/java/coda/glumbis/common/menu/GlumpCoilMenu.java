@@ -2,7 +2,6 @@ package coda.glumbis.common.menu;
 
 import coda.glumbis.common.blocks.entities.GlumpCoilBlockEntity;
 import coda.glumbis.common.menu.slot.CatEssenceSlot;
-import coda.glumbis.common.menu.slot.GlumpCoilResultSlot;
 import coda.glumbis.common.registry.GlumbisBlocks;
 import coda.glumbis.common.registry.GlumbisItems;
 import coda.glumbis.common.registry.GlumbisMenus;
@@ -11,10 +10,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.ResultContainer;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -39,7 +35,20 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
 
         this.addSlot(new Slot(inputSlots, 0, 27, 47));
         this.addSlot(new CatEssenceSlot(inputSlots, 1, 76, 47));
-        this.addSlot(new GlumpCoilResultSlot(blockEntity, 2, 134, 47));
+        this.addSlot(new Slot(blockEntity, 2, 134, 47) {
+
+            public boolean mayPlace(ItemStack stack) {
+                return false;
+            }
+
+            public boolean mayPickup(Player player) {
+                return true;
+            }
+
+            public void onTake(Player player, ItemStack stack) {
+                GlumpCoilMenu.this.onTake();
+            }
+        });
 
         for(int i = 0; i < 3; ++i) {
             for(int j = 0; j < 9; ++j) {
@@ -50,6 +59,17 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
         for(int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
+    }
+
+    private void onTake() {
+        this.shrinkStackInSlot(0);
+        this.shrinkStackInSlot(1);
+    }
+
+    private void shrinkStackInSlot(int p_40271_) {
+        ItemStack itemstack = this.inputSlots.getItem(p_40271_);
+        itemstack.shrink(1);
+        this.inputSlots.setItem(p_40271_, itemstack);
     }
 
     public GlumpCoilMenu(final int windowId, final Inventory playerInventory, final FriendlyByteBuf data) {
@@ -78,13 +98,18 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
 
             if (gearItem.getTag().get("Energized") != null) {
                 int energy = gearItem.getTag().getInt("Energized");
-                int energyUsed = 100 - energy;
+                int energyLevel = glumpCoilBlockEntity.energyLevel;
+                int energyUsed = Math.min(100 - energy, energyLevel);
 
                 if (gearItem.getTag().get("Energized") != null) {
-                    glumpCoilBlockEntity.energyLevel = glumpCoilBlockEntity.energyLevel - energyUsed;
+                    glumpCoilBlockEntity.energyLevel = energyLevel - energyUsed;
 
-                    gearItem.getTag().putInt("Energized", gearItem.getTag().getInt("Energized") + energyUsed);
-                    moveItemStackTo(gearItem, 1, 2, false); // todo - <--- fix this
+                    ItemStack result = gearItem.copy();
+
+                    result.getOrCreateTag().putInt("Energized", gearItem.getTag().getInt("Energized") + energyUsed);
+                    `
+                    setItem(2, 1, result);
+                    glumpCoilBlockEntity.removeItem(0, 1);
                 }
 
             }

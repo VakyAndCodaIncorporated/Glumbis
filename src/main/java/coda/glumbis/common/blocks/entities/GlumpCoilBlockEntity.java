@@ -76,25 +76,7 @@ public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IA
 
     @Override
     public void setItem(int slot, ItemStack stack) {
-        ItemStack itemstack = this.items.get(slot);
         this.items.set(slot, stack);
-
-        if (stack.getCount() > this.getMaxStackSize()) {
-            stack.setCount(this.getMaxStackSize());
-        }
-
-        boolean flag1 = stack.getTag() != null && stack.getTag().get("Energized") != null;
-        if (flag1) {
-            int energy = stack.getTag().getInt("Energized");
-
-            if (slot == 0 && !stack.isEmpty() && flag1 && energy < 100) {
-                int energyUsed = 100 - energy;
-
-                removeItem(0, 1);
-                this.energyLevel = energyLevel - energyUsed;
-                this.setChanged();
-            }
-        }
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, GlumpCoilBlockEntity coil) {
