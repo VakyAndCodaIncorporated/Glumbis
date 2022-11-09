@@ -15,6 +15,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
@@ -97,7 +101,21 @@ public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IA
 
     @Override
     public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController<>(this, "controller", 2, this::predicate));
+    }
 
+    public boolean isActive() {
+        return !items.isEmpty();
+    }
+
+    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+        if (isActive()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glump_coil.activated", true));
+        }
+        else {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glump_coil.deactivated", true));
+        }
+        return PlayState.CONTINUE;
     }
 
     @Override

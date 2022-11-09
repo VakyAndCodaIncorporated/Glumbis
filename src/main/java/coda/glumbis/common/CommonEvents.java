@@ -153,9 +153,6 @@ public class CommonEvents {
 
                     armor.setHoverName(new TranslatableComponent("gear.glumbis.energized").append(armor.getItem().getName(armor)).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
 
-                    // todo - make the particles only render to others players & if the player is in first person. we cant get the camera from the player, so idk what to do
-                    //if (!Minecraft.getInstance().options.getCameraType().isFirstPerson())
-
                     float armorAmount = player.getArmorCoverPercentage();
                     float particleAmount = armorAmount * 2;
 
