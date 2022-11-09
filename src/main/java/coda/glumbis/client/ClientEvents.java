@@ -63,7 +63,7 @@ public class ClientEvents {
             List<Component> list = e.getToolTip();
 
             if (stack.getTag() != null && stack.getTag().get("Energized") != null) {
-                MutableComponent empty = new TextComponent("⚡ - ").withStyle(Style.EMPTY.withColor(0x9eb8ff).withBold(true));
+                MutableComponent empty = new TextComponent("⚡ - ").withStyle(Style.EMPTY.withColor(0x9eb8ff));
 
                 int mth = (stack.getTag().getInt("Energized") / 10) + 1;
                 int level = Mth.clamp(mth, (stack.getTag().getInt("Energized") / 10) + 1, 10);
@@ -81,7 +81,7 @@ public class ClientEvents {
                 }
 
                 empty.append(new TextComponent(String.format(" - %s", stack.getTag().getInt("Energized"))).withStyle(Style.EMPTY.withColor(0x9eb8ff)))
-                        .append("%").withStyle(Style.EMPTY.withColor(0x9eb8ff));
+                        .append("%").withStyle(Style.EMPTY.withColor(0x9eb8ff).withBold(false));
 
                 list.add(1, empty);
             }
