@@ -105,7 +105,7 @@ public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IA
     }
 
     public boolean isActive() {
-        return !items.isEmpty();
+        return true; // todo - fix animation condition
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
