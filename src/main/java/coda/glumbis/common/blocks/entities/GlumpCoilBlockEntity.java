@@ -20,7 +20,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IAnimatable {
     private final AnimationFactory factory = new AnimationFactory(this);
-    private final NonNullList<ItemStack> items = NonNullList.withSize(39, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
 
     public GlumpCoilBlockEntity(BlockPos pos, BlockState state) {
         super(GlumbisBlockEntities.GLUMP_COIL.get(), pos, state);
