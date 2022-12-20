@@ -7,10 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -18,7 +15,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.Random;
 
-public class SoggySocksArmorItem extends ArmorItem {
+public class SoggySocksArmorItem extends ArmorItem implements DyeableLeatherItem {
     public static final ArmorMaterial MATERIAL = new SockArmorMaterial(Glumbis.MOD_ID + ":soggy_socks", 2, new int[]{2, 3, 3, 2}, 9, SoundEvents.GENERIC_SPLASH, 0.0F, () -> Ingredient.of(Items.STRING));
     private final Random rand = new Random();
 

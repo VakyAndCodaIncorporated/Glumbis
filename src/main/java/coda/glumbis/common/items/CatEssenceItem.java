@@ -40,14 +40,9 @@ public class CatEssenceItem extends Item {
 
             Vec3 vec3 = entity.getDeltaMovement();
             if (!entity.level.isClientSide) {
-                if(entity.tickCount > 60){
-                entity.setDeltaMovement(vec3.subtract(0d, -0.3d, 0d));
-                }
-                else {
-                    entity.setDeltaMovement(vec3);
-                }
+                entity.setDeltaMovement(vec3);
             }
         }
-        return false;
+        return super.onEntityItemUpdate(stack, entity);
     }
 }

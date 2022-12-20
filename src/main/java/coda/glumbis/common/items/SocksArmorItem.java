@@ -10,7 +10,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 
-public class SocksArmorItem extends ArmorItem {
+public class SocksArmorItem extends ArmorItem implements DyeableLeatherItem {
     public static final ArmorMaterial MATERIAL = new SockArmorMaterial(Glumbis.MOD_ID + ":socks", 2, new int[]{1, 2, 2, 1}, 9, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, () -> Ingredient.of(Items.STRING));
 
     public SocksArmorItem(EquipmentSlot slot) {
