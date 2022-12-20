@@ -17,6 +17,7 @@
   "entity.glumbis.big_sock": "Big Sock",
 
   "block.glumbis.catnip": "Catnip",
+  "block.glumbis.glump_coil": "Glump Coil",
 
   "advancement.glumbis.soggy_socks.title": "Squishy and Squeaky!",
   "advancement.glumbis.soggy_socks.description": "Get your socks wet.",
@@ -28,6 +29,8 @@
   "advancement.glumbis.root.description": "Sock cat",
 
   "itemGroup.glumbis": "Glumbis",
+
+  "container.glumbis.glump_coil": "Glump Coil",
 
   "glumbis.glumboss.ambient": "Glumboss snarls",
   "glumbis.glumboss.hurt": "Glumboss hurts",
@@ -41,5 +44,8 @@
 
   "glumbis.big_sock.jump": "Sock jumps",
 
-  "gear.glumbis.energized": "Energized "
+  "gear.glumbis.energized": "Energized ",
+
+  "key.glumbis.slam_key": "Slam (Big Sock)",
+  "key.category.glumbis": "Glumbis"
 }

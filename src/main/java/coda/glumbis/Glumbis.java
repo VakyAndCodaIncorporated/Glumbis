@@ -3,13 +3,14 @@ package coda.glumbis;
 import coda.glumbis.common.entities.BigSockEntity;
 import coda.glumbis.common.entities.GlumbossEntity;
 import coda.glumbis.common.entities.GlumpEntity;
-import coda.glumbis.common.entities.RocketPropelledGlumpEntity;
 import coda.glumbis.common.registry.*;
+import coda.glumbis.networking.GlumbisNetworking;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,10 +35,17 @@ public class Glumbis {
         GlumbisSounds.SOUNDS.register(bus);
         GlumbisParticles.PARTICLES.register(bus);
         GlumbisBlocks.BLOCKS.register(bus);
+        GlumbisMenus.MENU_TYPES.register(bus);
+        GlumbisBlockEntities.BLOCK_ENTITIES.register(bus);
 
         bus.addListener(this::registerEntityAttributes);
+        bus.addListener(this::commonSetup);
 
         GeckoLib.initialize();
+    }
+
+    private void commonSetup(FMLCommonSetupEvent e) {
+        GlumbisNetworking.init();
     }
 
     private void registerEntityAttributes(EntityAttributeCreationEvent event) {

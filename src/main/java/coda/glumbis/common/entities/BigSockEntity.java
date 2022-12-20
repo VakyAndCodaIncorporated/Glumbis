@@ -5,6 +5,9 @@ import coda.glumbis.common.registry.GlumbisSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -30,13 +33,30 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class BigSockEntity extends Animal implements IAnimatable, IAnimationTickable {
+	public static final EntityDataAccessor<Boolean> SLAMMING = SynchedEntityData.defineId(BigSockEntity.class, EntityDataSerializers.BOOLEAN);
 	private final AnimationFactory factory = new AnimationFactory(this);
+	public float distance = 4F;
+	public int attackTick;
 
 	public BigSockEntity(EntityType<? extends Animal> type, Level worldIn) {
 		super(type, worldIn);
 		this.noCulling = true;
+	}
+
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(SLAMMING, false);
+	}
+
+	public boolean isSlamming() {
+		return this.entityData.get(SLAMMING);
+	}
+
+	public void setSlamming(boolean slamming) {
+		this.entityData.set(SLAMMING, slamming);
 	}
 
 	@Override
@@ -62,7 +82,6 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 	}
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		//event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.bike.idle", true));
 		return PlayState.CONTINUE;
 	}
 
@@ -98,7 +117,26 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 		if (isVehicle()) {
 			LivingEntity passenger = (LivingEntity) this.getControllingPassenger();
 
+			if (this.attackTick > 0) {
+				--this.attackTick;
+			}
+
 			this.setYRot(passenger.yBodyRot);
+		}
+
+		if (isSlamming() && isOnGround()) {
+			List<Entity> list = level.getEntities(this, getBoundingBox().inflate(6.0D));
+			for (Entity entity : list) {
+				if (getControllingPassenger() instanceof Player player && entity != player && entity != this && entity instanceof LivingEntity) {
+					setSlamming(false);
+
+					attackTick = 100;
+
+					playSound(SoundEvents.GENERIC_EXPLODE, 1.0F, 1.0F);
+
+					entity.hurt(DamageSource.mobAttack(this), Math.min(distance - (float) entity.getY() * 0.66F, 10.0F));
+				}
+			}
 		}
 	}
 
@@ -129,7 +167,6 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 				super.travel(Vec3.ZERO);
 			}
 		}
-
 	}
 
 	@Override
