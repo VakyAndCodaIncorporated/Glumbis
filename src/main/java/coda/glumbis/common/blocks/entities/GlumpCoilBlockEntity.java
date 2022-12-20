@@ -85,6 +85,8 @@ public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IA
                 coil.energyLevel += 2;
             }
         }
+
+        System.out.println(coil.energyLevel);
     }
 
     @Override
@@ -120,7 +122,7 @@ public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IA
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (isActive()) {
+        if (energyLevel > 0) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glump_coil.activated", true));
         }
         else {

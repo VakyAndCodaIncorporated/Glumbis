@@ -17,7 +17,6 @@ public class CatEssenceItem extends Item {
         super(builder);
     }
 
-    // todo - figure out why cat essence despawns so fast and fix it
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
         Vec3[] COLORS2 = Util.make(new Vec3[16], (p_154319_) -> {

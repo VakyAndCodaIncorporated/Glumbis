@@ -173,10 +173,10 @@ public class CommonEvents {
             if (tag.get("Energized") == null) {
                 tag.putString("CachedName", stack.getHoverName().getString());
             }
-
-            if (tag.get("Energized") == null && /*todo - remove temporary !isDamaged check*/!stack.isDamaged()) {
+/*
+            if (tag.get("Energized") == null && !stack.isDamaged()) {
                 tag.putInt("Energized", 100);
-            }
+            }*/
 
             if (stack.getTag() != null && stack.getTag().get("Energized") != null && stack.getTag().getInt("Energized") > 0) {
 

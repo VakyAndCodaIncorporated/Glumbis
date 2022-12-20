@@ -5,6 +5,7 @@ import coda.glumbis.common.menu.slot.CatEssenceSlot;
 import coda.glumbis.common.registry.GlumbisBlocks;
 import coda.glumbis.common.registry.GlumbisItems;
 import coda.glumbis.common.registry.GlumbisMenus;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -117,23 +118,29 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
             this.resultSlots.setItem(0, ItemStack.EMPTY);
         }
         else {
+            CompoundTag tag = gearItem.getOrCreateTag();
 
-            if (gearItem.getTag().get("Energized") != null) {
-                int energy = gearItem.getTag().getInt("Energized");
-                int energyLevel = glumpCoilBlockEntity.energyLevel;
-                int energyNeeded = 100 - energy;
-                int energyUsed = Math.min(energyLevel, energyNeeded); // todo - fix the amount of energy the process consumes
+            int currentEnergy = 0;
 
-                if (gearItem.getTag().get("Energized") != null) {
-                    ItemStack result = gearItem.copy();
-
-                    result.getOrCreateTag().putInt("Energized", gearItem.getTag().getInt("Energized") + energyUsed);
-
-                    setItem(2, 1, result);
-                    glumpCoilBlockEntity.removeItem(0, 1);
-                }
-
+            if (tag.get("Energized") != null) {
+                currentEnergy = tag.getInt("Energized");
             }
+            else {
+                tag.putInt("Energized", 0);
+            }
+
+            int energyLevel = glumpCoilBlockEntity.energyLevel;
+            int energyNeeded = 100 - currentEnergy;
+            int energyUsed = Math.min(energyLevel, energyNeeded); // todo - fix the amount of energy the process consumes
+
+            ItemStack result = gearItem.copy();
+
+            result.getOrCreateTag().putInt("Energized", tag.getInt("Energized") + energyUsed);
+
+            glumpCoilBlockEntity.energyLevel = energyLevel - energyUsed;
+
+            glumpCoilBlockEntity.removeItem(0, 1);
+
             this.resultSlots.setItem(0, gearItem);
         }
 

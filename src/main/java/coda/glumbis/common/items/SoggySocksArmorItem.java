@@ -51,4 +51,10 @@ public class SoggySocksArmorItem extends ArmorItem implements DyeableLeatherItem
             world.addParticle(ParticleTypes.FALLING_WATER, player.getRandomX(0.25D), player.getY() + 0.15D, player.getRandomZ(0.25D), d0, d1, d2);
         }
     }
+
+    @Override
+    public int getColor(ItemStack p_41122_) {
+        CompoundTag compoundtag = p_41122_.getTagElement("display");
+        return compoundtag != null && compoundtag.contains("color", 99) ? compoundtag.getInt("color") : 16119285;
+    }
 }

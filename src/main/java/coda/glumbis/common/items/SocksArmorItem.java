@@ -29,4 +29,10 @@ public class SocksArmorItem extends ArmorItem implements DyeableLeatherItem {
             player.setItemSlot(EquipmentSlot.FEET, wetSocks);
         }
     }
+
+    @Override
+    public int getColor(ItemStack p_41122_) {
+        CompoundTag compoundtag = p_41122_.getTagElement("display");
+        return compoundtag != null && compoundtag.contains("color", 99) ? compoundtag.getInt("color") : 14145495;
+    }
 }
