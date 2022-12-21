@@ -38,7 +38,11 @@ public class GlumpCoilScreen extends AbstractContainerScreen<GlumpCoilMenu> {
     @Override
     protected void renderLabels(PoseStack matrixStack, int x, int y) {
         this.font.draw(matrixStack, this.playerInventoryTitle, (float) this.inventoryLabelX, (float) this.inventoryLabelY, 4210752);
-        this.font.draw(matrixStack, new TranslatableComponent("container." + Glumbis.MOD_ID + ".glump_coil"), ((float) imageWidth / 2 - font.width("Glump Coil") / 2F), 6f, 4210752);
+
+        matrixStack.pushPose();
+        matrixStack.scale(0.8F, 0.8F, 0.8F);
+        this.font.draw(matrixStack, new TranslatableComponent(menu.glumpCoilBlockEntity.energyLevel / 4 + "%"), ((float) imageWidth * 0.99F - font.width("100%") / 2F) + 5, 20f, 4210752);
+        matrixStack.popPose();
     }
 
     @Override

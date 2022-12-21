@@ -86,7 +86,6 @@ public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IA
             }
         }
 
-        System.out.println(coil.energyLevel);
     }
 
     @Override
