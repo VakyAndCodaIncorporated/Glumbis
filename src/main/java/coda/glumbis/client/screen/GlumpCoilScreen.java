@@ -41,7 +41,7 @@ public class GlumpCoilScreen extends AbstractContainerScreen<GlumpCoilMenu> {
 
         matrixStack.pushPose();
         matrixStack.scale(0.8F, 0.8F, 0.8F);
-        this.font.draw(matrixStack, new TranslatableComponent(menu.glumpCoilBlockEntity.energyLevel / 4 + "%"), ((float) imageWidth * 0.99F - font.width("100%") / 2F) + 5, 20f, 4210752);
+        this.font.draw(matrixStack, new TranslatableComponent(menu.glumpCoilBlockEntity.energyLevel / 4 + "%"), ((float) imageWidth * 0.99F - font.width("0%") / 2F) + 5, 20f, 4210752);
         matrixStack.popPose();
     }
 
