@@ -10,7 +10,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 
-
+// todo - figure out why glumboss isnt kicking
 public class GlumbossKickGoal extends BaseGlumbossAttackGoal {
     public GlumbossEntity glumboss;
     public int timer;
@@ -42,10 +42,7 @@ public class GlumbossKickGoal extends BaseGlumbossAttackGoal {
     @Override
     public boolean canUse() {
         if (this.glumboss.getTarget() != null && !this.glumboss.getCharged()) {
-            if(this.glumboss.getTarget().isOnGround()){
-                return true;
-            }
-            return false;
+            return this.glumboss.getTarget().isOnGround();
         }
         return false;
     }

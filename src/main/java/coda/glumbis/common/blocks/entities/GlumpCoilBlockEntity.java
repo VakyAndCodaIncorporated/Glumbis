@@ -116,10 +116,6 @@ public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IA
         data.addAnimationController(new AnimationController<>(this, "controller", 2, this::predicate));
     }
 
-    public boolean isActive() {
-        return true; // todo - fix animation condition
-    }
-
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (energyLevel > 0) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glump_coil.activated", true));

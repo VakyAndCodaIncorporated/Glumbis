@@ -142,7 +142,7 @@ public class CommonEvents {
         ItemStack stack = player.getItemInHand(hand);
         Level level = player.level;
 
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
+/*        for (EquipmentSlot slot : EquipmentSlot.values()) {
             ItemStack armor = player.getItemBySlot(slot);
 
             if (slot.getType().equals(EquipmentSlot.Type.ARMOR)) {
@@ -165,7 +165,7 @@ public class CommonEvents {
                     }
                 }
             }
-        }
+        }*/
 
         if (stack.is(Items.IRON_SWORD)) {
             CompoundTag tag = stack.getOrCreateTag();

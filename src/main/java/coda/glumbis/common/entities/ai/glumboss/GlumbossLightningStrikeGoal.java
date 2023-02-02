@@ -39,41 +39,40 @@ public class GlumbossLightningStrikeGoal extends BaseGlumbossAttackGoal {
 
     @Override
     public boolean canUse() {
-        return this.glumboss.getTarget() != null;
+        return glumboss.getTarget() != null;
     }
 
     @Override
     public void tick() {
-
-        if (this.glumboss.getCharged()) {
+        if (glumboss.getCharged()) {
             super.tick();
         }
     }
 
     public void attack() {
-        LivingEntity target = this.glumboss.getTarget();
+        LivingEntity target = glumboss.getTarget();
         Vec3 targetVec = target.getPosition(1f);
-        Vec3 vec3 = this.glumboss.getPosition(1f);
+        Vec3 vec3 = glumboss.getPosition(1f);
         Vec3 vecTo = vec3.vectorTo(targetVec);
-        if(this.glumboss.distanceTo(this.glumboss.getTarget()) > 5d) {
+        if (glumboss.distanceTo(glumboss.getTarget()) > 5d) {
             for (int i = 0; i < 5; i++) {
                 lightningPos = vec3.add((vecTo.multiply(0.15d, 0.15d, 0.15d)).multiply(i, i, i));
-                BlockPos blockpos = this.glumboss.blockPosition();
-                if (this.glumboss.level.canSeeSky(blockpos.above())) {
-                    LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(this.glumboss.level);
+                BlockPos blockpos = glumboss.blockPosition();
+                if (glumboss.level.canSeeSky(blockpos.above())) {
+                    LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(glumboss.level);
                     lightningbolt.moveTo(lightningPos.x(), lightningPos.y(), lightningPos.z());
-                    this.glumboss.level.addFreshEntity(lightningbolt);
+                    glumboss.level.addFreshEntity(lightningbolt);
                 }
             }
         }
         else {
             for (int i = 0; i < 5; i++) {
-                lightningPos = vec3.add(Math.sin(this.glumboss.tickCount + i), 0d, Math.cos(this.glumboss.tickCount + i));
-                BlockPos blockpos = this.glumboss.blockPosition();
-                if (this.glumboss.level.canSeeSky(blockpos.above())) {
-                    LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(this.glumboss.level);
+                lightningPos = vec3.add(Math.sin(glumboss.tickCount + i), 0d, Math.cos(glumboss.tickCount + i));
+                BlockPos blockpos = glumboss.blockPosition();
+                if (glumboss.level.canSeeSky(blockpos.above())) {
+                    LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(glumboss.level);
                     lightningbolt.moveTo(lightningPos.x(), lightningPos.y(), lightningPos.z());
-                    this.glumboss.level.addFreshEntity(lightningbolt);
+                    glumboss.level.addFreshEntity(lightningbolt);
                 }
             }
 

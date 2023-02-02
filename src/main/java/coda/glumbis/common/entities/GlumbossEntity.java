@@ -100,8 +100,19 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
         this.bossEvent.removePlayer(p_31488_);
     }
 
-    public void readAdditionalSaveData(CompoundTag p_31474_) {
-        super.readAdditionalSaveData(p_31474_);
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+
+        tag.putBoolean("charged", getCharged());
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+
+        entityData.set(CHARGED, tag.getBoolean("charged"));
+
         if (this.hasCustomName()) {
             this.bossEvent.setName(this.getDisplayName());
         }
@@ -147,23 +158,23 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
     @Override
     public void tick() {
         super.tick();
-        if(this.getCharged()){
+        if (this.getCharged()) {
             this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(5.0D);
             this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.27D);
             this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(1f), this.getY(), this.getRandomZ(1f), 0d, this.getRandom().nextFloat(), 0d);
         }
-        if(getAnimState() == 2){
-            if(slamTimer <= 30){
+        if (getAnimState() == 2) {
+            if (slamTimer <= 30) {
                 slamTimer++;
-                if(slamTimer == 28){
-                    if(this.level.isClientSide()){
-                        for(int i = 0; i < 100; i++){
+                if (slamTimer == 28) {
+                    if (this.level.isClientSide()) {
+                        for (int i = 0; i < 100; i++) {
                             this.level.addParticle(ParticleTypes.POOF, this.getRandomX(3f), this.getY(), this.getRandomZ(3f), 0d, this.getRandom().nextFloat()/2, 0d);
                         }
                     }
                 }
             }
-            else{
+            else {
                 slamTimer = 0;
             }
         }
@@ -171,26 +182,21 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
             slamTimer = 0;
         }
 
-        if (this.getAnimState() == 3 || this.getAnimState() == 4) {
-            setInvulnerable(true);
-        }
-        else {
-            setInvulnerable(false);
-        }
+        setInvulnerable(this.getAnimState() == 3 || this.getAnimState() == 4);
 
-        if(this.getHealth() < this.getMaxHealth()/2 && !this.getHalfHealth() && this.getAnimState() == 0){
+        if (this.getHealth() < this.getMaxHealth() / 2 && !this.getHalfHealth() && this.getAnimState() == 0) {
             this.setHalfHealth(true);
             this.setAnimState(4);
         }
-        if(this.getAnimState() == 4){
+        if (this.getAnimState() == 4) {
             if(timer <= 150){
                 timer++;
                 this.getNavigation().stop();
                 this.setDeltaMovement(this.getDeltaMovement().multiply(0d, 1d, 0d));
-                if(timer == 20){
+                if (timer == 20) {
                     this.playSound(GlumbisSounds.GLUMBOSS_CHARGE.get(), 1f, 1f);
                 }
-                if(timer == 130){
+                if (timer == 130) {
                     BlockPos blockpos = this.blockPosition();
                     setCharged(true);
                     if (this.level.canSeeSky(blockpos.above())) {
@@ -202,7 +208,7 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
                     }
                 }
                 if(this.level.isClientSide()) {
-                    for(int i = 0; i < Math.round(timer/4); i++){
+                    for(int i = 0; i < Math.round(timer / 4.0F); i++){
                         this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(1f), this.getY(), this.getRandomZ(1f), 0d, this.getRandom().nextFloat(), 0d);
                     }
                 }
@@ -230,11 +236,11 @@ public class GlumbossEntity extends PathfinderMob implements IAnimatable, IAnima
         }
         switch (getAnimState()) {
             case 0:
-                if(event.isMoving()){
+                if (event.isMoving()) {
                     event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.walk", true));
                     return PlayState.CONTINUE;
                 }
-                if(!event.isMoving()){
+                if (!event.isMoving()) {
                     event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.glumboss.idle", true));
                     return PlayState.CONTINUE;
                 }
