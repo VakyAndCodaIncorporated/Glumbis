@@ -60,10 +60,9 @@ public class GlumbossKickGoal extends BaseGlumbossAttackGoal {
         }
     }
 
-
     public void attack() {
         LivingEntity target = this.glumboss.getTarget();
-        if(this.glumboss.distanceTo(target) < 3.5f) {
+        if (target != null && this.glumboss.distanceTo(target) < 3.5f) {
             this.glumboss.doHurtTarget(this.glumboss.getTarget());
             this.glumboss.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 0.4f, 1f);
             target.setDeltaMovement(target.getDeltaMovement().add(0d, 0.2d, 0d));
