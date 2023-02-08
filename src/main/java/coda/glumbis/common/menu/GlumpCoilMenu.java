@@ -29,6 +29,7 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
         }
     };
 
+    // todo - fix the coil depleting energy when the chunk is unloaded (needs more testing)
     public GlumpCoilMenu(final int windowId, final Inventory playerInventory, GlumpCoilBlockEntity blockEntity) {
         super(GlumbisMenus.GLUMP_COIL.get(), windowId);
         this.glumpCoilBlockEntity = blockEntity;
