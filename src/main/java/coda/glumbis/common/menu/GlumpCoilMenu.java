@@ -6,6 +6,10 @@ import coda.glumbis.common.registry.GlumbisItems;
 import coda.glumbis.common.registry.GlumbisMenus;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -163,6 +167,7 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
             currentEnergy = tag.getInt("Energized");
         }
         else {
+            tag.putString("CachedName", stack.getHoverName().getString());
             tag.putInt("Energized", 0);
         }
 
@@ -179,8 +184,12 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
             tag.putInt("Energized", tag.getInt("Energized") + energyUsed);
         }
 
+        Component name = tag.contains("CachedName") ? new TextComponent(tag.getString("CachedName")) : stack.getItem().getName(stack);
+        stack.setHoverName(new TranslatableComponent("gear.glumbis.energized").append(name).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
+
     }
 
+    @Override
     public ItemStack quickMoveStack(Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);

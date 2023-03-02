@@ -8,7 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -25,9 +24,10 @@ import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -144,7 +144,7 @@ public class CommonEvents {
         ItemStack stack = player.getItemInHand(hand);
         Level level = player.level;
 
-/*        for (EquipmentSlot slot : EquipmentSlot.values()) {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
             ItemStack armor = player.getItemBySlot(slot);
 
             if (slot.getType().equals(EquipmentSlot.Type.ARMOR)) {
@@ -167,23 +167,16 @@ public class CommonEvents {
                     }
                 }
             }
-        }*/
+        }
 
-        if (stack.getItem() instanceof SwordItem) {
+        if (stack.getItem() instanceof TieredItem || stack.getItem() instanceof ArmorItem) {
             CompoundTag tag = stack.getOrCreateTag();
 
             if (tag.get("Energized") == null) {
                 tag.putString("CachedName", stack.getHoverName().getString());
             }
-/*
-            if (tag.get("Energized") == null && !stack.isDamaged()) {
-                tag.putInt("Energized", 100);
-            }*/
 
             if (stack.getTag() != null && stack.getTag().get("Energized") != null && stack.getTag().getInt("Energized") > 0) {
-
-                Component name = tag.contains("CachedName") ? new TextComponent(tag.getString("CachedName")) : stack.getItem().getName(stack);
-                stack.setHoverName(new TranslatableComponent("gear.glumbis.energized").append(name).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
 
                 boolean camera = Minecraft.getInstance().options.getCameraType().isFirstPerson();
                 Vec3 pos = new Vec3(player.getMainArm() == HumanoidArm.LEFT ? 0.3 : -0.3, 0.95, camera ? 0.2 : 1.0).yRot(-player.yBodyRot * ((float) Math.PI / 180f)).add(player.getX(), player.getY(), player.getZ());
@@ -207,14 +200,24 @@ public class CommonEvents {
         Player player = e.getPlayer();
         InteractionHand hand = player.getUsedItemHand();
         ItemStack stack = player.getItemInHand(hand);
+        CompoundTag tag = stack.getTag();
 
-        if (stack.getTag() != null && stack.getTag().get("Energized") != null) {
-            int i = stack.getTag().getInt("Energized");
+        if (tag != null && tag.get("Energized") != null) {
+            int i = tag.getInt("Energized");
 
             if (i > 0) {
-                stack.getTag().putInt("Energized", i - 1);
+                tag.putInt("Energized", i - 1);
+            }
+
+            if (i == 0) {
+                tag.remove("Energized");
+
+                if (tag.contains("CachedName")) {
+                    stack.setHoverName(new TextComponent(tag.getString("CachedName")).withStyle(Style.EMPTY));
+                }
             }
         }
+
     }
 
     @SubscribeEvent
