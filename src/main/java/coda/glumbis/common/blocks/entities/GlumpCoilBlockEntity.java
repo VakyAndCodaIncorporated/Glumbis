@@ -27,7 +27,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IAnimatable, Tickable {
+public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IAnimatable {
     private final AnimationFactory factory = new AnimationFactory(this);
     private final NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
     public int energyLevel = 0;
@@ -86,15 +86,6 @@ public class GlumpCoilBlockEntity extends BaseContainerBlockEntity implements IA
             }
         }
 
-    }
-
-    @Override
-    public void tick() {
-        if (energyLevel < 400) {
-            if (level.isThundering() && level.getGameTime() % 4 == 0) {
-                energyLevel += 2;
-            }
-        }
     }
 
     @Override
