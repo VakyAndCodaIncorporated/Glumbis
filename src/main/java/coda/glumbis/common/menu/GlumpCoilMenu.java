@@ -14,8 +14,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.Objects;
@@ -133,7 +134,7 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
     }
 
     private boolean canBeEnergized(ItemStack stack) {
-        return stack.getItem() instanceof SwordItem; // todo - make this work with all gear
+        return stack.getItem() instanceof TieredItem || stack.getItem() instanceof ArmorItem;
     }
 
     public void slotsChanged(Container p_39778_) {
