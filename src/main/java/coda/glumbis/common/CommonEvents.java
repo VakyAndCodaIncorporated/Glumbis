@@ -4,12 +4,14 @@ import coda.glumbis.Glumbis;
 import coda.glumbis.common.registry.GlumbisItems;
 import coda.glumbis.common.registry.GlumbisParticles;
 import lain.mods.cos.api.CosArmorAPI;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -25,7 +27,7 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -167,7 +169,7 @@ public class CommonEvents {
             }
         }*/
 
-        if (stack.is(Items.IRON_SWORD)) {
+        if (stack.getItem() instanceof SwordItem) {
             CompoundTag tag = stack.getOrCreateTag();
 
             if (tag.get("Energized") == null) {

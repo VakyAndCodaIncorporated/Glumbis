@@ -10,12 +10,13 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.*;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.ResultContainer;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Objects;
 
@@ -39,6 +40,11 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
         this.addSlot(new Slot(inputSlots, 0, 27, 47) {
 
             @Override
+            public boolean mayPlace(ItemStack p_40231_) {
+                return canBeEnergized(p_40231_);
+            }
+
+            @Override
             public void onTake(Player p_150645_, ItemStack p_150646_) {
                 GlumpCoilMenu.this.onTakeGear();
             }
@@ -57,22 +63,21 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
         });
         this.addSlot(new Slot(blockEntity, 2, 134, 47) {
 
+            @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;
             }
 
+            @Override
             public boolean mayPickup(Player player) {
                 return true;
             }
 
+            @Override
             public void onTake(Player player, ItemStack stack) {
                 GlumpCoilMenu.this.onTake(stack);
             }
 
-            @Override
-            public void onQuickCraft(ItemStack p_40235_, ItemStack p_40236_) {
-                energize(p_40236_);
-            }
         });
 
         for(int i = 0; i < 3; ++i) {
@@ -94,9 +99,13 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
         this.shrinkStackInSlot(0);
         this.shrinkStackInSlot(1);
 
-        ItemStack gearItem = resultSlots.getItem(0);
+        if (canEnergize(stack)) {
+            energize(stack);
+        }
+    }
 
-        energize(stack);
+    private boolean canEnergize(ItemStack stack) {
+        return glumpCoilBlockEntity.energyLevel > 0 && stack.getOrCreateTag().getInt("Energized") < 100;
     }
 
     @Override
@@ -171,21 +180,23 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
 
     }
 
-    // todo - fix quick crafting not copying/saving tags
-    public ItemStack quickMoveStack(Player p_39792_, int p_39793_) {
+    public ItemStack quickMoveStack(Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(p_39793_);
+        Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
-            if (p_39793_ == 2) {
+            if (index == 2) {
+
+                energize(itemstack1);
+
                 if (!this.moveItemStackTo(itemstack1, 3, 39, true)) {
                     return ItemStack.EMPTY;
                 }
 
                 slot.onQuickCraft(itemstack1, itemstack);
-            } else if (p_39793_ != 0 && p_39793_ != 1) {
-                if (p_39793_ >= 3 && p_39793_ < 39) {
+            } else if (index != 0 && index != 1) {
+                if (index >= 3 && index < 39) {
                     if (!this.moveItemStackTo(itemstack1, 0, 2, false)) {
                         return ItemStack.EMPTY;
                     }
@@ -204,7 +215,7 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
                 return ItemStack.EMPTY;
             }
 
-            slot.onTake(p_39792_, itemstack1);
+            slot.onTake(player, itemstack1);
         }
 
         return itemstack;
