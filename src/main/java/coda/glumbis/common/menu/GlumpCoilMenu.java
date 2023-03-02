@@ -138,6 +138,7 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
         //this.slots.get(p_40271_).container.setItem(p_40271_, itemstack);
     }
 
+    // todo - add a tag for tools that can be energized so people can add mod compat if needed
     private boolean canBeEnergized(ItemStack stack) {
         return stack.getItem() instanceof TieredItem || stack.getItem() instanceof ArmorItem;
     }
