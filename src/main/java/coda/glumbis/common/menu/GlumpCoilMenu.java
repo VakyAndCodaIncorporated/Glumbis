@@ -76,7 +76,7 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
 
             @Override
             public boolean mayPickup(Player player) {
-                return true;
+                return GlumpCoilMenu.this.mayPickup();
             }
 
             @Override
@@ -144,9 +144,16 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
 
     public void slotsChanged(Container p_39778_) {
         super.slotsChanged(p_39778_);
-        if (p_39778_ == inputSlots) {
+        if (p_39778_ == inputSlots && !inputSlots.getItem(1).isEmpty() && inputSlots.getItem(1).is(GlumbisItems.CAT_ESSENCE.get())) {
             this.createResult();
         }
+        else if (inputSlots.getItem(1).isEmpty()) {
+            resultSlots.clearContent();
+        }
+    }
+
+    private boolean mayPickup() {
+        return !inputSlots.getItem(0).isEmpty() && !inputSlots.getItem(1).is(GlumbisItems.CAT_ESSENCE.get()) && canBeEnergized(inputSlots.getItem(0));
     }
 
     public void createResult() {
