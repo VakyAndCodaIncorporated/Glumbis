@@ -21,4 +21,5 @@ public class GlumbisSounds {
     public static final RegistryObject<SoundEvent> GLUMP_EXPLODE = SOUNDS.register("glump.explode", () -> new SoundEvent(new ResourceLocation(Glumbis.MOD_ID, "glump.explode")));
 
     public static final RegistryObject<SoundEvent> BIG_SOCK_JUMP = SOUNDS.register("big_sock.jump", () -> new SoundEvent(new ResourceLocation(Glumbis.MOD_ID, "big_sock.jump")));
+    public static final RegistryObject<SoundEvent> BIG_SOCK_SLAM = SOUNDS.register("big_sock.slam", () -> new SoundEvent(new ResourceLocation(Glumbis.MOD_ID, "big_sock.slam")));
 }

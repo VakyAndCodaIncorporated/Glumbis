@@ -110,6 +110,23 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 		super.checkFallDamage(pY, pOnGround, pState, pPos);
 	}
 
+	private void slam() {
+		List<Entity> list = level.getEntities(this, getBoundingBox().inflate(6.0D));
+
+		setSlamming(false);
+
+		attackTick = 100;
+
+		playSound(GlumbisSounds.BIG_SOCK_SLAM.get(), 2.0F, 1.0F);
+
+		for (Entity entity : list) {
+			if (getControllingPassenger() instanceof Player player && entity != player && entity != this && entity instanceof LivingEntity) {
+
+				entity.hurt(DamageSource.mobAttack(this), Math.min(distance - (float) entity.getY() * 0.66F, 10.0F));
+			}
+		}
+	}
+
 	@Override
 	public void tick() {
 		super.tick();
@@ -125,18 +142,7 @@ public class BigSockEntity extends Animal implements IAnimatable, IAnimationTick
 		}
 
 		if (isSlamming() && isOnGround()) {
-			List<Entity> list = level.getEntities(this, getBoundingBox().inflate(6.0D));
-			for (Entity entity : list) {
-				if (getControllingPassenger() instanceof Player player && entity != player && entity != this && entity instanceof LivingEntity) {
-					setSlamming(false);
-
-					attackTick = 100;
-
-					playSound(SoundEvents.GENERIC_EXPLODE, 1.0F, 1.0F);
-
-					entity.hurt(DamageSource.mobAttack(this), Math.min(distance - (float) entity.getY() * 0.66F, 10.0F));
-				}
-			}
+			slam();
 		}
 	}
 

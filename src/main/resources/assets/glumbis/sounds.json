@@ -75,7 +75,16 @@
     "subtitle": "glumbis.big_sock.jump",
     "sounds": [
       {
-        "name": "glumbis:jump",
+        "name": "glumbis:sock/jump",
+        "stream": true
+      }
+    ]
+  },
+  "big_sock.slam": {
+    "subtitle": "glumbis.big_sock.slam",
+    "sounds": [
+      {
+        "name": "glumbis:sock/slam",
         "stream": true
       }
     ]
