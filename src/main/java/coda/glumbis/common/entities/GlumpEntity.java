@@ -119,7 +119,7 @@ public class GlumpEntity extends Monster implements IAnimatable {
                     this.level.addParticle(GlumbisParticles.STATIC_LIGHTNING.get(), this.getRandomX(3.5D), (this.getPosition(1.0f).y() - 0.5) , this.getRandomZ(3.5D), 0, this.getRandomY() * 2, 0);
                 }
             }
-            playSound(GlumbisSounds.GLUMP_EXPLODE.get(), 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
+            playSound(GlumbisSounds.GLUMP_EXPLODE.get(), 1.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
             this.kill();
         }
         if (soundTick) {
