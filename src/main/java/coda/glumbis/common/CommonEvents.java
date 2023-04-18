@@ -10,7 +10,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -144,7 +143,7 @@ public class CommonEvents {
         ItemStack stack = player.getItemInHand(hand);
         Level level = player.level;
 
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
+        /*for (EquipmentSlot slot : EquipmentSlot.values()) {
             ItemStack armor = player.getItemBySlot(slot);
 
             if (slot.getType().equals(EquipmentSlot.Type.ARMOR)) {
@@ -167,7 +166,7 @@ public class CommonEvents {
                     }
                 }
             }
-        }
+        }*/
 
         if (stack.getItem() instanceof TieredItem || stack.getItem() instanceof ArmorItem) {
             CompoundTag tag = stack.getOrCreateTag();
