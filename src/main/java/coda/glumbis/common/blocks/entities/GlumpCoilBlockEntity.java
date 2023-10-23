@@ -65,6 +65,16 @@ public class GlumpCoilBlockEntity extends BlockEntity implements IAnimatable, Me
         }
     }
 
+    public void getEnergyLevel() {
+         return this.energyLevel;
+    }
+
+    public void setEnergyLevel(int newEnergyLevel) {
+        if (!getLevel().isClientSide()) {
+            this.energyLevel = newEnergyLevel;
+        }
+    }
+    
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
