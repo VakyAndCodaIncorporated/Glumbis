@@ -28,6 +28,7 @@ import java.util.Objects;
 public class GlumpCoilMenu extends AbstractContainerMenu {
     public final GlumpCoilBlockEntity glumpCoilBlockEntity;
     private final ContainerLevelAccess access;
+    public static final String ENERGIZED = "Energized";
     private final ResultContainer resultSlots = new ResultContainer();
     private final Container inputSlots = new SimpleContainer(2) {
         public void setChanged() {
@@ -38,6 +39,7 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
 
     // todo - fix the coil depleting energy when the chunk is unloaded (needs more testing)
     // todo - fix the coil disregarding essence (or lack of) when energizing
+    // todo - fix cat essence item consumption (should be 1 consumed for every 50% energy)
     public GlumpCoilMenu(final int windowId, final Inventory playerInventory, GlumpCoilBlockEntity blockEntity) {
         super(GlumbisMenus.GLUMP_COIL.get(), windowId);
         this.glumpCoilBlockEntity = blockEntity;
@@ -53,6 +55,7 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
             @Override
             public void onTake(Player p_150645_, ItemStack p_150646_) {
                 GlumpCoilMenu.this.onTakeGear();
+                super.onTake(p_150645_, p_150646_);
             }
         });
         this.addSlot(new Slot(inputSlots, 1, 76, 47) {
@@ -65,9 +68,10 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
             @Override
             public void onTake(Player p_150645_, ItemStack p_150646_) {
                 GlumpCoilMenu.this.onTakeEssence();
+                super.onTake(p_150645_, p_150646_);
             }
         });
-        this.addSlot(new Slot(blockEntity, 2, 134, 47) {
+        this.addSlot(new Slot(resultSlots, 2, 134, 47) {
 
             @Override
             public boolean mayPlace(ItemStack stack) {
@@ -82,6 +86,7 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
             @Override
             public void onTake(Player player, ItemStack stack) {
                 GlumpCoilMenu.this.onTake(stack);
+                super.onTake(player, stack);
             }
 
         });
@@ -106,12 +111,12 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
         this.shrinkStackInSlot(1);
 
         if (canEnergize(stack)) {
-            energize(stack);
+            energize(stack, true);
         }
     }
 
     private boolean canEnergize(ItemStack stack) {
-        return glumpCoilBlockEntity.energyLevel > 0 && stack.getOrCreateTag().getInt("Energized") < 100;
+        return glumpCoilBlockEntity.energyLevel > 0 && stack.getOrCreateTag().getInt(ENERGIZED) < 100;
     }
 
     @Override
@@ -124,18 +129,15 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
 
     private void onTakeGear() {
         this.resultSlots.getItem(0).shrink(1);
-        //this.shrinkStackInSlot(2);
     }
 
     private void onTakeEssence() {
         this.resultSlots.getItem(0).shrink(1);
-        //this.shrinkStackInSlot(2);
     }
 
     private void shrinkStackInSlot(int p_40271_) {
         ItemStack itemstack = this.slots.get(p_40271_).getItem();
         itemstack.shrink(1);
-        //this.slots.get(p_40271_).container.setItem(p_40271_, itemstack);
     }
 
     // todo - add a tag for tools that can be energized so people can add mod compat if needed
@@ -154,49 +156,83 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
     }
 
     private boolean mayPickup() {
-        return !inputSlots.getItem(0).isEmpty() && !inputSlots.getItem(1).is(GlumbisItems.CAT_ESSENCE.get()) && canBeEnergized(inputSlots.getItem(0));
+        return !inputSlots.getItem(0).isEmpty() && inputSlots.getItem(1).is(GlumbisItems.CAT_ESSENCE.get()) && canBeEnergized(inputSlots.getItem(0));
     }
 
     public void createResult() {
         ItemStack gearItem = getSlot(0).getItem();
         ItemStack essenceItem = getSlot(1).getItem();
 
-        if (glumpCoilBlockEntity.energyLevel > 0 || !gearItem.isEmpty() || !essenceItem.isEmpty() || (gearItem.getOrCreateTag().get("Energized") == null && gearItem.getOrCreateTag().getInt("Energized") < 100)) {
-            glumpCoilBlockEntity.setItem(2, gearItem);
-        }
+        if (glumpCoilBlockEntity.energyLevel > 0 || !gearItem.isEmpty() || !essenceItem.isEmpty() || (gearItem.getOrCreateTag().contains(ENERGIZED) && gearItem.getOrCreateTag().getInt(ENERGIZED) < 100)) {
 
+            if (!gearItem.isEmpty()) {
+                ItemStack preview = gearItem.copy();
+
+                energize(preview, false);
+                resultSlots.setItem(0, preview);
+                this.broadcastChanges();
+            }
+        }
     }
 
-    private void energize(ItemStack stack) {
+    private void energize(ItemStack stack, boolean depleteEnergy) {
         CompoundTag tag = stack.getOrCreateTag();
 
         int currentEnergy = 0;
 
-        if (tag.get("Energized") != null) {
-            currentEnergy = tag.getInt("Energized");
+        if (tag.contains(ENERGIZED)) {
+            currentEnergy = tag.getInt(ENERGIZED);
         }
         else {
             tag.putString("CachedName", stack.getHoverName().getString());
-            tag.putInt("Energized", 0);
+            tag.putInt(ENERGIZED, 0);
         }
 
         int energyLevel = glumpCoilBlockEntity.energyLevel;
         int energyNeeded = 100 - currentEnergy;
         int energyUsed = Math.min(energyLevel, energyNeeded);
 
-        glumpCoilBlockEntity.energyLevel = energyLevel - energyUsed;
-
-        if (tag.get("Energized") == null) {
-            tag.putInt("Energized", tag.getInt("Energized") + energyUsed);
+        if (depleteEnergy) {
+            glumpCoilBlockEntity.energyLevel = energyLevel - energyUsed;
         }
-        else if (tag.getInt("Energized") < 100) {
-            tag.putInt("Energized", tag.getInt("Energized") + energyUsed);
+
+        if (!tag.contains(ENERGIZED)) {
+            tag.putInt(ENERGIZED, tag.getInt(ENERGIZED) + energyUsed);
+        } else if (tag.getInt(ENERGIZED) < 100) {
+            tag.putInt(ENERGIZED, tag.getInt(ENERGIZED) + energyUsed);
         }
 
         Component name = tag.contains("CachedName") ? new TextComponent(tag.getString("CachedName")) : stack.getItem().getName(stack);
         stack.setHoverName(new TranslatableComponent("gear.glumbis.energized").append(name).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
-
     }
+
+    private void showEnergizePreview(ItemStack stack) {
+        CompoundTag tag = stack.getOrCreateTag();
+
+        int currentEnergy = 0;
+
+        if (tag.contains(ENERGIZED)) {
+            currentEnergy = tag.getInt(ENERGIZED);
+        }
+        else {
+            tag.putString("CachedName", stack.getHoverName().getString());
+            tag.putInt(ENERGIZED, 0);
+        }
+
+        int energyLevel = glumpCoilBlockEntity.energyLevel;
+        int energyNeeded = 100 - currentEnergy;
+        int energyUsed = Math.min(energyLevel, energyNeeded);
+
+        if (!tag.contains(ENERGIZED)) {
+            tag.putInt(ENERGIZED, tag.getInt(ENERGIZED) + energyUsed);
+        } else if (tag.getInt(ENERGIZED) < 100) {
+            tag.putInt(ENERGIZED, tag.getInt(ENERGIZED) + energyUsed);
+        }
+
+        Component name = tag.contains("CachedName") ? new TextComponent(tag.getString("CachedName")) : stack.getItem().getName(stack);
+        stack.setHoverName(new TranslatableComponent("gear.glumbis.energized").append(name).withStyle(Style.EMPTY.withColor(0x9eb8ff).withItalic(false)));
+    }
+
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
@@ -207,7 +243,7 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
             itemstack = itemstack1.copy();
             if (index == 2) {
 
-                energize(itemstack1);
+                energize(itemstack1, true);
 
                 if (!this.moveItemStackTo(itemstack1, 3, 39, true)) {
                     return ItemStack.EMPTY;
