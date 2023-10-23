@@ -188,12 +188,12 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
             tag.putInt(ENERGIZED, 0);
         }
 
-        int energyLevel = glumpCoilBlockEntity.energyLevel;
+        int energyLevel = glumpCoilBlockEntity.getEnergyLevel();
         int energyNeeded = 100 - currentEnergy;
         int energyUsed = Math.min(energyLevel, energyNeeded);
 
         if (depleteEnergy) {
-            glumpCoilBlockEntity.energyLevel = energyLevel - energyUsed;
+            glumpCoilBlockEntity.setEnergylevel(glumpCoilBlockEntity.getEnergyLevel() - energyUsed);
         }
 
         if (!tag.contains(ENERGIZED)) {
