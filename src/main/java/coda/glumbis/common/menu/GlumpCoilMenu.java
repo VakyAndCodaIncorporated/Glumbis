@@ -19,6 +19,7 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -38,7 +39,6 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
     };
 
     // todo - fix the coil depleting energy when the chunk is unloaded (needs more testing)
-    // todo - fix the coil disregarding essence (or lack of) when energizing
     // todo - fix cat essence item consumption (should be 1 consumed for every 50% item energy replenished)
     public GlumpCoilMenu(final int windowId, final Inventory playerInventory, GlumpCoilBlockEntity blockEntity) {
         super(GlumbisMenus.GLUMP_COIL.get(), windowId);
@@ -142,7 +142,7 @@ public class GlumpCoilMenu extends AbstractContainerMenu {
 
     // todo - add a tag for tools that can be energized so people can add mod compat if needed
     private boolean canBeEnergized(ItemStack stack) {
-        return stack.getItem() instanceof TieredItem || stack.getItem() instanceof ArmorItem;
+        return stack.getItem() instanceof TieredItem || stack.getItem() instanceof ArmorItem || stack.getItem() instanceof BowItem;
     }
 
     public void slotsChanged(Container p_39778_) {

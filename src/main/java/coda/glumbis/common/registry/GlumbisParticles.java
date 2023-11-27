@@ -17,8 +17,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class GlumbisParticles {
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Glumbis.MOD_ID);
 
-    public static final RegistryObject<SimpleParticleType> STATIC_LIGHTNING =
-            PARTICLES.register("static_lightning", () -> new SimpleParticleType(false));
+    public static final RegistryObject<SimpleParticleType> STATIC_LIGHTNING = PARTICLES.register("static_lightning", () -> new SimpleParticleType(false));
 
     @Mod.EventBusSubscriber(modid = Glumbis.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class RegisterParticleFactories {
