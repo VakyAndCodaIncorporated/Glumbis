@@ -145,7 +145,7 @@ repositories {
 dependencies {
 
     minecraft 'net.minecraftforge:forge:1.18.2-40.0.52'
-    implementation fg.deobf('software.bernie.geckolib:geckolib-1.18-forge:3.0.15')
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.18:3.0.57')
     implementation fg.deobf('curse.maven:cosmetic-armor-reworked-237307:3738144')
 
 

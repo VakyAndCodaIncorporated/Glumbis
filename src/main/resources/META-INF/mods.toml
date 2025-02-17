@@ -6,8 +6,8 @@ modId="glumbis" #mandatory
 version="${file.jarVersion}" #mandatory
 displayName="Glumbis" #mandatory
 logoFile="examplemod.png" #optional
-credits="Virtualhel, Ninni, VakyPanda" #optional
-authors="Coda, Wadoo" #optional
+credits="Wadoo, Virtualhel, Ninni, VakyPanda" #optional
+authors="codyhuh" #optional
 description='''
 Glumbis lets you pick up cats in socks for easy transport!'''
 [[dependencies.glumbis]] #optional
